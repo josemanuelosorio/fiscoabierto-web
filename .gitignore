@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Editores
+*.swp
+*.swo
+*~
+
+# Node (por si en el futuro se agrega)
+node_modules/
+
+# Variables de entorno
+.env
