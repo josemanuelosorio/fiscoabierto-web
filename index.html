@@ -715,7 +715,8 @@
             .nav-links { gap: 16px; }
             .nav-links a { font-size: 0.82rem; }
             section { padding: 40px 0; }
-            .stat-number { font-size: 1.8rem; }
+            .stat-number { font-size: 1.8rem; filter: none !important; opacity: 0; }
+            .stat-number.counting { opacity: 1 !important; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
         }
     </style>
