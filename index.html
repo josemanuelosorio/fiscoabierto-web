@@ -617,40 +617,41 @@
 
         /* TRUST / QUIÉN ESTÁ DETRÁS */
         .trust-section {
-            background: var(--color-surface);
-            border-top: 1px solid var(--color-border);
-            border-bottom: 1px solid var(--color-border);
+            background: #1C1917;
+            color: #E7E5E4;
+            padding: 60px 0;
         }
+        .trust-section h2 { color: white; }
+        .trust-section .section-subtitle { color: #A8A29E; }
         .trust-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
         }
         .trust-card {
-            background: var(--color-bg);
-            border-radius: var(--radius);
-            padding: 24px;
-            border: 1px solid transparent;
-            transition: all 0.3s ease;
+            padding: 28px 32px;
+            border-left: 2px solid rgba(94, 234, 212, 0.15);
+            transition: border-color 0.3s ease;
         }
         .trust-card:hover {
-            border-color: var(--color-border);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-            transform: translateY(-2px);
+            border-left-color: #5EEAD4;
         }
         .trust-card h3 {
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             margin-bottom: 8px;
+            color: #5EEAD4;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         .trust-card p {
-            font-size: 0.88rem;
-            color: var(--color-text-secondary);
-            line-height: 1.6;
-            text-align: justify;
+            font-size: 0.86rem;
+            color: #A8A29E;
+            line-height: 1.65;
+        }
+        @media (max-width: 600px) {
+            .trust-grid { grid-template-columns: 1fr; }
         }
 
         /* FAQ */
@@ -809,20 +810,20 @@
         <p class="section-subtitle reveal reveal-delay-1" data-i18n="trust.subtitle">Es justo que te lo preguntes. Aquí van las respuestas.</p>
         <div class="trust-grid reveal reveal-delay-2">
             <div class="trust-card">
-                <h3 data-i18n="trust.card1.title">📚 Quién está detrás</h3>
-                <p data-i18n="trust.card1.text">Un proyecto independiente creado por profesionales del derecho fiscal en México. No es una empresa, no es un despacho, no vende nada. Existe porque la información fiscal básica debería ser accesible para todos, no solo para quienes pueden pagar una consulta.</p>
+                <h3 data-i18n="trust.card1.title">Quién está detrás</h3>
+                <p data-i18n="trust.card1.text">Un proyecto independiente creado por profesionales del derecho fiscal en México. No es una empresa, no es un despacho, no vende nada. Existe porque la información fiscal básica debería ser accesible para todos.</p>
             </div>
             <div class="trust-card">
-                <h3 data-i18n="trust.card2.title">🔓 Por qué es gratis</h3>
-                <p data-i18n="trust.card2.text">Porque la información fiscal básica no debería costar dinero. Este proyecto existe para que las personas que trabajan en plataformas digitales entiendan sus obligaciones sin tener que pagar una consulta. No hay plan premium, no hay upsell, no hay trampa.</p>
+                <h3 data-i18n="trust.card2.title">Por qué es gratis</h3>
+                <p data-i18n="trust.card2.text">Porque la información fiscal básica no debería costar dinero. No hay plan premium, no hay upsell, no hay trampa. Solo información pública, bien explicada.</p>
             </div>
             <div class="trust-card">
-                <h3 data-i18n="trust.card3.title">🛡️ Tus datos están a salvo</h3>
-                <p data-i18n="trust.card3.text">No pedimos nombre, RFC, correo ni ningún dato personal en el diagnóstico. Todo se procesa directamente en tu navegador. No enviamos nada a ningún servidor. Puedes verificarlo tú mismo en el código fuente.</p>
+                <h3 data-i18n="trust.card3.title">Tus datos están a salvo</h3>
+                <p data-i18n="trust.card3.text">No pedimos nombre, RFC, correo ni ningún dato personal. Todo se procesa en tu navegador. No enviamos nada a ningún servidor. Puedes verificarlo en el código fuente.</p>
             </div>
             <div class="trust-card">
-                <h3 data-i18n="trust.card4.title">⚖️ Informar, no asesorar</h3>
-                <p data-i18n="trust.card4.text">Fisco Abierto traduce la ley para que cualquier persona la entienda. Pero no sustituye a un contador ni a un abogado. Siempre que la situación lo amerite, te vamos a decir: busca a un profesional. Eso es lo responsable.</p>
+                <h3 data-i18n="trust.card4.title">Informar, no asesorar</h3>
+                <p data-i18n="trust.card4.text">Traducimos la ley para que cualquier persona la entienda. Pero no sustituimos a un contador ni a un abogado. Cuando la situación lo amerite, te lo vamos a decir.</p>
             </div>
         </div>
     </div>
@@ -1094,14 +1095,14 @@ const translations = {
         'audience.payments': 'Pagos internacionales',
         'trust.title': '¿Por qué confiar en Fisco Abierto?',
         'trust.subtitle': 'Es justo que te lo preguntes. Aquí van las respuestas.',
-        'trust.card1.title': '📚 Quién está detrás',
-        'trust.card1.text': 'Un proyecto independiente creado por profesionales del derecho fiscal en México. No es una empresa, no es un despacho, no vende nada. Existe porque la información fiscal básica debería ser accesible para todos, no solo para quienes pueden pagar una consulta.',
-        'trust.card2.title': '🔓 Por qué es gratis',
-        'trust.card2.text': 'Porque la información fiscal básica no debería costar dinero. Este proyecto existe para que las personas que trabajan en plataformas digitales entiendan sus obligaciones sin tener que pagar una consulta. No hay plan premium, no hay upsell, no hay trampa.',
-        'trust.card3.title': '🛡️ Tus datos están a salvo',
-        'trust.card3.text': 'No pedimos nombre, RFC, correo ni ningún dato personal en el diagnóstico. Todo se procesa directamente en tu navegador. No enviamos nada a ningún servidor. Puedes verificarlo tú mismo en el código fuente.',
-        'trust.card4.title': '⚖️ Informar, no asesorar',
-        'trust.card4.text': 'Fisco Abierto traduce la ley para que cualquier persona la entienda. Pero no sustituye a un contador ni a un abogado. Siempre que la situación lo amerite, te vamos a decir: busca a un profesional. Eso es lo responsable.',
+        'trust.card1.title': 'Quién está detrás',
+        'trust.card1.text': 'Un proyecto independiente creado por profesionales del derecho fiscal en México. No es una empresa, no es un despacho, no vende nada. Existe porque la información fiscal básica debería ser accesible para todos.',
+        'trust.card2.title': 'Por qué es gratis',
+        'trust.card2.text': 'Porque la información fiscal básica no debería costar dinero. No hay plan premium, no hay upsell, no hay trampa. Solo información pública, bien explicada.',
+        'trust.card3.title': 'Tus datos están a salvo',
+        'trust.card3.text': 'No pedimos nombre, RFC, correo ni ningún dato personal. Todo se procesa en tu navegador. No enviamos nada a ningún servidor. Puedes verificarlo en el código fuente.',
+        'trust.card4.title': 'Informar, no asesorar',
+        'trust.card4.text': 'Traducimos la ley para que cualquier persona la entienda. Pero no sustituimos a un contador ni a un abogado. Cuando la situación lo amerite, te lo vamos a decir.',
         'diag.title': 'Diagnóstico fiscal express',
         'diag.intro': 'Selecciona tus plataformas e ingresos aproximados. No pedimos datos personales (ni nombre, ni RFC, ni correo). Todo se procesa en tu navegador.',
         'diag.step1.question': '¿En qué plataformas generas ingresos?',
@@ -1185,14 +1186,14 @@ const translations = {
         'audience.payments': 'International payments',
         'trust.title': 'Why trust Fisco Abierto?',
         'trust.subtitle': "It's fair to ask. Here are the answers.",
-        'trust.card1.title': '📚 Who\'s behind it',
-        'trust.card1.text': 'An independent project created by Mexican tax law professionals. It\'s not a company, not a law firm, doesn\'t sell anything. It exists because basic tax information in Mexico should be accessible to everyone, not just those who can afford a consultation.',
-        'trust.card2.title': '🔓 Why it\'s free',
-        'trust.card2.text': 'Because basic tax information shouldn\'t cost money. This project exists so people working on digital platforms understand their obligations without paying for a consultation. No premium plans, no upsells, no tricks.',
-        'trust.card3.title': '🛡️ Your data is safe',
-        'trust.card3.text': 'We don\'t ask for your name, tax ID (RFC), email, or any personal data in the diagnostic. Everything is processed directly in your browser. We don\'t send anything to any server. You can verify it yourself in the source code.',
-        'trust.card4.title': '⚖️ Inform, don\'t advise',
-        'trust.card4.text': 'Fisco Abierto translates the law so anyone can understand it. But it doesn\'t replace an accountant or tax lawyer. When the situation calls for it, we\'ll tell you: consult a professional. That\'s the responsible thing to do.',
+        'trust.card1.title': 'Who\'s behind it',
+        'trust.card1.text': 'An independent project created by Mexican tax law professionals. Not a company, not a law firm, doesn\'t sell anything. It exists because basic tax information in Mexico should be accessible to everyone.',
+        'trust.card2.title': 'Why it\'s free',
+        'trust.card2.text': 'Because basic tax information shouldn\'t cost money. No premium plans, no upsells, no tricks. Just public information, clearly explained.',
+        'trust.card3.title': 'Your data is safe',
+        'trust.card3.text': 'We don\'t ask for your name, tax ID, email, or any personal data. Everything runs in your browser. Nothing is sent to any server. You can verify it in the source code.',
+        'trust.card4.title': 'Inform, not advise',
+        'trust.card4.text': 'We translate the law so anyone can understand it. But we don\'t replace an accountant or tax lawyer. When the situation calls for it, we\'ll tell you.',
         'diag.title': 'Quick tax diagnostic',
         'diag.intro': 'Select your platforms and approximate income. We don\'t ask for personal data (no name, tax ID, or email). Everything is processed in your browser.',
         'diag.step1.question': 'Which platforms do you earn income on?',
