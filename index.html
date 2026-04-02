@@ -107,7 +107,8 @@
             margin-bottom: 20px;
             color: #FFFFFF;
         }
-        .hero h1 span { color: #5EEAD4; }
+        .hero h1 .hero-main { color: #FFFFFF; }
+        .hero h1 .hero-accent { color: #5EEAD4; }
         .hero p {
             font-size: 1.1rem;
             color: rgba(255,255,255,0.75);
@@ -738,7 +739,7 @@
 <section class="hero">
     <canvas id="heroCanvas"></canvas>
     <div class="container">
-        <h1><span data-i18n="hero.title">¿Generas ingresos en plataformas digitales?</span><br><span data-i18n="hero.subtitle">El SAT ya lo sabe.</span></h1>
+        <h1><span class="hero-main" data-i18n="hero.title">¿Generas ingresos en plataformas digitales?</span><br><span class="hero-accent" data-i18n="hero.subtitle">El SAT ya lo sabe.</span></h1>
         <p data-i18n="hero.description">Entiende tu situación fiscal en menos de 2 minutos. Sin pedir tus datos personales, porque entender tus impuestos debería ser gratis.</p>
         <a href="#diagnostico" class="hero-cta" data-i18n="hero.cta">Hacer mi diagnóstico fiscal</a>
     </div>
@@ -782,7 +783,7 @@
             </div>
         </div>
         <div class="stats-callout" data-i18n="stats.callout">
-            <strong>Hoy, 1° de abril de 2026</strong>, entró en vigor el Art. 30-B del CFF: el SAT ya tiene acceso <strong>en tiempo real</strong> a la información de las plataformas digitales en México. Las reglas cambiaron. Estar informado ya no es opcional.
+            <strong>Desde el 1° de abril de 2026</strong>, está en vigor el Art. 30-B del CFF: el SAT tiene acceso <strong>en tiempo real</strong> a la información de las plataformas digitales en México. Las reglas cambiaron. Estar informado ya no es opcional.
         </div>
     </div>
 </section>
@@ -1084,7 +1085,7 @@ const translations = {
         'stats.stat4': 'es la multa máxima. Informarte hoy te ahorra problemas mañana.',
         'stats.stat5': 'de los trabajadores en México son informales. Muchos sin saberlo.',
         'stats.stat6': 'de tus ganancias se van en retención si no tienes RFC. Se puede evitar.',
-        'stats.callout': '<strong>Hoy, 1° de abril de 2026</strong>, entró en vigor el Art. 30-B del CFF: el SAT ya tiene acceso <strong>en tiempo real</strong> a la información de las plataformas digitales en México. Las reglas cambiaron. Estar informado ya no es opcional.',
+        'stats.callout': '<strong>Desde el 1° de abril de 2026</strong>, está en vigor el Art. 30-B del CFF: el SAT tiene acceso <strong>en tiempo real</strong> a la información de las plataformas digitales en México. Las reglas cambiaron. Estar informado ya no es opcional.',
         'audience.title': '¿Para quién es esto?',
         'audience.subtitle': 'Si generas ingresos en cualquiera de estas plataformas, esto te interesa.',
         'audience.sellers': 'Vendedores online',
@@ -1175,7 +1176,7 @@ const translations = {
         'stats.stat4': 'is the maximum fine. Getting informed today saves problems tomorrow.',
         'stats.stat5': 'of Mexican workers are informally employed. Many without knowing it.',
         'stats.stat6': 'of your earnings go to withholding tax if you lack a tax ID (RFC). It can be avoided.',
-        'stats.callout': '<strong>As of April 1, 2026</strong>, Article 30-B of the Federal Tax Code (CFF) came into force: Mexico\'s tax authority now has <strong>real-time access</strong> to data from digital platforms in Mexico. The rules changed. Staying informed is no longer optional.',
+        'stats.callout': '<strong>Since April 1, 2026</strong>, Article 30-B of Mexico\'s Federal Tax Code (CFF) is in effect: the tax authority now has <strong>real-time access</strong> to data from digital platforms operating in Mexico. The rules changed. Staying informed is no longer optional.',
         'audience.title': 'Who is this for?',
         'audience.subtitle': 'If you earn income on any of these platforms while living in Mexico, this matters to you.',
         'audience.sellers': 'Online sellers',
