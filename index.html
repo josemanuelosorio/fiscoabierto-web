@@ -753,32 +753,32 @@
         <p class="section-subtitle" data-i18n="stats.subtitle">Cifras reales sobre la fiscalización de la economía digital en México.</p>
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-number">2.5M+</div>
+                <div class="stat-number" data-count="2.5" data-prefix="" data-suffix="M+" data-decimals="1">0</div>
                 <div class="stat-label" data-i18n="stats.stat1">de personas en México viven de plataformas digitales. No estás solo.</div>
                 <div class="stat-source">Buendía & Márquez, 2023</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">268</div>
+                <div class="stat-number" data-count="268" data-prefix="" data-suffix="" data-decimals="0">0</div>
                 <div class="stat-label" data-i18n="stats.stat2">plataformas ya comparten información con el SAT</div>
                 <div class="stat-source">DOF, agosto 2025</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">2.5%</div>
+                <div class="stat-number" data-count="2.5" data-prefix="" data-suffix="%" data-decimals="1">0</div>
                 <div class="stat-label" data-i18n="stats.stat3">es la nueva retención de ISR por venta (antes era 1%)</div>
                 <div class="stat-source">Reforma LISR vigente 2026</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">$228K</div>
+                <div class="stat-number" data-count="228" data-prefix="$" data-suffix="K" data-decimals="0">0</div>
                 <div class="stat-label" data-i18n="stats.stat4">es la multa máxima. Informarte hoy te ahorra problemas mañana.</div>
                 <div class="stat-source">Código Fiscal de la Federación</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">55%</div>
+                <div class="stat-number" data-count="55" data-prefix="" data-suffix="%" data-decimals="0">0</div>
                 <div class="stat-label" data-i18n="stats.stat5">de los trabajadores en México son informales. Muchos sin saberlo.</div>
                 <div class="stat-source">INEGI, ENOE 4T 2025</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">20%</div>
+                <div class="stat-number" data-count="20" data-prefix="" data-suffix="%" data-decimals="0">0</div>
                 <div class="stat-label" data-i18n="stats.stat6">de tus ganancias se van en retención si no tienes RFC. Se puede evitar.</div>
                 <div class="stat-source">Retención ISR sin RFC, LISR 2026</div>
             </div>
@@ -1764,6 +1764,64 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
         if (target) target.scrollIntoView({ behavior: 'smooth' });
     });
 });
+
+// ==================== COUNT-UP ANIMATION ====================
+(function() {
+    var counters = document.querySelectorAll('.stat-number[data-count]');
+    if (!counters.length) return;
+    var animated = false;
+
+    function easeOutExpo(t) {
+        return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+    }
+
+    function animateCounter(el) {
+        var target = parseFloat(el.getAttribute('data-count'));
+        var prefix = el.getAttribute('data-prefix') || '';
+        var suffix = el.getAttribute('data-suffix') || '';
+        var decimals = parseInt(el.getAttribute('data-decimals')) || 0;
+        var duration = 2000;
+        var start = null;
+
+        function step(timestamp) {
+            if (!start) start = timestamp;
+            var progress = Math.min((timestamp - start) / duration, 1);
+            var eased = easeOutExpo(progress);
+            var current = eased * target;
+
+            if (decimals > 0) {
+                el.textContent = prefix + current.toFixed(decimals) + suffix;
+            } else {
+                el.textContent = prefix + Math.floor(current).toLocaleString('es-MX') + suffix;
+            }
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            } else {
+                el.textContent = prefix + (decimals > 0 ? target.toFixed(decimals) : target.toLocaleString('es-MX')) + suffix;
+            }
+        }
+
+        requestAnimationFrame(step);
+    }
+
+    var statsObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting && !animated) {
+                animated = true;
+                counters.forEach(function(counter, i) {
+                    setTimeout(function() {
+                        animateCounter(counter);
+                    }, i * 150);
+                });
+                statsObserver.disconnect();
+            }
+        });
+    }, { threshold: 0.3 });
+
+    var statsSection = document.querySelector('.stats-section');
+    if (statsSection) statsObserver.observe(statsSection);
+})();
 
 // ==================== SCROLL REVEAL ====================
 (function() {
