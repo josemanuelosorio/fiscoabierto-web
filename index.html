@@ -78,6 +78,31 @@
         }
         .nav-links a:hover { color: var(--color-accent); }
 
+        /* LANGUAGE TOGGLE */
+        .lang-toggle {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 4px 8px;
+        }
+        .lang-toggle:hover { color: var(--color-accent); }
+        .lang-toggle .sep {
+            margin: 0 4px;
+            opacity: 0.3;
+        }
+        .lang-toggle .lang-option {
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+        .lang-toggle .lang-option.active {
+            opacity: 1;
+            color: var(--color-accent);
+        }
+
         /* HERO */
         .hero {
             position: relative;
@@ -711,9 +736,14 @@
             </svg>
         </a>
         <div class="nav-links">
-            <a href="#diagnostico">Diagnóstico</a>
-            <a href="#faq">FAQ</a>
-            <a href="#newsletter">Newsletter</a>
+            <a href="#diagnostico" data-i18n="nav.diagnostic">Diagnóstico</a>
+            <a href="#faq" data-i18n="nav.faq">FAQ</a>
+            <a href="#newsletter" data-i18n="nav.newsletter">Newsletter</a>
+            <button class="lang-toggle" id="langToggle" title="Toggle language">
+                <span class="lang-option active" data-lang="es">ES</span>
+                <span class="sep">|</span>
+                <span class="lang-option" data-lang="en">EN</span>
+            </button>
         </div>
     </div>
 </nav>
@@ -722,50 +752,50 @@
 <section class="hero">
     <canvas id="heroCanvas"></canvas>
     <div class="container">
-        <h1>¿Generas ingresos en plataformas digitales?<br><span>El SAT ya lo sabe.</span></h1>
-        <p>Entiende tu situación fiscal en menos de 2 minutos. Sin pedir tus datos personales, porque entender tus impuestos debería ser gratis.</p>
-        <a href="#diagnostico" class="hero-cta">Hacer mi diagnóstico fiscal</a>
+        <h1 data-i18n="hero.title">¿Generas ingresos en plataformas digitales?<br><span data-i18n="hero.subtitle">El SAT ya lo sabe.</span></h1>
+        <p data-i18n="hero.description">Entiende tu situación fiscal en menos de 2 minutos. Sin pedir tus datos personales, porque entender tus impuestos debería ser gratis.</p>
+        <a href="#diagnostico" class="hero-cta" data-i18n="hero.cta">Hacer mi diagnóstico fiscal</a>
     </div>
 </section>
 
 <!-- DATOS DUROS -->
 <section class="stats-section">
     <div class="container">
-        <h2>Esto no es teórico. Ya está pasando.</h2>
-        <p class="section-subtitle">Cifras reales sobre la fiscalización de la economía digital en México.</p>
+        <h2 data-i18n="stats.title">Esto no es teórico. Ya está pasando.</h2>
+        <p class="section-subtitle" data-i18n="stats.subtitle">Cifras reales sobre la fiscalización de la economía digital en México.</p>
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-number">2.5M+</div>
-                <div class="stat-label">de personas en México viven de plataformas digitales. No estás solo.</div>
+                <div class="stat-label" data-i18n="stats.stat1">de personas en México viven de plataformas digitales. No estás solo.</div>
                 <div class="stat-source">Buendía & Márquez, 2023</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number">268</div>
-                <div class="stat-label">plataformas ya comparten información con el SAT</div>
+                <div class="stat-label" data-i18n="stats.stat2">plataformas ya comparten información con el SAT</div>
                 <div class="stat-source">DOF, agosto 2025</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number">2.5%</div>
-                <div class="stat-label">es la nueva retención de ISR por venta (antes era 1%)</div>
+                <div class="stat-label" data-i18n="stats.stat3">es la nueva retención de ISR por venta (antes era 1%)</div>
                 <div class="stat-source">Reforma LISR vigente 2026</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number">$228K</div>
-                <div class="stat-label">es la multa máxima. Informarte hoy te ahorra problemas mañana.</div>
+                <div class="stat-label" data-i18n="stats.stat4">es la multa máxima. Informarte hoy te ahorra problemas mañana.</div>
                 <div class="stat-source">Código Fiscal de la Federación</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number">55%</div>
-                <div class="stat-label">de los trabajadores en México son informales. Muchos sin saberlo.</div>
+                <div class="stat-label" data-i18n="stats.stat5">de los trabajadores en México son informales. Muchos sin saberlo.</div>
                 <div class="stat-source">INEGI, ENOE 4T 2025</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number">20%</div>
-                <div class="stat-label">de tus ganancias se van en retención si no tienes RFC. Se puede evitar.</div>
+                <div class="stat-label" data-i18n="stats.stat6">de tus ganancias se van en retención si no tienes RFC. Se puede evitar.</div>
                 <div class="stat-source">Retención ISR sin RFC, LISR 2026</div>
             </div>
         </div>
-        <div class="stats-callout">
+        <div class="stats-callout" data-i18n="stats.callout">
             <strong>Hoy, 1° de abril de 2026</strong>, entró en vigor el Art. 30-B del CFF: el SAT ya tiene acceso <strong>en tiempo real</strong> a la información de las plataformas digitales en México. Las reglas cambiaron. Estar informado ya no es opcional.
         </div>
     </div>
@@ -774,15 +804,15 @@
 <!-- AUDIENCIA -->
 <section id="audiencia">
     <div class="container">
-        <h2 class="reveal" style="text-align:center;">¿Para quién es esto?</h2>
-        <p class="section-subtitle reveal reveal-delay-1" style="text-align:center;">Si generas ingresos en cualquiera de estas plataformas, esto te interesa.</p>
+        <h2 class="reveal" style="text-align:center;" data-i18n="audience.title">¿Para quién es esto?</h2>
+        <p class="section-subtitle reveal reveal-delay-1" style="text-align:center;" data-i18n="audience.subtitle">Si generas ingresos en cualquiera de estas plataformas, esto te interesa.</p>
         <div class="audience-pills reveal reveal-delay-2">
-            <span class="audience-pill"><span class="pill-emoji">🛒</span> Vendedores online <span class="pill-detail">MeLi, Amazon</span></span>
-            <span class="audience-pill"><span class="pill-emoji">🚗</span> Conductores <span class="pill-detail">Uber, DiDi, Rappi</span></span>
-            <span class="audience-pill"><span class="pill-emoji">🏠</span> Hosts <span class="pill-detail">Airbnb, Vrbo</span></span>
-            <span class="audience-pill"><span class="pill-emoji">💻</span> Freelancers <span class="pill-detail">Fiverr, Upwork</span></span>
-            <span class="audience-pill"><span class="pill-emoji">🎬</span> Creadores <span class="pill-detail">YouTube, TikTok</span></span>
-            <span class="audience-pill"><span class="pill-emoji">💸</span> Pagos internacionales <span class="pill-detail">PayPal, Wise, Crypto</span></span>
+            <span class="audience-pill" data-i18n="audience.sellers"><span class="pill-emoji">🛒</span> Vendedores online <span class="pill-detail">MeLi, Amazon</span></span>
+            <span class="audience-pill" data-i18n="audience.drivers"><span class="pill-emoji">🚗</span> Conductores <span class="pill-detail">Uber, DiDi, Rappi</span></span>
+            <span class="audience-pill" data-i18n="audience.hosts"><span class="pill-emoji">🏠</span> Hosts <span class="pill-detail">Airbnb, Vrbo</span></span>
+            <span class="audience-pill" data-i18n="audience.freelancers"><span class="pill-emoji">💻</span> Freelancers <span class="pill-detail">Fiverr, Upwork</span></span>
+            <span class="audience-pill" data-i18n="audience.creators"><span class="pill-emoji">🎬</span> Creadores <span class="pill-detail">YouTube, TikTok</span></span>
+            <span class="audience-pill" data-i18n="audience.payments"><span class="pill-emoji">💸</span> Pagos internacionales <span class="pill-detail">PayPal, Wise, Crypto</span></span>
         </div>
     </div>
 </section>
@@ -790,24 +820,24 @@
 <!-- CONFIANZA -->
 <section class="trust-section" id="sobre">
     <div class="container">
-        <h2 class="reveal">¿Por qué confiar en Fisco Abierto?</h2>
-        <p class="section-subtitle reveal reveal-delay-1">Es justo que te lo preguntes. Aquí van las respuestas.</p>
+        <h2 class="reveal" data-i18n="trust.title">¿Por qué confiar en Fisco Abierto?</h2>
+        <p class="section-subtitle reveal reveal-delay-1" data-i18n="trust.subtitle">Es justo que te lo preguntes. Aquí van las respuestas.</p>
         <div class="trust-grid reveal reveal-delay-2">
             <div class="trust-card">
-                <h3>📚 Quién está detrás</h3>
-                <p>Un proyecto independiente creado por profesionales del derecho fiscal en México. No es una empresa, no es un despacho, no vende nada. Existe porque la información fiscal básica debería ser accesible para todos, no solo para quienes pueden pagar una consulta.</p>
+                <h3 data-i18n="trust.card1.title">📚 Quién está detrás</h3>
+                <p data-i18n="trust.card1.text">Un proyecto independiente creado por profesionales del derecho fiscal en México. No es una empresa, no es un despacho, no vende nada. Existe porque la información fiscal básica debería ser accesible para todos, no solo para quienes pueden pagar una consulta.</p>
             </div>
             <div class="trust-card">
-                <h3>🔓 Por qué es gratis</h3>
-                <p>Porque la información fiscal básica no debería costar dinero. Este proyecto existe para que las personas que trabajan en plataformas digitales entiendan sus obligaciones sin tener que pagar una consulta. No hay plan premium, no hay upsell, no hay trampa.</p>
+                <h3 data-i18n="trust.card2.title">🔓 Por qué es gratis</h3>
+                <p data-i18n="trust.card2.text">Porque la información fiscal básica no debería costar dinero. Este proyecto existe para que las personas que trabajan en plataformas digitales entiendan sus obligaciones sin tener que pagar una consulta. No hay plan premium, no hay upsell, no hay trampa.</p>
             </div>
             <div class="trust-card">
-                <h3>🛡️ Tus datos están a salvo</h3>
-                <p>No pedimos nombre, RFC, correo ni ningún dato personal en el diagnóstico. Todo se procesa directamente en tu navegador. No enviamos nada a ningún servidor. Puedes verificarlo tú mismo en el código fuente.</p>
+                <h3 data-i18n="trust.card3.title">🛡️ Tus datos están a salvo</h3>
+                <p data-i18n="trust.card3.text">No pedimos nombre, RFC, correo ni ningún dato personal en el diagnóstico. Todo se procesa directamente en tu navegador. No enviamos nada a ningún servidor. Puedes verificarlo tú mismo en el código fuente.</p>
             </div>
             <div class="trust-card">
-                <h3>⚖️ Informar, no asesorar</h3>
-                <p>Fisco Abierto traduce la ley para que cualquier persona la entienda. Pero no sustituye a un contador ni a un abogado. Siempre que la situación lo amerite, te vamos a decir: busca a un profesional. Eso es lo responsable.</p>
+                <h3 data-i18n="trust.card4.title">⚖️ Informar, no asesorar</h3>
+                <p data-i18n="trust.card4.text">Fisco Abierto traduce la ley para que cualquier persona la entienda. Pero no sustituye a un contador ni a un abogado. Siempre que la situación lo amerite, te vamos a decir: busca a un profesional. Eso es lo responsable.</p>
             </div>
         </div>
     </div>
@@ -817,8 +847,8 @@
 <section id="diagnostico">
     <div class="container">
         <div class="diag-intro">
-            <h2>Diagnóstico fiscal express</h2>
-            <p class="section-subtitle">Selecciona tus plataformas e ingresos aproximados. No pedimos datos personales (ni nombre, ni RFC, ni correo). Todo se procesa en tu navegador.</p>
+            <h2 data-i18n="diag.title">Diagnóstico fiscal express</h2>
+            <p class="section-subtitle" data-i18n="diag.intro">Selecciona tus plataformas e ingresos aproximados. No pedimos datos personales (ni nombre, ni RFC, ni correo). Todo se procesa en tu navegador.</p>
         </div>
 
         <div class="diag-progress"><div class="diag-progress-fill" id="diag-progress-fill"></div></div>
@@ -826,8 +856,8 @@
         <div id="diag-wizard">
             <!-- PASO 1: Plataformas -->
             <div class="diag-step active" data-step="1">
-                <p class="diag-question">¿En qué plataformas generas ingresos?</p>
-                <p class="diag-hint">Puedes seleccionar varias.</p>
+                <p class="diag-question" data-i18n="diag.step1.question">¿En qué plataformas generas ingresos?</p>
+                <p class="diag-hint" data-i18n="diag.step1.hint">Puedes seleccionar varias.</p>
                 <div class="platform-grid">
                     <button class="platform-btn" data-platform="meli" data-category="marketplace">
                         <span class="p-emoji">🛒</span> Mercado Libre
@@ -867,55 +897,55 @@
                     </button>
                 </div>
                 <div class="diag-nav">
-                    <span class="step-indicator">Paso 1 de 3</span>
-                    <button class="btn-next" id="btn-step1" disabled>Siguiente</button>
+                    <span class="step-indicator" data-i18n="diag.step1.indicator">Paso 1 de 3</span>
+                    <button class="btn-next" id="btn-step1" disabled data-i18n="diag.next">Siguiente</button>
                 </div>
             </div>
 
             <!-- PASO 2: Ingresos mensuales -->
             <div class="diag-step" data-step="2">
-                <p class="diag-question">¿Cuánto generas aproximadamente al mes en total?</p>
-                <p class="diag-hint">No necesitamos la cifra exacta. Un rango es suficiente.</p>
+                <p class="diag-question" data-i18n="diag.step2.question">¿Cuánto generas aproximadamente al mes en total?</p>
+                <p class="diag-hint" data-i18n="diag.step2.hint">No necesitamos la cifra exacta. Un rango es suficiente.</p>
                 <div class="income-options">
-                    <button class="income-btn" data-income="bajo">Menos de $10,000 MXN al mes</button>
-                    <button class="income-btn" data-income="medio">Entre $10,000 y $25,000 MXN al mes</button>
-                    <button class="income-btn threshold-marker" data-income="umbral">Entre $25,000 y $50,000 MXN al mes <span class="threshold-tag">Rebasa umbral de $300K/año</span></button>
-                    <button class="income-btn" data-income="alto">Entre $50,000 y $150,000 MXN al mes</button>
-                    <button class="income-btn" data-income="muy_alto">Más de $150,000 MXN al mes</button>
+                    <button class="income-btn" data-income="bajo" data-i18n="diag.step2.income1">Menos de $10,000 MXN al mes</button>
+                    <button class="income-btn" data-income="medio" data-i18n="diag.step2.income2">Entre $10,000 y $25,000 MXN al mes</button>
+                    <button class="income-btn threshold-marker" data-income="umbral" data-i18n="diag.step2.income3">Entre $25,000 y $50,000 MXN al mes <span class="threshold-tag" data-i18n="diag.step2.threshold">Rebasa umbral de $300K/año</span></button>
+                    <button class="income-btn" data-income="alto" data-i18n="diag.step2.income4">Entre $50,000 y $150,000 MXN al mes</button>
+                    <button class="income-btn" data-income="muy_alto" data-i18n="diag.step2.income5">Más de $150,000 MXN al mes</button>
                 </div>
                 <div class="diag-nav">
-                    <button class="btn-prev" onclick="goStep(1)">Atrás</button>
-                    <span class="step-indicator">Paso 2 de 3</span>
-                    <button class="btn-next" id="btn-step2" disabled>Siguiente</button>
+                    <button class="btn-prev" onclick="goStep(1)" data-i18n="diag.prev">Atrás</button>
+                    <span class="step-indicator" data-i18n="diag.step2.indicator">Paso 2 de 3</span>
+                    <button class="btn-next" id="btn-step2" disabled data-i18n="diag.next">Siguiente</button>
                 </div>
             </div>
 
             <!-- PASO 3: Situación fiscal + facturación -->
             <div class="diag-step" data-step="3">
-                <p class="diag-question">Casi listo. Dos preguntas finales para afinar tu diagnóstico.</p>
-                <p class="diag-hint">No hay respuesta incorrecta. Si no sabes, hay opción para eso.</p>
+                <p class="diag-question" data-i18n="diag.step3.question">Casi listo. Dos preguntas finales para afinar tu diagnóstico.</p>
+                <p class="diag-hint" data-i18n="diag.step3.hint">No hay respuesta incorrecta. Si no sabes, hay opción para eso.</p>
 
-                <p style="font-size:0.92rem; font-weight:600; margin-bottom:10px; color:#FFFFFF;">Tu situación ante el SAT:</p>
+                <p style="font-size:0.92rem; font-weight:600; margin-bottom:10px; color:#FFFFFF;" data-i18n="diag.step3.fiscal">Tu situación ante el SAT:</p>
                 <div class="income-options" style="margin-bottom:28px;">
-                    <button class="income-btn" data-fiscal="ninguna">No estoy dado de alta en el SAT</button>
-                    <button class="income-btn" data-fiscal="alta_sin_declarar">Estoy dado de alta pero no he declarado</button>
-                    <button class="income-btn" data-fiscal="declaro_parcial">Declaro pero no sé si incluyo todo</button>
-                    <button class="income-btn" data-fiscal="al_corriente">Estoy al corriente con mis declaraciones</button>
-                    <button class="income-btn" data-fiscal="no_se">No sé / No estoy seguro</button>
+                    <button class="income-btn" data-fiscal="ninguna" data-i18n="diag.step3.fiscal1">No estoy dado de alta en el SAT</button>
+                    <button class="income-btn" data-fiscal="alta_sin_declarar" data-i18n="diag.step3.fiscal2">Estoy dado de alta pero no he declarado</button>
+                    <button class="income-btn" data-fiscal="declaro_parcial" data-i18n="diag.step3.fiscal3">Declaro pero no sé si incluyo todo</button>
+                    <button class="income-btn" data-fiscal="al_corriente" data-i18n="diag.step3.fiscal4">Estoy al corriente con mis declaraciones</button>
+                    <button class="income-btn" data-fiscal="no_se" data-i18n="diag.step3.fiscal5">No sé / No estoy seguro</button>
                 </div>
 
-                <p style="font-size:0.92rem; font-weight:600; margin-bottom:10px; color:#FFFFFF;">¿Emites facturas (CFDI)?</p>
+                <p style="font-size:0.92rem; font-weight:600; margin-bottom:10px; color:#FFFFFF;" data-i18n="diag.step3.invoices">¿Emites facturas (CFDI)?</p>
                 <div class="income-options">
-                    <button class="income-btn" data-factura="si_todas">Sí, facturo todos mis ingresos</button>
-                    <button class="income-btn" data-factura="algunas">Solo facturo algunos</button>
-                    <button class="income-btn" data-factura="no">No emito facturas</button>
-                    <button class="income-btn" data-factura="no_se">No sé qué es un CFDI</button>
+                    <button class="income-btn" data-factura="si_todas" data-i18n="diag.step3.invoice1">Sí, facturo todos mis ingresos</button>
+                    <button class="income-btn" data-factura="algunas" data-i18n="diag.step3.invoice2">Solo facturo algunos</button>
+                    <button class="income-btn" data-factura="no" data-i18n="diag.step3.invoice3">No emito facturas</button>
+                    <button class="income-btn" data-factura="no_se" data-i18n="diag.step3.invoice4">No sé qué es un CFDI</button>
                 </div>
 
                 <div class="diag-nav">
-                    <button class="btn-prev" onclick="goStep(2)">Atrás</button>
-                    <span class="step-indicator">Paso 3 de 3</span>
-                    <button class="btn-results" id="btn-results" disabled>Ver mi diagnóstico</button>
+                    <button class="btn-prev" onclick="goStep(2)" data-i18n="diag.prev">Atrás</button>
+                    <span class="step-indicator" data-i18n="diag.step3.indicator">Paso 3 de 3</span>
+                    <button class="btn-results" id="btn-results" disabled data-i18n="diag.results">Ver mi diagnóstico</button>
                 </div>
             </div>
         </div>
@@ -929,23 +959,23 @@
             <div class="profile-summary" id="profile-summary"></div>
 
             <div class="result-section" id="sat-visibility">
-                <h3>Lo que el SAT puede ver sobre tus operaciones</h3>
+                <h3 data-i18n="results.visibility">Lo que el SAT puede ver sobre tus operaciones</h3>
                 <ul id="sat-visibility-list"></ul>
             </div>
 
             <div class="result-section" id="obligations">
-                <h3>Obligaciones que probablemente tienes (y quizá no conoces)</h3>
+                <h3 data-i18n="results.obligations">Obligaciones que probablemente tienes (y quizá no conoces)</h3>
                 <ul id="obligations-list"></ul>
             </div>
 
             <div class="result-section" id="actions">
-                <h3>Pasos que puedes tomar</h3>
+                <h3 data-i18n="results.actions">Pasos que puedes tomar</h3>
                 <ul id="actions-list"></ul>
             </div>
 
-            <p style="text-align:center; font-size:0.88rem; color:rgba(255,255,255,0.5); margin-top:24px;">¿Quieres estar al dia con los cambios del SAT? <a href="#newsletter" style="color:#5EEAD4; font-weight:600; text-decoration:none;">Suscribete al newsletter</a></p>
+            <p style="text-align:center; font-size:0.88rem; color:rgba(255,255,255,0.5); margin-top:24px;" data-i18n="results.cta">¿Quieres estar al dia con los cambios del SAT? <a href="#newsletter" style="color:#5EEAD4; font-weight:600; text-decoration:none;" data-i18n="results.newsletter">Suscribete al newsletter</a></p>
 
-            <button class="btn-restart" onclick="restartDiag()">Hacer otro diagnóstico</button>
+            <button class="btn-restart" onclick="restartDiag()" data-i18n="results.restart">Hacer otro diagnóstico</button>
         </div>
     </div>
 </section>
@@ -953,61 +983,61 @@
 <!-- FAQ -->
 <section id="faq">
     <div class="container">
-        <h2 class="reveal">Preguntas frecuentes</h2>
-        <p class="section-subtitle reveal reveal-delay-1">Lo que la mayoría se pregunta antes de usar la herramienta.</p>
+        <h2 class="reveal" data-i18n="faq.title">Preguntas frecuentes</h2>
+        <p class="section-subtitle reveal reveal-delay-1" data-i18n="faq.subtitle">Lo que la mayoría se pregunta antes de usar la herramienta.</p>
         <div class="faq-list reveal reveal-delay-2">
             <div class="faq-item">
-                <button class="faq-question">
+                <button class="faq-question" data-i18n="faq.q1">
                     ¿El SAT se va a enterar de que usé esta herramienta?
                     <span class="faq-arrow">▼</span>
                 </button>
                 <div class="faq-answer">
-                    <div class="faq-answer-inner">No. El diagnóstico funciona completamente en tu navegador. No se envía ningún dato a ningún servidor. No hay registros, no hay cookies de rastreo, no hay forma de que alguien sepa que lo usaste. Es como usar una calculadora en tu computadora.</div>
+                    <div class="faq-answer-inner" data-i18n="faq.a1">No. El diagnóstico funciona completamente en tu navegador. No se envía ningún dato a ningún servidor. No hay registros, no hay cookies de rastreo, no hay forma de que alguien sepa que lo usaste. Es como usar una calculadora en tu computadora.</div>
                 </div>
             </div>
             <div class="faq-item">
-                <button class="faq-question">
+                <button class="faq-question" data-i18n="faq.q2">
                     ¿Me van a multar si no estoy dado de alta en el SAT?
                     <span class="faq-arrow">▼</span>
                 </button>
                 <div class="faq-answer">
-                    <div class="faq-answer-inner">Depende. Si generas ingresos y no estás registrado, técnicamente estás incumpliendo una obligación fiscal. Las multas van de $4,480 a $13,430 MXN solo por no inscribirte (Art. 80 CFF). Sin embargo, regularizarte voluntariamente antes de que el SAT te requiera generalmente reduce las consecuencias. Consulta a un contador para tu caso específico.</div>
+                    <div class="faq-answer-inner" data-i18n="faq.a2">Depende. Si generas ingresos y no estás registrado, técnicamente estás incumpliendo una obligación fiscal. Las multas van de $4,480 a $13,430 MXN solo por no inscribirte (Art. 80 CFF). Sin embargo, regularizarte voluntariamente antes de que el SAT te requiera generalmente reduce las consecuencias. Consulta a un contador para tu caso específico.</div>
                 </div>
             </div>
             <div class="faq-item">
-                <button class="faq-question">
+                <button class="faq-question" data-i18n="faq.q3">
                     Si las plataformas ya me retienen impuestos, ¿ya cumplí?
                     <span class="faq-arrow">▼</span>
                 </button>
                 <div class="faq-answer">
-                    <div class="faq-answer-inner">Solo si tus ingresos anuales por plataformas no exceden $300,000 MXN y optaste por que las retenciones sean tu pago definitivo. Si ganas más, o si tienes ingresos de otras fuentes, necesitas hacer declaraciones mensuales y anual por la diferencia. Las retenciones son un adelanto, no necesariamente el pago completo.</div>
+                    <div class="faq-answer-inner" data-i18n="faq.a3">Solo si tus ingresos anuales por plataformas no exceden $300,000 MXN y optaste por que las retenciones sean tu pago definitivo. Si ganas más, o si tienes ingresos de otras fuentes, necesitas hacer declaraciones mensuales y anual por la diferencia. Las retenciones son un adelanto, no necesariamente el pago completo.</div>
                 </div>
             </div>
             <div class="faq-item">
-                <button class="faq-question">
+                <button class="faq-question" data-i18n="faq.q4">
                     ¿Fisco Abierto es asesoría fiscal?
                     <span class="faq-arrow">▼</span>
                 </button>
                 <div class="faq-answer">
-                    <div class="faq-answer-inner">No. Fisco Abierto es una herramienta informativa. Traducimos la ley y las reformas a un lenguaje que cualquier persona pueda entender, pero no sustituimos a un contador público o abogado fiscalista. Siempre recomendamos consultar a un profesional antes de tomar decisiones sobre tu situación fiscal.</div>
+                    <div class="faq-answer-inner" data-i18n="faq.a4">No. Fisco Abierto es una herramienta informativa. Traducimos la ley y las reformas a un lenguaje que cualquier persona pueda entender, pero no sustituimos a un contador público o abogado fiscalista. Siempre recomendamos consultar a un profesional antes de tomar decisiones sobre tu situación fiscal.</div>
                 </div>
             </div>
             <div class="faq-item">
-                <button class="faq-question">
+                <button class="faq-question" data-i18n="faq.q5">
                     ¿Qué pasa con las criptomonedas? ¿El SAT sabe si tengo crypto?
                     <span class="faq-arrow">▼</span>
                 </button>
                 <div class="faq-answer">
-                    <div class="faq-answer-inner">Si usas exchanges mexicanos como Bitso, sí, reportan al SAT. Si usas exchanges extranjeros como Binance, el SAT no tiene acceso directo, pero puede ver los depósitos que llegan a tu cuenta bancaria mexicana. En México no existe un régimen fiscal especial para criptomonedas; las ganancias se tratan como enajenación de bienes y son ingresos acumulables para ISR.</div>
+                    <div class="faq-answer-inner" data-i18n="faq.a5">Si usas exchanges mexicanos como Bitso, sí, reportan al SAT. Si usas exchanges extranjeros como Binance, el SAT no tiene acceso directo, pero puede ver los depósitos que llegan a tu cuenta bancaria mexicana. En México no existe un régimen fiscal especial para criptomonedas; las ganancias se tratan como enajenación de bienes y son ingresos acumulables para ISR.</div>
                 </div>
             </div>
             <div class="faq-item">
-                <button class="faq-question">
+                <button class="faq-question" data-i18n="faq.q6">
                     ¿Esto de verdad es gratis? ¿Cuál es el truco?
                     <span class="faq-arrow">▼</span>
                 </button>
                 <div class="faq-answer">
-                    <div class="faq-answer-inner">No hay truco. Fisco Abierto es un proyecto de utilidad pública, no un negocio. No vendemos cursos, no ofrecemos "asesoría premium", no monetizamos tus datos (no los tenemos). El proyecto existe como portafolio profesional y porque creemos que la información fiscal básica debería ser accesible para todos.</div>
+                    <div class="faq-answer-inner" data-i18n="faq.a6">No hay truco. Fisco Abierto es un proyecto de utilidad pública, no un negocio. No vendemos cursos, no ofrecemos "asesoría premium", no monetizamos tus datos (no los tenemos). El proyecto existe como portafolio profesional y porque creemos que la información fiscal básica debería ser accesible para todos.</div>
                 </div>
             </div>
         </div>
@@ -1018,8 +1048,8 @@
 <section id="newsletter">
     <div class="container">
         <div class="newsletter-box reveal">
-            <h2>Newsletter semanal</h2>
-            <p>Lo que cambió en el SAT esta semana, explicado para personas normales. Gratis.</p>
+            <h2 data-i18n="newsletter.title">Newsletter semanal</h2>
+            <p data-i18n="newsletter.description">Lo que cambió en el SAT esta semana, explicado para personas normales. Gratis.</p>
             <div id="substack-embed">
                 <!-- Reemplaza esta URL con tu Substack real cuando lo tengas -->
                 <iframe src="https://fiscoabierto.substack.com/embed" width="100%" height="150" style="border:none; background:transparent;" frameborder="0" scrolling="no"></iframe>
@@ -1037,14 +1067,244 @@
 <!-- FOOTER -->
 <footer>
     <div class="container">
-        <div class="disclaimer">
+        <div class="disclaimer" data-i18n="footer.disclaimer">
             Fisco Abierto es una herramienta informativa. No constituye asesoría fiscal, legal ni contable. Consulta a un profesional antes de tomar decisiones sobre tu situación fiscal.
         </div>
-        <p class="footer-copy">&copy; 2026 Fisco Abierto. Hecho en México.</p>
+        <p class="footer-copy" data-i18n="footer.copy">&copy; 2026 Fisco Abierto. Hecho en México.</p>
     </div>
 </footer>
 
 <script>
+// ==================== INTERNATIONALIZATION (i18n) ====================
+let currentLanguage = 'es';
+
+const translations = {
+    es: {
+        'nav.diagnostic': 'Diagnóstico',
+        'nav.faq': 'FAQ',
+        'nav.newsletter': 'Newsletter',
+        'hero.title': '¿Generas ingresos en plataformas digitales?',
+        'hero.subtitle': 'El SAT ya lo sabe.',
+        'hero.description': 'Entiende tu situación fiscal en menos de 2 minutos. Sin pedir tus datos personales, porque entender tus impuestos debería ser gratis.',
+        'hero.cta': 'Hacer mi diagnóstico fiscal',
+        'stats.title': 'Esto no es teórico. Ya está pasando.',
+        'stats.subtitle': 'Cifras reales sobre la fiscalización de la economía digital en México.',
+        'stats.stat1': 'de personas en México viven de plataformas digitales. No estás solo.',
+        'stats.stat2': 'plataformas ya comparten información con el SAT',
+        'stats.stat3': 'es la nueva retención de ISR por venta (antes era 1%)',
+        'stats.stat4': 'es la multa máxima. Informarte hoy te ahorra problemas mañana.',
+        'stats.stat5': 'de los trabajadores en México son informales. Muchos sin saberlo.',
+        'stats.stat6': 'de tus ganancias se van en retención si no tienes RFC. Se puede evitar.',
+        'stats.callout': '<strong>Hoy, 1° de abril de 2026</strong>, entró en vigor el Art. 30-B del CFF: el SAT ya tiene acceso <strong>en tiempo real</strong> a la información de las plataformas digitales en México. Las reglas cambiaron. Estar informado ya no es opcional.',
+        'audience.title': '¿Para quién es esto?',
+        'audience.subtitle': 'Si generas ingresos en cualquiera de estas plataformas, esto te interesa.',
+        'audience.sellers': 'Vendedores online',
+        'audience.drivers': 'Conductores',
+        'audience.hosts': 'Hosts',
+        'audience.freelancers': 'Freelancers',
+        'audience.creators': 'Creadores',
+        'audience.payments': 'Pagos internacionales',
+        'trust.title': '¿Por qué confiar en Fisco Abierto?',
+        'trust.subtitle': 'Es justo que te lo preguntes. Aquí van las respuestas.',
+        'trust.card1.title': '📚 Quién está detrás',
+        'trust.card1.text': 'Un proyecto independiente creado por profesionales del derecho fiscal en México. No es una empresa, no es un despacho, no vende nada. Existe porque la información fiscal básica debería ser accesible para todos, no solo para quienes pueden pagar una consulta.',
+        'trust.card2.title': '🔓 Por qué es gratis',
+        'trust.card2.text': 'Porque la información fiscal básica no debería costar dinero. Este proyecto existe para que las personas que trabajan en plataformas digitales entiendan sus obligaciones sin tener que pagar una consulta. No hay plan premium, no hay upsell, no hay trampa.',
+        'trust.card3.title': '🛡️ Tus datos están a salvo',
+        'trust.card3.text': 'No pedimos nombre, RFC, correo ni ningún dato personal en el diagnóstico. Todo se procesa directamente en tu navegador. No enviamos nada a ningún servidor. Puedes verificarlo tú mismo en el código fuente.',
+        'trust.card4.title': '⚖️ Informar, no asesorar',
+        'trust.card4.text': 'Fisco Abierto traduce la ley para que cualquier persona la entienda. Pero no sustituye a un contador ni a un abogado. Siempre que la situación lo amerite, te vamos a decir: busca a un profesional. Eso es lo responsable.',
+        'diag.title': 'Diagnóstico fiscal express',
+        'diag.intro': 'Selecciona tus plataformas e ingresos aproximados. No pedimos datos personales (ni nombre, ni RFC, ni correo). Todo se procesa en tu navegador.',
+        'diag.step1.question': '¿En qué plataformas generas ingresos?',
+        'diag.step1.hint': 'Puedes seleccionar varias.',
+        'diag.step1.indicator': 'Paso 1 de 3',
+        'diag.step2.question': '¿Cuánto generas aproximadamente al mes en total?',
+        'diag.step2.hint': 'No necesitamos la cifra exacta. Un rango es suficiente.',
+        'diag.step2.income1': 'Menos de $10,000 MXN al mes',
+        'diag.step2.income2': 'Entre $10,000 y $25,000 MXN al mes',
+        'diag.step2.income3': 'Entre $25,000 y $50,000 MXN al mes',
+        'diag.step2.threshold': 'Rebasa umbral de $300K/año',
+        'diag.step2.income4': 'Entre $50,000 y $150,000 MXN al mes',
+        'diag.step2.income5': 'Más de $150,000 MXN al mes',
+        'diag.step2.indicator': 'Paso 2 de 3',
+        'diag.step3.question': 'Casi listo. Dos preguntas finales para afinar tu diagnóstico.',
+        'diag.step3.hint': 'No hay respuesta incorrecta. Si no sabes, hay opción para eso.',
+        'diag.step3.fiscal': 'Tu situación ante el SAT:',
+        'diag.step3.fiscal1': 'No estoy dado de alta en el SAT',
+        'diag.step3.fiscal2': 'Estoy dado de alta pero no he declarado',
+        'diag.step3.fiscal3': 'Declaro pero no sé si incluyo todo',
+        'diag.step3.fiscal4': 'Estoy al corriente con mis declaraciones',
+        'diag.step3.fiscal5': 'No sé / No estoy seguro',
+        'diag.step3.invoices': '¿Emites facturas (CFDI)?',
+        'diag.step3.invoice1': 'Sí, facturo todos mis ingresos',
+        'diag.step3.invoice2': 'Solo facturo algunos',
+        'diag.step3.invoice3': 'No emito facturas',
+        'diag.step3.invoice4': 'No sé qué es un CFDI',
+        'diag.step3.indicator': 'Paso 3 de 3',
+        'diag.next': 'Siguiente',
+        'diag.prev': 'Atrás',
+        'diag.results': 'Ver mi diagnóstico',
+        'results.visibility': 'Lo que el SAT puede ver sobre tus operaciones',
+        'results.obligations': 'Obligaciones que probablemente tienes (y quizá no conoces)',
+        'results.actions': 'Pasos que puedes tomar',
+        'results.cta': '¿Quieres estar al dia con los cambios del SAT?',
+        'results.newsletter': 'Suscribete al newsletter',
+        'results.restart': 'Hacer otro diagnóstico',
+        'faq.title': 'Preguntas frecuentes',
+        'faq.subtitle': 'Lo que la mayoría se pregunta antes de usar la herramienta.',
+        'faq.q1': '¿El SAT se va a enterar de que usé esta herramienta?',
+        'faq.a1': 'No. El diagnóstico funciona completamente en tu navegador. No se envía ningún dato a ningún servidor. No hay registros, no hay cookies de rastreo, no hay forma de que alguien sepa que lo usaste. Es como usar una calculadora en tu computadora.',
+        'faq.q2': '¿Me van a multar si no estoy dado de alta en el SAT?',
+        'faq.a2': 'Depende. Si generas ingresos y no estás registrado, técnicamente estás incumpliendo una obligación fiscal. Las multas van de $4,480 a $13,430 MXN solo por no inscribirte (Art. 80 CFF). Sin embargo, regularizarte voluntariamente antes de que el SAT te requiera generalmente reduce las consecuencias. Consulta a un contador para tu caso específico.',
+        'faq.q3': 'Si las plataformas ya me retienen impuestos, ¿ya cumplí?',
+        'faq.a3': 'Solo si tus ingresos anuales por plataformas no exceden $300,000 MXN y optaste por que las retenciones sean tu pago definitivo. Si ganas más, o si tienes ingresos de otras fuentes, necesitas hacer declaraciones mensuales y anual por la diferencia. Las retenciones son un adelanto, no necesariamente el pago completo.',
+        'faq.q4': '¿Fisco Abierto es asesoría fiscal?',
+        'faq.a4': 'No. Fisco Abierto es una herramienta informativa. Traducimos la ley y las reformas a un lenguaje que cualquier persona pueda entender, pero no sustituimos a un contador público o abogado fiscalista. Siempre recomendamos consultar a un profesional antes de tomar decisiones sobre tu situación fiscal.',
+        'faq.q5': '¿Qué pasa con las criptomonedas? ¿El SAT sabe si tengo crypto?',
+        'faq.a5': 'Si usas exchanges mexicanos como Bitso, sí, reportan al SAT. Si usas exchanges extranjeros como Binance, el SAT no tiene acceso directo, pero puede ver los depósitos que llegan a tu cuenta bancaria mexicana. En México no existe un régimen fiscal especial para criptomonedas; las ganancias se tratan como enajenación de bienes y son ingresos acumulables para ISR.',
+        'faq.q6': '¿Esto de verdad es gratis? ¿Cuál es el truco?',
+        'faq.a6': 'No hay truco. Fisco Abierto es un proyecto de utilidad pública, no un negocio. No vendemos cursos, no ofrecemos "asesoría premium", no monetizamos tus datos (no los tenemos). El proyecto existe como portafolio profesional y porque creemos que la información fiscal básica debería ser accesible para todos.',
+        'newsletter.title': 'Newsletter semanal',
+        'newsletter.description': 'Lo que cambió en el SAT esta semana, explicado para personas normales. Gratis.',
+        'footer.disclaimer': 'Fisco Abierto es una herramienta informativa. No constituye asesoría fiscal, legal ni contable. Consulta a un profesional antes de tomar decisiones sobre tu situación fiscal.',
+        'footer.copy': '© 2026 Fisco Abierto. Hecho en México.',
+    },
+    en: {
+        'nav.diagnostic': 'Diagnostic',
+        'nav.faq': 'FAQ',
+        'nav.newsletter': 'Newsletter',
+        'hero.title': 'Do you earn income on digital platforms?',
+        'hero.subtitle': "Mexico's tax authority already knows.",
+        'hero.description': 'Understand your tax situation in less than 2 minutes. Without asking for your personal data, because understanding your taxes should be free.',
+        'hero.cta': 'Get my tax diagnostic',
+        'stats.title': "This isn't theoretical. It's already happening.",
+        'stats.subtitle': 'Real figures on how digital gig workers are being taxed in Mexico.',
+        'stats.stat1': 'people in Mexico earn from digital platforms. You\'re not alone.',
+        'stats.stat2': 'platforms already share information with Mexico\'s tax authority (SAT)',
+        'stats.stat3': 'is the new income tax (ISR) withholding rate on sales (was 1% before)',
+        'stats.stat4': 'is the maximum fine. Getting informed today saves problems tomorrow.',
+        'stats.stat5': 'of Mexican workers are informally employed. Many without knowing it.',
+        'stats.stat6': 'of your earnings go to withholding tax if you lack a tax ID (RFC). It can be avoided.',
+        'stats.callout': '<strong>As of April 1, 2026</strong>, Article 30-B of the Federal Tax Code (CFF) came into force: Mexico\'s tax authority now has <strong>real-time access</strong> to data from digital platforms in Mexico. The rules changed. Staying informed is no longer optional.',
+        'audience.title': 'Who is this for?',
+        'audience.subtitle': 'If you earn income on any of these platforms, this matters to you.',
+        'audience.sellers': 'Online sellers',
+        'audience.drivers': 'Drivers',
+        'audience.hosts': 'Hosts',
+        'audience.freelancers': 'Freelancers',
+        'audience.creators': 'Content creators',
+        'audience.payments': 'International payments',
+        'trust.title': 'Why trust Fisco Abierto?',
+        'trust.subtitle': "It's fair to ask. Here are the answers.",
+        'trust.card1.title': '📚 Who\'s behind it',
+        'trust.card1.text': 'An independent project created by Mexican tax law professionals. It\'s not a company, not a law firm, doesn\'t sell anything. It exists because basic tax information should be accessible to everyone, not just those who can afford a consultation.',
+        'trust.card2.title': '🔓 Why it\'s free',
+        'trust.card2.text': 'Because basic tax information shouldn\'t cost money. This project exists so people working on digital platforms understand their obligations without paying for a consultation. No premium plans, no upsells, no tricks.',
+        'trust.card3.title': '🛡️ Your data is safe',
+        'trust.card3.text': 'We don\'t ask for your name, tax ID (RFC), email, or any personal data in the diagnostic. Everything is processed directly in your browser. We don\'t send anything to any server. You can verify it yourself in the source code.',
+        'trust.card4.title': '⚖️ Inform, don\'t advise',
+        'trust.card4.text': 'Fisco Abierto translates the law so anyone can understand it. But it doesn\'t replace an accountant or tax lawyer. When the situation calls for it, we\'ll tell you: consult a professional. That\'s the responsible thing to do.',
+        'diag.title': 'Quick tax diagnostic',
+        'diag.intro': 'Select your platforms and approximate income. We don\'t ask for personal data (no name, tax ID, or email). Everything is processed in your browser.',
+        'diag.step1.question': 'Which platforms do you earn income on?',
+        'diag.step1.hint': 'You can select multiple.',
+        'diag.step1.indicator': 'Step 1 of 3',
+        'diag.step2.question': 'How much do you earn approximately per month in total?',
+        'diag.step2.hint': "We don't need the exact amount. A range is enough.",
+        'diag.step2.income1': 'Less than $10,000 MXN per month',
+        'diag.step2.income2': 'Between $10,000 and $25,000 MXN per month',
+        'diag.step2.income3': 'Between $25,000 and $50,000 MXN per month',
+        'diag.step2.threshold': 'Exceeds $300K/year threshold',
+        'diag.step2.income4': 'Between $50,000 and $150,000 MXN per month',
+        'diag.step2.income5': 'More than $150,000 MXN per month',
+        'diag.step2.indicator': 'Step 2 of 3',
+        'diag.step3.question': 'Almost done. Two final questions to refine your diagnostic.',
+        'diag.step3.hint': "There's no wrong answer. If you don't know, there's an option for that.",
+        'diag.step3.fiscal': 'Your status with the tax authority (SAT):',
+        'diag.step3.fiscal1': 'I\'m not registered with the tax authority',
+        'diag.step3.fiscal2': 'I\'m registered but haven\'t filed returns',
+        'diag.step3.fiscal3': 'I file but don\'t know if I include everything',
+        'diag.step3.fiscal4': 'I\'m current with my tax filings',
+        'diag.step3.fiscal5': 'I don\'t know / I\'m not sure',
+        'diag.step3.invoices': 'Do you issue invoices (tax receipts/CFDI)?',
+        'diag.step3.invoice1': 'Yes, I issue tax receipts for all income',
+        'diag.step3.invoice2': 'I only issue receipts for some income',
+        'diag.step3.invoice3': 'I don\'t issue invoices',
+        'diag.step3.invoice4': 'I don\'t know what a tax receipt (CFDI) is',
+        'diag.step3.indicator': 'Step 3 of 3',
+        'diag.next': 'Next',
+        'diag.prev': 'Back',
+        'diag.results': 'See my diagnostic',
+        'results.visibility': 'What the tax authority can see about your operations',
+        'results.obligations': 'Obligations you probably have (and maybe don\'t know)',
+        'results.actions': 'Steps you can take',
+        'results.cta': 'Want to stay updated on tax authority (SAT) changes?',
+        'results.newsletter': 'Subscribe to the newsletter',
+        'results.restart': 'Run another diagnostic',
+        'faq.title': 'Frequently asked questions',
+        'faq.subtitle': 'What most people ask before using the tool.',
+        'faq.q1': 'Will the tax authority know I used this tool?',
+        'faq.a1': 'No. The diagnostic works entirely in your browser. No data is sent to any server. No logs, no tracking cookies, no way anyone knows you used it. It\'s like using a calculator on your computer.',
+        'faq.q2': 'Will I be fined if I\'m not registered with the tax authority?',
+        'faq.a2': 'It depends. If you earn income and aren\'t registered, you\'re technically violating a tax obligation. Fines range from about $260 to $780 USD just for not registering (Article 80 of the Federal Tax Code). However, voluntarily regularizing your situation before the tax authority requires it generally reduces consequences. Consult an accountant about your specific situation.',
+        'faq.q3': 'If platforms already withhold taxes from me, am I compliant?',
+        'faq.a3': 'Only if your annual platform income doesn\'t exceed $300,000 MXN and you chose for withholdings to be your final payment. If you earn more, or have other income sources, you need to file monthly and annual returns for the difference. Withholdings are an advance, not necessarily the full payment.',
+        'faq.q4': 'Is Fisco Abierto tax advice?',
+        'faq.a4': 'No. Fisco Abierto is an informational tool. We translate the law and reforms into language anyone can understand, but we don\'t replace a professional accountant or tax attorney. We always recommend consulting a professional before making decisions about your tax situation.',
+        'faq.q5': 'What about cryptocurrency? Does the tax authority know if I have crypto?',
+        'faq.a5': 'If you use Mexican exchanges like Bitso, yes, they report to the tax authority. If you use foreign exchanges like Binance, the tax authority doesn\'t have direct access, but can see deposits arriving in your Mexican bank account. Mexico has no special tax regime for cryptocurrency; gains are treated as asset sales and count as taxable income.',
+        'faq.q6': 'Is this really free? What\'s the catch?',
+        'faq.a6': 'No catch. Fisco Abierto is a public utility project, not a business. We don\'t sell courses, don\'t offer "premium advice," don\'t monetize your data (we don\'t have any). The project exists as a professional portfolio and because we believe basic tax information should be accessible to everyone.',
+        'newsletter.title': 'Weekly newsletter',
+        'newsletter.description': 'What changed at the tax authority this week, explained for normal people. Free.',
+        'footer.disclaimer': 'Fisco Abierto is an informational tool. It does not constitute tax, legal, or accounting advice. Consult a professional before making decisions about your tax situation.',
+        'footer.copy': '© 2026 Fisco Abierto. Made in Mexico.',
+    }
+};
+
+function t(key) {
+    return translations[currentLanguage]?.[key] || translations.es[key] || key;
+}
+
+function setLanguage(lang) {
+    if (lang !== 'es' && lang !== 'en') return;
+    currentLanguage = lang;
+    document.documentElement.lang = lang;
+
+    // Update all elements with data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        const text = t(key);
+        if (el.innerHTML.includes('<')) {
+            // Has HTML inside, replace only text content carefully
+            el.innerHTML = text;
+        } else {
+            el.textContent = text;
+        }
+    });
+
+    // Update language toggle button
+    document.querySelectorAll('.lang-toggle .lang-option').forEach(opt => {
+        opt.classList.remove('active');
+        if (opt.dataset.lang === lang) opt.classList.add('active');
+    });
+}
+
+// Language toggle button
+document.getElementById('langToggle').addEventListener('click', () => {
+    const newLang = currentLanguage === 'es' ? 'en' : 'es';
+    setLanguage(newLang);
+});
+
+// Auto-detect browser language on load
+window.addEventListener('DOMContentLoaded', () => {
+    const browserLang = navigator.language || navigator.userLanguage;
+    if (browserLang.startsWith('en')) {
+        setLanguage('en');
+    }
+});
+
 // ==================== ESTADO ====================
 const state = {
     platforms: new Set(),
@@ -1153,7 +1413,9 @@ function showResults() {
     const riskLevel = document.getElementById('risk-level');
 
     banner.className = 'risk-banner risk-' + risk.level;
-    const labels = { alto: 'EXPOSICION ALTA', medio: 'EXPOSICION MEDIA', bajo: 'EXPOSICION BAJA' };
+    const labels = currentLanguage === 'en'
+        ? { alto: 'HIGH EXPOSURE', medio: 'MEDIUM EXPOSURE', bajo: 'LOW EXPOSURE' }
+        : { alto: 'EXPOSICION ALTA', medio: 'EXPOSICION MEDIA', bajo: 'EXPOSICION BAJA' };
     riskLevel.textContent = labels[risk.level];
 
     renderList('sat-visibility-list', risk.visibility);
@@ -1165,24 +1427,47 @@ function showResults() {
 
 function renderProfileSummary() {
     const container = document.getElementById('profile-summary');
-    const platformNames = {
+
+    const platformNames = currentLanguage === 'en' ? {
+        meli: 'Mercado Libre', amazon: 'Amazon', uber: 'Uber', didi: 'DiDi',
+        rappi: 'Rappi', airbnb: 'Airbnb', youtube: 'YouTube', tiktok: 'TikTok',
+        freelance: 'Freelance', paypal: 'PayPal/Wise', crypto: 'Cryptocurrency', otro: 'another platform'
+    } : {
         meli: 'Mercado Libre', amazon: 'Amazon', uber: 'Uber', didi: 'DiDi',
         rappi: 'Rappi', airbnb: 'Airbnb', youtube: 'YouTube', tiktok: 'TikTok',
         freelance: 'freelance', paypal: 'PayPal/Wise', crypto: 'crypto', otro: 'otra plataforma'
     };
-    const incomeLabels = {
+
+    const incomeLabels = currentLanguage === 'en' ? {
+        bajo: 'less than $10,000 MXN per month', medio: 'between $10,000 and $25,000 MXN per month',
+        umbral: 'between $25,000 and $50,000 MXN per month', alto: 'between $50,000 and $150,000 MXN per month',
+        muy_alto: 'more than $150,000 MXN per month'
+    } : {
         bajo: 'menos de $10,000', medio: 'entre $10,000 y $25,000',
         umbral: 'entre $25,000 y $50,000', alto: 'entre $50,000 y $150,000',
         muy_alto: 'mas de $150,000'
     };
-    const fiscalFragments = {
+
+    const fiscalFragments = currentLanguage === 'en' ? {
+        ninguna: 'you are not registered with the tax authority',
+        alta_sin_declarar: 'you are registered but have not filed returns',
+        declaro_parcial: 'you file but are unsure if you include everything',
+        al_corriente: 'you are current with your tax filings',
+        no_se: 'you are unsure of your status with the tax authority'
+    } : {
         ninguna: 'no estas dado de alta en el SAT',
         alta_sin_declarar: 'estas dado de alta pero no has declarado',
         declaro_parcial: 'declaras pero no estas seguro de incluir todo',
         al_corriente: 'estas al corriente con tus declaraciones',
         no_se: 'no estas seguro de tu situacion ante el SAT'
     };
-    const facturaFragments = {
+
+    const facturaFragments = currentLanguage === 'en' ? {
+        si_todas: 'you issue tax receipts for all your income',
+        algunas: 'you only issue receipts for some income',
+        no: 'you do not issue invoices',
+        no_se: 'you do not know what a tax receipt (CFDI) is'
+    } : {
         si_todas: 'facturas todos tus ingresos',
         algunas: 'solo facturas algunos ingresos',
         no: 'no emites facturas',
@@ -1191,11 +1476,18 @@ function renderProfileSummary() {
 
     const platsArr = Array.from(state.platforms).map(p => platformNames[p] || p);
     let platsText = '';
-    if (platsArr.length === 1) platsText = '<strong>' + platsArr[0] + '</strong>';
-    else if (platsArr.length === 2) platsText = '<strong>' + platsArr[0] + '</strong> y <strong>' + platsArr[1] + '</strong>';
-    else platsText = platsArr.slice(0,-1).map(p => '<strong>' + p + '</strong>').join(', ') + ' y <strong>' + platsArr[platsArr.length-1] + '</strong>';
+    const connector = currentLanguage === 'en' ? ' and ' : ' y ';
+    const comma = currentLanguage === 'en' ? ', ' : ', ';
 
-    container.innerHTML = `Tu perfil: generas <strong>${incomeLabels[state.income]} al mes</strong> en ${platsText}, ${fiscalFragments[state.fiscal]}, y ${facturaFragments[state.factura]}.`;
+    if (platsArr.length === 1) platsText = '<strong>' + platsArr[0] + '</strong>';
+    else if (platsArr.length === 2) platsText = '<strong>' + platsArr[0] + '</strong>' + connector + '<strong>' + platsArr[1] + '</strong>';
+    else platsText = platsArr.slice(0,-1).map(p => '<strong>' + p + '</strong>').join(comma) + connector + '<strong>' + platsArr[platsArr.length-1] + '</strong>';
+
+    const profileText = currentLanguage === 'en'
+        ? `Your profile: you earn <strong>${incomeLabels[state.income]}</strong> on ${platsText}, ${fiscalFragments[state.fiscal]}, and ${facturaFragments[state.factura]}.`
+        : `Tu perfil: generas <strong>${incomeLabels[state.income]} al mes</strong> en ${platsText}, ${fiscalFragments[state.fiscal]}, y ${facturaFragments[state.factura]}.`;
+
+    container.innerHTML = profileText;
 }
 
 function renderList(id, items) {
@@ -1217,35 +1509,59 @@ function calculateRisk() {
 
     // --- Visibilidad por plataforma ---
     if (categories.has('marketplace')) {
-        visibility.push('<strong>Tus ventas en marketplaces:</strong> Mercado Libre y Amazon reportan directamente al SAT cada operación, incluyendo montos, fechas y retenciones aplicadas (Art. 113-C LISR).');
+        const text = currentLanguage === 'en'
+            ? '<strong>Your marketplace sales:</strong> Mercado Libre and Amazon report every transaction directly to the tax authority, including amounts, dates, and withholdings applied (Income Tax Law Article 113-C).'
+            : '<strong>Tus ventas en marketplaces:</strong> Mercado Libre y Amazon reportan directamente al SAT cada operación, incluyendo montos, fechas y retenciones aplicadas (Art. 113-C LISR).';
+        visibility.push(text);
         riskScore += 3;
     }
     if (categories.has('transporte')) {
-        visibility.push('<strong>Tus viajes como conductor:</strong> Uber, DiDi y plataformas similares reportan tus ingresos al SAT y te retienen ISR e IVA automáticamente.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Your rides as a driver:</strong> Uber, DiDi, and similar platforms report your income to the tax authority and automatically withhold income tax (ISR) and value-added tax (IVA).'
+            : '<strong>Tus viajes como conductor:</strong> Uber, DiDi y plataformas similares reportan tus ingresos al SAT y te retienen ISR e IVA automáticamente.';
+        visibility.push(text);
         riskScore += 2;
     }
     if (categories.has('delivery')) {
-        visibility.push('<strong>Tus entregas:</strong> Rappi y plataformas de delivery informan al SAT sobre los ingresos de sus repartidores.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Your deliveries:</strong> Rappi and delivery platforms report rider income to the tax authority.'
+            : '<strong>Tus entregas:</strong> Rappi y plataformas de delivery informan al SAT sobre los ingresos de sus repartidores.';
+        visibility.push(text);
         riskScore += 2;
     }
     if (categories.has('hospedaje')) {
-        visibility.push('<strong>Tus rentas de hospedaje:</strong> Airbnb reporta al SAT y retiene impuestos. Si tu inmueble está en un estado con impuesto local de hospedaje, hay una capa adicional.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Your rental income:</strong> Airbnb reports to the tax authority and withholds taxes. If your property is in a state with a local accommodation tax, there\'s an additional layer.'
+            : '<strong>Tus rentas de hospedaje:</strong> Airbnb reporta al SAT y retiene impuestos. Si tu inmueble está en un estado con impuesto local de hospedaje, hay una capa adicional.';
+        visibility.push(text);
         riskScore += 3;
     }
     if (categories.has('contenido')) {
-        visibility.push('<strong>Tus ingresos como creador:</strong> Los pagos de YouTube, TikTok, etc. llegan por transferencia internacional. Los bancos mexicanos reportan al SAT movimientos del exterior.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Your creator income:</strong> Payments from YouTube, TikTok, etc. arrive via international transfer. Mexican banks report to the tax authority all foreign transfers.'
+            : '<strong>Tus ingresos como creador:</strong> Los pagos de YouTube, TikTok, etc. llegan por transferencia internacional. Los bancos mexicanos reportan al SAT movimientos del exterior.';
+        visibility.push(text);
         riskScore += 2;
     }
     if (categories.has('freelance')) {
-        visibility.push('<strong>Tus pagos de freelance:</strong> Si recibes por transferencia bancaria o plataformas de pago, el SAT puede detectar ingresos no declarados al cruzar información con los bancos (Art. 55 CFF).');
+        const text = currentLanguage === 'en'
+            ? '<strong>Your freelance payments:</strong> If you receive payments via bank transfer or payment platforms, the tax authority can detect unreported income by cross-checking with banks (Federal Tax Code Article 55).'
+            : '<strong>Tus pagos de freelance:</strong> Si recibes por transferencia bancaria o plataformas de pago, el SAT puede detectar ingresos no declarados al cruzar información con los bancos (Art. 55 CFF).';
+        visibility.push(text);
         riskScore += 2;
     }
     if (categories.has('pagos')) {
-        visibility.push('<strong>Tus movimientos en PayPal/Wise:</strong> Las instituciones financieras mexicanas reportan al SAT. Si los fondos llegan a tu cuenta bancaria en México, el SAT tiene visibilidad.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Your PayPal/Wise transfers:</strong> Mexican financial institutions report to the tax authority. If funds arrive in your Mexican bank account, the tax authority has visibility.'
+            : '<strong>Tus movimientos en PayPal/Wise:</strong> Las instituciones financieras mexicanas reportan al SAT. Si los fondos llegan a tu cuenta bancaria en México, el SAT tiene visibilidad.';
+        visibility.push(text);
         riskScore += 2;
     }
     if (categories.has('crypto')) {
-        visibility.push('<strong>Tus operaciones crypto:</strong> Exchanges mexicanos como Bitso reportan al SAT. Exchanges extranjeros no reportan directo, pero los depósitos a tu banco mexicano sí son visibles.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Your crypto transactions:</strong> Mexican exchanges like Bitso report to the tax authority. Foreign exchanges don\'t report directly, but deposits to your Mexican bank are visible.'
+            : '<strong>Tus operaciones crypto:</strong> Exchanges mexicanos como Bitso reportan al SAT. Exchanges extranjeros no reportan directo, pero los depósitos a tu banco mexicano sí son visibles.';
+        visibility.push(text);
         riskScore += 2;
     }
 
@@ -1258,71 +1574,125 @@ function calculateRisk() {
 
     // Alerta de umbral $300K
     if (state.income === 'umbral' || state.income === 'alto' || state.income === 'muy_alto') {
-        obligations.push('<strong>Rebasas el umbral de $300,000 anuales:</strong> Las retenciones de las plataformas ya no pueden ser tu pago definitivo. Debes calcular y pagar la diferencia de ISR e IVA mensualmente (Art. 113-A LISR).');
+        const text = currentLanguage === 'en'
+            ? '<strong>You exceed the $300,000 annual threshold:</strong> Platform withholdings can no longer be your final payment. You must calculate and pay the ISR and IVA difference monthly (Income Tax Law Articles 113-A).'
+            : '<strong>Rebasas el umbral de $300,000 anuales:</strong> Las retenciones de las plataformas ya no pueden ser tu pago definitivo. Debes calcular y pagar la diferencia de ISR e IVA mensualmente (Art. 113-A LISR).';
+        obligations.push(text);
     }
 
     // --- Situación fiscal ---
     if (state.fiscal === 'ninguna') {
         riskScore += 4;
-        obligations.push('<strong>Darte de alta en el SAT:</strong> Si generas ingresos, estas obligado a inscribirte en el RFC y elegir un regimen fiscal. Esto no es opcional.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Register with the tax authority (SAT):</strong> If you earn income, you\'re required to register for a tax ID (RFC) and choose a tax regime. This is not optional.'
+            : '<strong>Darte de alta en el SAT:</strong> Si generas ingresos, estas obligado a inscribirte en el RFC y elegir un regimen fiscal. Esto no es opcional.';
+        obligations.push(text);
     }
     if (state.fiscal === 'alta_sin_declarar') {
         riskScore += 3;
-        obligations.push('<strong>Presentar declaraciones pendientes:</strong> Estar dado de alta sin declarar puede generar requerimientos del SAT con multas y recargos.');
+        const text = currentLanguage === 'en'
+            ? '<strong>File pending returns:</strong> Being registered without filing can trigger tax authority inquiries with penalties and surcharges.'
+            : '<strong>Presentar declaraciones pendientes:</strong> Estar dado de alta sin declarar puede generar requerimientos del SAT con multas y recargos.';
+        obligations.push(text);
     }
     if (state.fiscal === 'declaro_parcial') {
         riskScore += 2;
-        obligations.push('<strong>Revisar que ingresos estas incluyendo:</strong> Si tienes ingresos de varias plataformas, todos deben estar en tus declaraciones. El SAT cruza informacion.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Review which income you\'re including:</strong> If you have income from multiple platforms, all must be in your returns. The tax authority cross-checks.'
+            : '<strong>Revisar que ingresos estas incluyendo:</strong> Si tienes ingresos de varias plataformas, todos deben estar en tus declaraciones. El SAT cruza informacion.';
+        obligations.push(text);
     }
     if (state.fiscal === 'no_se') {
         riskScore += 3;
-        obligations.push('<strong>Revisa tu situacion fiscal:</strong> Si no estas seguro de tu estatus ante el SAT, lo primero es obtener tu Constancia de Situacion Fiscal en sat.gob.mx. Ahi vas a ver si estas dado de alta, en que regimen y tus obligaciones.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Check your tax status:</strong> If you\'re unsure of your status with the tax authority, start by getting your Tax Status Certificate at sat.gob.mx. There you\'ll see if you\'re registered, in which regime, and your obligations.'
+            : '<strong>Revisa tu situacion fiscal:</strong> Si no estas seguro de tu estatus ante el SAT, lo primero es obtener tu Constancia de Situacion Fiscal en sat.gob.mx. Ahi vas a ver si estas dado de alta, en que regimen y tus obligaciones.';
+        obligations.push(text);
     }
 
     // --- Facturación ---
     if (state.factura === 'no' || state.factura === 'no_se') {
         riskScore += 2;
-        obligations.push('<strong>Emitir facturas (CFDI):</strong> Si estas dado de alta en el SAT, debes emitir un CFDI por cada ingreso que recibas. Es un tramite gratuito en el portal del SAT. No facturar es una de las irregularidades mas comunes y faciles de detectar.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Issue tax receipts (CFDI):</strong> If you\'re registered, you must issue a tax receipt for each income received. It\'s free in the tax authority portal. Not issuing is one of the most common and easy-to-detect violations.'
+            : '<strong>Emitir facturas (CFDI):</strong> Si estas dado de alta en el SAT, debes emitir un CFDI por cada ingreso que recibas. Es un tramite gratuito en el portal del SAT. No facturar es una de las irregularidades mas comunes y faciles de detectar.';
+        obligations.push(text);
     }
     if (state.factura === 'algunas') {
         riskScore += 1;
-        obligations.push('<strong>Facturar todos tus ingresos:</strong> Si solo facturas algunos, el SAT puede detectar la diferencia al cruzar lo que las plataformas reportan vs lo que tu facturas. Conviene regularizar.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Issue tax receipts for all income:</strong> If you only issue for some, the tax authority can detect the difference by comparing platform reports vs your receipts. Regularizing helps.'
+            : '<strong>Facturar todos tus ingresos:</strong> Si solo facturas algunos, el SAT puede detectar la diferencia al cruzar lo que las plataformas reportan vs lo que tu facturas. Conviene regularizar.';
+        obligations.push(text);
     }
 
     // --- Obligaciones por tipo ---
     if (platforms.length > 0) {
-        obligations.push('<strong>Declaraciones mensuales:</strong> ISR e IVA se declaran cada mes (a más tardar el día 17). Esto aplica aunque las plataformas ya te retengan.');
-        obligations.push('<strong>Declaración anual:</strong> En abril de cada año debes presentar tu declaración anual de ISR, incluyendo todos los ingresos de todas tus fuentes.');
+        const text1 = currentLanguage === 'en'
+            ? '<strong>Monthly returns:</strong> Income tax (ISR) and value-added tax (IVA) are declared every month (by the 17th). This applies even if platforms already withhold.'
+            : '<strong>Declaraciones mensuales:</strong> ISR e IVA se declaran cada mes (a más tardar el día 17). Esto aplica aunque las plataformas ya te retengan.';
+        const text2 = currentLanguage === 'en'
+            ? '<strong>Annual return:</strong> Every April you must file your annual income tax (ISR) return, including all income from all sources.'
+            : '<strong>Declaración anual:</strong> En abril de cada año debes presentar tu declaración anual de ISR, incluyendo todos los ingresos de todas tus fuentes.';
+        obligations.push(text1);
+        obligations.push(text2);
     }
     if (categories.has('marketplace') || categories.has('transporte') || categories.has('hospedaje') || categories.has('delivery')) {
-        obligations.push('<strong>Régimen de plataformas digitales:</strong> Si tus ingresos anuales no exceden $300,000 MXN, las retenciones de las plataformas pueden ser tu pago definitivo. Si exceden, debes calcular y pagar la diferencia (Art. 113-A y 113-B LISR).');
+        const text = currentLanguage === 'en'
+            ? '<strong>Digital platform tax regime:</strong> If your annual income doesn\'t exceed $300,000 MXN, platform withholdings can be your final payment. If it exceeds, you must calculate and pay the difference (Income Tax Law Articles 113-A and 113-B).'
+            : '<strong>Régimen de plataformas digitales:</strong> Si tus ingresos anuales no exceden $300,000 MXN, las retenciones de las plataformas pueden ser tu pago definitivo. Si exceden, debes calcular y pagar la diferencia (Art. 113-A y 113-B LISR).';
+        obligations.push(text);
     }
     if ((categories.has('contenido') || categories.has('freelance') || categories.has('pagos')) && state.factura === 'si_todas') {
-        obligations.push('<strong>Sigue facturando:</strong> Estas haciendo bien en emitir CFDI. Asegurate de que cada factura coincida con los montos que las plataformas reportan al SAT.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Keep issuing receipts:</strong> You\'re doing well with tax receipts. Make sure each receipt matches the amounts platforms report to the tax authority.'
+            : '<strong>Sigue facturando:</strong> Estas haciendo bien en emitir CFDI. Asegurate de que cada factura coincida con los montos que las plataformas reportan al SAT.';
+        obligations.push(text);
     }
     if (categories.has('crypto')) {
-        obligations.push('<strong>Enajenación de bienes:</strong> Las ganancias por venta de criptomonedas se consideran ingresos acumulables. No hay régimen especial para crypto en México, lo cual complica las cosas.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Asset sales (crypto):</strong> Gains from cryptocurrency sales are treated as taxable income. There\'s no special tax regime for crypto in Mexico, which complicates things.'
+            : '<strong>Enajenación de bienes:</strong> Las ganancias por venta de criptomonedas se consideran ingresos acumulables. No hay régimen especial para crypto en México, lo cual complica las cosas.';
+        obligations.push(text);
     }
 
     // --- Acciones ---
-    actions.push('<strong>Obtén tu Constancia de Situación Fiscal:</strong> Entra al portal del SAT y descárgala. Este documento te dice en qué régimen estás (o si no estás dado de alta).');
+    const action1 = currentLanguage === 'en'
+        ? '<strong>Get your Tax Status Certificate:</strong> Go to the tax authority portal and download it. This document tells you which regime you\'re in (or if you\'re not registered).'
+        : '<strong>Obtén tu Constancia de Situación Fiscal:</strong> Entra al portal del SAT y descárgala. Este documento te dice en qué régimen estás (o si no estás dado de alta).';
+    actions.push(action1);
 
     if (state.fiscal === 'ninguna') {
-        actions.push('<strong>Agenda cita en el SAT para inscribirte:</strong> Puedes hacerlo en sat.gob.mx. Lleva INE y comprobante de domicilio. Es gratis.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Schedule an appointment at the tax authority to register:</strong> You can do it at sat.gob.mx. Bring your ID and proof of address. It\'s free.'
+            : '<strong>Agenda cita en el SAT para inscribirte:</strong> Puedes hacerlo en sat.gob.mx. Lleva INE y comprobante de domicilio. Es gratis.';
+        actions.push(text);
     }
 
     if (state.fiscal === 'ninguna' || state.fiscal === 'alta_sin_declarar' || state.fiscal === 'no_se') {
-        actions.push('<strong>Consulta a un contador:</strong> Tu situacion requiere atencion profesional. Un contador puede regularizarte y calcular si hay montos pendientes.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Consult an accountant:</strong> Your situation needs professional attention. An accountant can help you regularize and calculate any outstanding amounts.'
+            : '<strong>Consulta a un contador:</strong> Tu situacion requiere atencion profesional. Un contador puede regularizarte y calcular si hay montos pendientes.';
+        actions.push(text);
     }
 
     if (state.factura === 'no_se') {
-        actions.push('<strong>Aprende a facturar:</strong> Facturar suena intimidante pero es un tramite que puedes hacer gratis en el portal del SAT. Busca tutoriales de "generar CFDI en el SAT" o preguntale a tu contador.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Learn to issue tax receipts:</strong> Issuing receipts sounds intimidating but it\'s a free process in the tax authority portal. Search for "how to generate CFDI" tutorials or ask your accountant.'
+            : '<strong>Aprende a facturar:</strong> Facturar suena intimidante pero es un tramite que puedes hacer gratis en el portal del SAT. Busca tutoriales de "generar CFDI en el SAT" o preguntale a tu contador.';
+        actions.push(text);
     }
 
-    actions.push('<strong>Infórmate antes de actuar:</strong> Suscríbete al newsletter de Fisco Abierto para recibir actualizaciones semanales sobre cambios fiscales que te afectan.');
+    const action2 = currentLanguage === 'en'
+        ? '<strong>Stay informed before acting:</strong> Subscribe to the Fisco Abierto newsletter to receive weekly updates on tax authority changes that affect you.'
+        : '<strong>Infórmate antes de actuar:</strong> Suscríbete al newsletter de Fisco Abierto para recibir actualizaciones semanales sobre cambios fiscales que te afectan.';
+    actions.push(action2);
 
     if (categories.size > 2) {
-        actions.push('<strong>Mapea todas tus fuentes de ingreso:</strong> Con más de dos plataformas, conviene tener un registro claro de cuánto recibes de cada una para tu declaración.');
+        const text = currentLanguage === 'en'
+            ? '<strong>Map all your income sources:</strong> With more than two platforms, it\'s helpful to keep a clear record of how much you receive from each for your returns.'
+            : '<strong>Mapea todas tus fuentes de ingreso:</strong> Con más de dos plataformas, conviene tener un registro claro de cuánto recibes de cada una para tu declaración.';
+        actions.push(text);
     }
 
     // --- Nivel final ---
