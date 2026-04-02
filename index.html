@@ -1378,10 +1378,13 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     const ctx = canvas.getContext('2d');
     let particles = [];
     let w, h;
-    const PARTICLE_COUNT = 60;
+    const isMobile = window.innerWidth < 768;
+    const PARTICLE_COUNT = isMobile ? 30 : 60;
     const CONNECTION_DIST = 150;
     const MOUSE_DIST = 200;
     let mouse = { x: -999, y: -999 };
+    let isVisible = true;
+    let animId = null;
 
     function resize() {
         const hero = canvas.parentElement;
@@ -1463,10 +1466,10 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
             if (p.y < 0 || p.y > h) p.vy *= -1;
         }
 
-        requestAnimationFrame(draw);
+        if (isVisible) animId = requestAnimationFrame(draw);
     }
 
-    // mouse tracking on hero
+    // mouse tracking on hero (desktop only)
     canvas.parentElement.addEventListener('mousemove', function(e) {
         const rect = canvas.getBoundingClientRect();
         mouse.x = e.clientX - rect.left;
@@ -1476,6 +1479,18 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
         mouse.x = -999;
         mouse.y = -999;
     });
+
+    // pause animation when hero is out of view (fixes mobile scroll jank)
+    var heroObserver = new IntersectionObserver(function(entries) {
+        isVisible = entries[0].isIntersecting;
+        if (isVisible && !animId) {
+            animId = requestAnimationFrame(draw);
+        } else if (!isVisible) {
+            if (animId) cancelAnimationFrame(animId);
+            animId = null;
+        }
+    }, { threshold: 0.05 });
+    heroObserver.observe(canvas.parentElement);
 
     window.addEventListener('resize', function() { resize(); createParticles(); });
     resize();
