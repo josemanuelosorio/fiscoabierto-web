@@ -592,6 +592,13 @@
             font-weight: 700;
             color: #5EEAD4;
             line-height: 1.2;
+            filter: blur(8px);
+            opacity: 0.4;
+            transition: filter 0.8s ease-out, opacity 0.8s ease-out;
+        }
+        .stat-number.counting {
+            filter: blur(0px);
+            opacity: 1;
         }
         .stat-label {
             font-size: 0.85rem;
@@ -1809,11 +1816,10 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
         entries.forEach(function(entry) {
             if (entry.isIntersecting && !animated) {
                 animated = true;
-                counters.forEach(function(counter) {
-                    counter.textContent = counter.getAttribute('data-prefix') + '0';
-                });
                 counters.forEach(function(counter, i) {
                     setTimeout(function() {
+                        counter.textContent = counter.getAttribute('data-prefix') + '0';
+                        counter.classList.add('counting');
                         animateCounter(counter);
                     }, i * 150);
                 });
