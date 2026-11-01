@@ -1,0 +1,35 @@
+# Corre los chequeos del sitio en cada push y en cada pull request.
+# Dos trabajos: los que solo necesitan node (rápidos) y los que necesitan
+# un navegador real (calculadora, idioma en el DOM, láminas y html-validate).
+name: Pruebas
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  navegador:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:navegador

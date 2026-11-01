@@ -15,7 +15,11 @@
 //     node tools/laminas.js [--rapido]
 // Tarda unos tres minutos, porque deja correr láminas completas.
 const http = require('http'), fs = require('fs'), path = require('path');
-const { chromium } = require('playwright');
+let chromium;
+try { ({ chromium } = require('playwright')); } catch (e) {
+  console.log('playwright no esta instalado (npm install)');
+  process.exit(2);
+}
 const raiz = path.resolve(__dirname, '..');
 const lento = !process.argv.includes('--rapido');
 const tipos = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.woff2': 'font/woff2', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.png': 'image/png', '.mp4': 'video/mp4' };
