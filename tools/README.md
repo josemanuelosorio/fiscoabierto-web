@@ -1,5 +1,22 @@
 # tools
 
+## Correr todo
+
+Desde `web/`, una vez:
+
+    npm install
+    npx playwright install chromium
+
+Y antes de cada push:
+
+    npm test                    # chequeos que solo necesitan node
+    npm run test:navegador      # html-validate, calculadora, idioma en el DOM y láminas
+    npm run test:todo           # los dos grupos
+
+`correr.js` corre todos los chequeos del grupo aunque alguno falle, muestra la
+salida solo de los que fallaron y sale con código 1 si falló al menos uno. El
+workflow `.github/workflows/pruebas.yml` corre los dos grupos en cada push.
+
 ## smoke.js
 
 Corre un `<script>` de `index.html` contra un DOM de mentiras y reporta si el

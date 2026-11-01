@@ -104,8 +104,10 @@ else {
 async function dom() {
   let pw;
   try { pw = require('playwright'); } catch (e) {
-    console.log('4. dom: playwright no esta instalado en este node; se omite (npm i -D playwright)');
-    return;
+    // Pedir --dom y no poder correrlo es una falla, no un pase: sin esto el
+    // chequeo salia con 0 sin haber leido el DOM.
+    console.log('4. dom: playwright no esta instalado (npm install); no se pudo revisar el DOM');
+    process.exit(2);
   }
   const ESPANOL = /[áéíóúñ¿¡]|\b(de la|del|que|los|las|para|con|una|por|sin|más|tus|está|son|pagan|tasa|ley|junio|corte)\b/i;
   const b = await pw.chromium.launch();

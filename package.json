@@ -1,0 +1,15 @@
+{
+  "name": "fiscoabierto-web",
+  "private": true,
+  "description": "Chequeos del sitio fiscoabierto.org. El sitio no tiene paso de build: esto solo corre pruebas.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node tools/correr.js node",
+    "test:navegador": "node tools/correr.js navegador",
+    "test:todo": "node tools/correr.js node navegador"
+  },
+  "devDependencies": {
+    "html-validate": "11.16.3",
+    "playwright": "1.64.1"
+  }
+}

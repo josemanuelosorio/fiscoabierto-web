@@ -23,6 +23,8 @@ El contenido fiscal es mío: qué dice la ley, cada cifra con su artículo y la 
 ├── videos/                 # Videos de la página principal, con sus portadas
 ├── docs/                   # Bitácoras de mantenimiento y verificación de fuentes
 ├── tools/                  # Chequeos que corren antes de cada push (detalle en tools/README.md)
+├── .github/workflows/      # pruebas.yml: los chequeos en cada push
+├── package.json            # Dependencias de las pruebas; el sitio no tiene build
 ├── .htmlvalidate.json      # Configuración de html-validate
 ├── CNAME                   # Dominio para GitHub Pages
 ├── favicon.svg, favicon-512.png
@@ -46,7 +48,7 @@ Los MP4, sus portadas y `aprende/laminas/const.js` salen de un pipeline de rende
 
 ## Antes de cada push
 
-Cada push a `main` publica en GitHub Pages. Desde esta carpeta:
+Cada push a `main` publica en GitHub Pages. Desde esta carpeta, `npm test` corre los chequeos que solo necesitan node y `npm run test:navegador` los que necesitan Chromium (instalación en `tools/README.md`); GitHub Actions corre los dos en cada push. Qué cubre cada uno:
 
 - Si toca JS: `node tools/smoke.js` y `node tools/smoke.js aprende/index.html`.
 - Si toca contenido: `node tools/cifras.js` y `node tools/cifras.js aprende/index.html` con divergencias en 0, y `node tools/i18n.js` sin hallazgos (con `aprende/index.html --dom` revisa también las seis láminas en inglés; necesita Playwright).

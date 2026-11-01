@@ -205,3 +205,4 @@ if (filas.length) {
 }
 out.push(``);
 process.stdout.write(out.join('\n'));
+if (divergencias) process.exitCode = 1;
