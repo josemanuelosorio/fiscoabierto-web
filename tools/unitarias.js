@@ -48,6 +48,13 @@ test('declaración anual: 30 de abril o el siguiente día hábil', () => {
   a = faPlazo.anual(dia('2027-04-30'));
   assert.equal(iso(a.fin), '2027-04-30');
   assert.equal(a.ejercicio, 2026);
+  // Si el plazo se corre a mayo, el periodo sigue en curso hasta la fecha corrida.
+  a = faPlazo.anual(dia('2028-05-01'));
+  assert.equal(iso(a.fin), '2028-05-02');
+  assert.equal(a.enCurso, true, '1 de mayo de 2028: la anual vence el 2 y sigue en curso');
+  a = faPlazo.anual(dia('2028-05-03'));
+  assert.equal(a.ejercicio, 2028);
+  assert.equal(a.enCurso, false);
 });
 
 // Igualdad con tolerancia: las tasas son decimales binarios (0.025 no es exacto).

@@ -27,7 +27,9 @@ var faPlazo = (function () {
         h = h || hoy();
         var y = h.getFullYear(), fin = habil(new Date(y, 3, 30));
         if (h > fin) { y++; fin = habil(new Date(y, 3, 30)); }
-        return { ejercicio: y - 1, fin: fin, enCurso: h >= new Date(y, 0, 1) && h.getMonth() <= 3 && h.getFullYear() === y };
+        // En curso: del 1 de enero a la fecha limite ya corrida. Comparar contra
+        // abril dejaba fuera el 1 y 2 de mayo cuando el 30 cae en fin de semana.
+        return { ejercicio: y - 1, fin: fin, enCurso: h >= new Date(y, 0, 1) && h <= fin };
     }
     function dias(d, h) { return Math.round((d - (h || hoy())) / 86400000); }
     var DIAS = { es: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'], en: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] };
