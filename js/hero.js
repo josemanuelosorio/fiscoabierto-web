@@ -9,7 +9,7 @@
     const PARTICLE_COUNT = parseInt(getComputedStyle(canvas.parentElement).getPropertyValue('--hero-particulas'), 10) || 60;
     const CONNECTION_DIST = 150;
     const MOUSE_DIST = 200;
-    let mouse = { x: -999, y: -999 };
+    const mouse = { x: -999, y: -999 };
     let isVisible = true;
     let animId = null;
     const reducedHero = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -79,7 +79,7 @@
         }
 
         // Particulas
-        for (let p of particles) {
+        for (const p of particles) {
             p.pulse += p.pulseSpeed;
             const glow = 0.3 + Math.sin(p.pulse) * 0.2;
             ctx.beginPath();
@@ -115,7 +115,7 @@
     });
 
     // Con el hero fuera de pantalla la animacion se pausa: en movil el scroll se trababa
-    var heroObserver = new IntersectionObserver(function(entries) {
+    const heroObserver = new IntersectionObserver(function(entries) {
         isVisible = entries[0].isIntersecting;
         if (isVisible && !animId && !reducedHero.matches) {
             animId = requestAnimationFrame(draw);
@@ -127,8 +127,8 @@
     heroObserver.observe(canvas.parentElement);
 
     // Redimensiona solo cuando cambia el ancho: la barra del navegador movil cambia el alto y no cuenta
-    var lastWidth = window.innerWidth;
-    var resizeTimer;
+    let lastWidth = window.innerWidth;
+    let resizeTimer;
     window.addEventListener('resize', function() {
         if (window.innerWidth !== lastWidth) {
             lastWidth = window.innerWidth;

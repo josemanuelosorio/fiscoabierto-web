@@ -1,22 +1,22 @@
 (function () {
-    var vids = [document.getElementById('vidPlayer'), document.getElementById('vidPlayer2')];
+    const vids = [document.getElementById('vidPlayer'), document.getElementById('vidPlayer2')];
     if (!vids[0] || !vids[1]) return;
-    var section = document.getElementById('videos');
-    var frame = document.getElementById('vidFrame');
-    var poster = document.getElementById('vidPoster');
-    var caps = Array.prototype.slice.call(document.querySelectorAll('.vid-ch'));
-    var fills = caps.map(function (c) { return c.querySelector('.vid-ch-fill'); });
-    var orden = caps.map(function (c) { return c.dataset.vid; });
-    var textEl = document.getElementById('vidText');
-    var nowEl = document.getElementById('vidNow');
-    var nowN = document.getElementById('vidNowN');
-    var nowT = document.getElementById('vidNowT');
-    var tituloEspera = null;
-    var boton = document.getElementById('vidPlay');
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    var narrow = window.matchMedia('(max-width: 600px)');
+    const section = document.getElementById('videos');
+    const frame = document.getElementById('vidFrame');
+    const poster = document.getElementById('vidPoster');
+    const caps = Array.prototype.slice.call(document.querySelectorAll('.vid-ch'));
+    const fills = caps.map(function (c) { return c.querySelector('.vid-ch-fill'); });
+    const orden = caps.map(function (c) { return c.dataset.vid; });
+    const textEl = document.getElementById('vidText');
+    const nowEl = document.getElementById('vidNow');
+    const nowN = document.getElementById('vidNowN');
+    const nowT = document.getElementById('vidNowT');
+    let tituloEspera = null;
+    const boton = document.getElementById('vidPlay');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const narrow = window.matchMedia('(max-width: 600px)');
     // i = capitulo en curso; cur = cual de los dos <video> lo lleva.
-    var i = 0, cur = 0, cargado = false, visible = false, pausadoPorScroll = false, espera = null;
+    let i = 0, cur = 0, cargado = false, visible = false, pausadoPorScroll = false, espera = null;
     // t() y currentLanguage vienen del script principal; se leen en cada uso.
     function texto(k) { return typeof t === 'function' ? t(k) : ''; }
     function idioma() { return typeof currentLanguage === 'string' ? currentLanguage : 'es'; }
@@ -27,8 +27,8 @@
     function ruta(j) { return 'videos/' + orden[j] + '-' + idioma() + (narrow.matches ? '-m' : ''); }
 
     function reproducir() {
-        var v = actual();
-        var p = v.play();
+        const v = actual();
+        const p = v.play();
         // Si el navegador no deja arrancar (ahorro de energia, datos), queda
         // el poster, que es el diagrama terminado, y el boton de play.
         if (p && p.catch) p.catch(function () { mostrarPoster(true); pintarBoton(); });
@@ -39,8 +39,8 @@
     }
     // El boton dice lo que va a hacer. Entre un capitulo y el siguiente sigue en pausa.
     function pintarBoton() {
-        var v = actual();
-        var estado = v.ended && ultimo() ? 'replay' : (v.paused && !espera ? 'play' : 'pause');
+        const v = actual();
+        const estado = v.ended && ultimo() ? 'replay' : (v.paused && !espera ? 'play' : 'pause');
         boton.dataset.estado = estado;
         boton.setAttribute('aria-label', texto('vid.' + estado));
     }
@@ -74,7 +74,7 @@
         }, 180);
     }
     function montar(v, j) {
-        var base = ruta(j);
+        const base = ruta(j);
         if (v.dataset.base === base) return;
         v.dataset.base = base;
         v.preload = 'auto';
@@ -94,7 +94,7 @@
         montar(reserva(), i + 1);
     }
     function cargar(correr) {
-        var v = actual();
+        const v = actual();
         montar(v, i);
         cargado = true;
         barra(i, 0, false);
@@ -110,14 +110,14 @@
     function ir(j, correr) {
         clearTimeout(espera); espera = null;
         if (cargado && j === i) { actual().currentTime = 0; if (correr) reproducir(); pintarBoton(); return; }
-        var listo = cargado && reserva().dataset.base === ruta(j);
+        const listo = cargado && reserva().dataset.base === ruta(j);
         if (listo) { actual().pause(); cur = 1 - cur; }
         i = j;
         cargar(correr);
     }
     function alternar() {
         if (!cargado) cargar(false);
-        var v = actual();
+        const v = actual();
         if (v.ended && ultimo()) { ir(0, true); return; }
         if (v.paused && !espera) { pausadoPorScroll = false; reproducir(); }
         else { clearTimeout(espera); espera = null; v.pause(); }
@@ -152,7 +152,7 @@
     // Cambio de idioma o de formato: ambos <video> quedan con otra ruta.
     function recargar() {
         if (!cargado) { pintarCapitulos(); return; }
-        var corria = !actual().paused;
+        const corria = !actual().paused;
         vids.forEach(function (v) { v.dataset.base = ''; });
         cargar(corria);
     }
@@ -172,7 +172,7 @@
         visible = es[0].isIntersecting;
         if (!visible && !cargado) return;
         if (!cargado) cargar(false);
-        var v = actual();
+        const v = actual();
         if (visible) {
             if (reduced.matches) return;
             if (pausadoPorScroll || (i === 0 && v.paused && v.currentTime === 0)) { pausadoPorScroll = false; reproducir(); }

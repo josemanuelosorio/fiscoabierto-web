@@ -9,21 +9,21 @@ var evaluarDiagnostico = (function () {
     // Puntos de exposicion. Es una escala del sitio para ordenar casos, no una
     // regla de la ley: suma lo visible que es cada fuente de ingreso para el
     // SAT, el nivel de ingreso y la brecha de cumplimiento que declara el lector.
-    var PUNTOS = {
+    const PUNTOS = {
         categoria: { marketplace: 3, transporte: 2, delivery: 2, hospedaje: 3, contenido: 2, freelance: 2, pagos: 2, crypto: 2 },
         ingreso: { muy_alto: 4, alto: 3, umbral: 3, medio: 2 }, // cualquier otro ingreso suma 1
         fiscal: { ninguna: 4, alta_sin_declarar: 3, declaro_parcial: 2, no_se: 3 },
         factura: { no: 2, no_se: 2, algunas: 1 }
     };
     // Con 8 puntos o mas la exposicion es alta; de 5 a 7, media; abajo, baja.
-    var ALTA = 8, MEDIA = 5;
-    var VISIBLES = ['marketplace', 'transporte', 'delivery', 'hospedaje', 'contenido', 'freelance', 'pagos', 'crypto'];
+    const ALTA = 8, MEDIA = 5;
+    const VISIBLES = ['marketplace', 'transporte', 'delivery', 'hospedaje', 'contenido', 'freelance', 'pagos', 'crypto'];
 
     function evaluar(r) {
-        var cat = new Set(r.categorias);
-        var tiene = function (c) { return cat.has(c); };
-        var puntos = 0;
-        var visibilidad = [], obligaciones = [];
+        const cat = new Set(r.categorias);
+        const tiene = function (c) { return cat.has(c); };
+        let puntos = 0;
+        const visibilidad = [], obligaciones = [];
 
         // --- Visibilidad por plataforma ---
         VISIBLES.forEach(function (c) {
@@ -39,7 +39,7 @@ var evaluarDiagnostico = (function () {
 
         // --- Situacion fiscal ---
         puntos += PUNTOS.fiscal[r.fiscal] || 0;
-        var porFiscal = { ninguna: 'diag.ob.alta', alta_sin_declarar: 'diag.ob.pendientes', declaro_parcial: 'diag.ob.revisaIngresos', no_se: 'diag.ob.revisaSituacion' };
+        const porFiscal = { ninguna: 'diag.ob.alta', alta_sin_declarar: 'diag.ob.pendientes', declaro_parcial: 'diag.ob.revisaIngresos', no_se: 'diag.ob.revisaSituacion' };
         if (porFiscal[r.fiscal]) obligaciones.push(porFiscal[r.fiscal]);
 
         // --- Facturacion ---
@@ -48,16 +48,16 @@ var evaluarDiagnostico = (function () {
         if (r.factura === 'algunas') obligaciones.push('diag.ob.facturarTodo');
 
         // --- Obligaciones por tipo (con el matiz del pago definitivo 113-B) ---
-        var excedeUmbral = r.ingreso === 'umbral' || r.ingreso === 'alto' || r.ingreso === 'muy_alto';
-        var plataformasRegimen = tiene('marketplace') || tiene('transporte') || tiene('hospedaje') || tiene('delivery');
+        const excedeUmbral = r.ingreso === 'umbral' || r.ingreso === 'alto' || r.ingreso === 'muy_alto';
+        const plataformasRegimen = tiene('marketplace') || tiene('transporte') || tiene('hospedaje') || tiene('delivery');
         // El 113-B solo admite ingresos de plataformas mas sueldo (cap. I) e
         // intereses (cap. VI). Cripto (enajenacion) y creadores quedan fuera.
-        var otrosIngresosExcluyen = tiene('crypto') || tiene('contenido');
+        const otrosIngresosExcluyen = tiene('crypto') || tiene('contenido');
         if (plataformasRegimen && !excedeUmbral && otrosIngresosExcluyen) obligaciones.push('diag.ob.definitivoNo');
         else if (plataformasRegimen && !excedeUmbral) obligaciones.push('diag.ob.definitivo');
         // Cripto de persona fisica fuera de actividad empresarial es enajenacion
         // de bienes (pago por operacion, Art. 126 LISR), no pagos mensuales.
-        var mensuales = excedeUmbral || ['contenido', 'freelance', 'pagos', 'otro'].some(tiene);
+        const mensuales = excedeUmbral || ['contenido', 'freelance', 'pagos', 'otro'].some(tiene);
         if (mensuales) obligaciones.push('diag.ob.mensuales');
         if (mensuales || tiene('crypto')) obligaciones.push('diag.ob.anual');
         if ((tiene('contenido') || tiene('freelance') || tiene('pagos')) && r.factura === 'si_todas') obligaciones.push('diag.ob.sigueFacturando');
@@ -67,7 +67,7 @@ var evaluarDiagnostico = (function () {
         // Cada paso es un tramite de la rama del panel (01 a 06) o la factura;
         // nota es una clave del diccionario o 'plazo' (agrega la fecha limite).
         // Las notas sin tramite van al final.
-        var pasos = [];
+        const pasos = [];
         function paso(n, nota) {
             if (pasos.some(function (x) { return x.n === n; })) return;
             pasos.push({ n: n, nota: nota });
@@ -78,14 +78,14 @@ var evaluarDiagnostico = (function () {
         else if (r.fiscal === 'declaro_parcial') { paso('04'); paso('05', 'pasos.oblig'); paso('06', 'plazo'); }
         else { if (mensuales) paso('06', 'plazo'); paso('03'); }
         if (r.factura === 'no' || r.factura === 'no_se' || r.factura === 'algunas') paso('cfdi');
-        var notas = [];
+        const notas = [];
         if (r.fiscal === 'ninguna' || r.fiscal === 'alta_sin_declarar' || r.fiscal === 'no_se') notas.push('pasos.contador');
         if (r.nPlataformas > 2) notas.push('pasos.mapea');
 
         // --- Nivel final ---
         // La visibilidad sola no es exposicion: sin brecha de cumplimiento, el nivel es bajo.
-        var sinBrecha = r.fiscal === 'al_corriente' && r.factura === 'si_todas';
-        var nivel = sinBrecha ? 'bajo' : puntos >= ALTA ? 'alto' : puntos >= MEDIA ? 'medio' : 'bajo';
+        const sinBrecha = r.fiscal === 'al_corriente' && r.factura === 'si_todas';
+        const nivel = sinBrecha ? 'bajo' : puntos >= ALTA ? 'alto' : puntos >= MEDIA ? 'medio' : 'bajo';
 
         return { nivel: nivel, puntos: puntos, visibilidad: visibilidad, obligaciones: obligaciones, pasos: pasos, notas: notas };
     }

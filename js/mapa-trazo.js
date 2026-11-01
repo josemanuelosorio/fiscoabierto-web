@@ -2,17 +2,17 @@
     // Contrato: entra "el mapa asomo al viewport"; sale UNA clase menos y
     // 32 delays. El orden narrativo es la tasa: b1 (2%) primero, b5 (6%)
     // al final: el mapa cuenta "va del 2% al 6%" mientras se pinta.
-    var svg = document.querySelector('.mxmap');
-    var group = document.getElementById('mxStates');
+    const svg = document.querySelector('.mxmap');
+    const group = document.getElementById('mxStates');
     if (!svg || !group) return;
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (reduced.matches) return;
-    var paths = Array.prototype.slice.call(group.querySelectorAll('.mx-st'));
+    const paths = Array.prototype.slice.call(group.querySelectorAll('.mx-st'));
     function bucket(p) {
-        var m = (p.className.baseVal || '').match(/\bb(\d)\b/);
+        const m = (p.className.baseVal || '').match(/\bb(\d)\b/);
         return m ? +m[1] : 6;
     }
-    var sorted = paths.slice().sort(function(a, b) { return bucket(a) - bucket(b); });
+    const sorted = paths.slice().sort(function(a, b) { return bucket(a) - bucket(b); });
     svg.classList.add('unpainted');
     sorted.forEach(function(p, i) {
         // primer delay = filter (hover, sin retraso); segundo = fill

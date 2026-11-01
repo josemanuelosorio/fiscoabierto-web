@@ -1,8 +1,8 @@
 (function() {
     // Contrato: entra scrollY, sale UNA clase en el nav. Nada mas.
-    var nav = document.getElementById('topnav');
+    const nav = document.getElementById('topnav');
     if (!nav) return;
-    var ticking = false;
+    let ticking = false;
     function update() {
         ticking = false;
         nav.classList.toggle('shrunk', window.scrollY > 24);

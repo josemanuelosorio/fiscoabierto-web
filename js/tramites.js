@@ -3,14 +3,14 @@
 // cuando un enlace interno apunta a un tramite (data-tram), lo resalta al
 // llegar. No toca las URLs: viven en el HTML de la rama.
 (function () {
-    var plazo = document.getElementById('tramPlazo');
+    const plazo = document.getElementById('tramPlazo');
     function pintar() { if (plazo) plazo.textContent = faPlazo.textoMensual() + ' ' + faPlazo.textoAnual(); }
     pintar();
     document.addEventListener('idioma', pintar);
     document.addEventListener('click', function (e) {
-        var a = e.target.closest && e.target.closest('a[data-tram]');
+        const a = e.target.closest && e.target.closest('a[data-tram]');
         if (!a) return;
-        var li = document.getElementById('tram-' + a.dataset.tram);
+        const li = document.getElementById('tram-' + a.dataset.tram);
         if (!li) return;
         li.classList.add('is-flash');
         setTimeout(function () { li.classList.remove('is-flash'); }, 2600);
