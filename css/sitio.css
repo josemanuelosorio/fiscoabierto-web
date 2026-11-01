@@ -1,5 +1,18 @@
 /* Estilos de fiscoabierto.org (página principal). Sin preprocesador ni build. */
 
+/* Fuentes servidas desde el sitio (SIL OFL 1.1, avisos en fonts/OFL.txt): las
+   tipografías ya no se piden a un tercero. Son los mismos archivos variables
+   que entregaba Google Fonts (alfabeto latino), declarados con los mismos
+   pesos que se le pedían: un peso fuera de la lista (800 en tres titulares)
+   se sigue dibujando con el más cercano, como antes. */
+@font-face { font-family: 'Inter'; font-weight: 400; font-display: swap; src: url('../fonts/inter-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Inter'; font-weight: 500; font-display: swap; src: url('../fonts/inter-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Inter'; font-weight: 600; font-display: swap; src: url('../fonts/inter-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Inter'; font-weight: 700; font-display: swap; src: url('../fonts/inter-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Source Serif 4'; font-weight: 400; font-display: swap; src: url('../fonts/source-serif-4-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Source Serif 4'; font-weight: 500; font-display: swap; src: url('../fonts/source-serif-4-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'Source Serif 4'; font-weight: 700; font-display: swap; src: url('../fonts/source-serif-4-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
 :root {
     --color-bg: #FAFAF9;
     --color-surface: #FFFFFF;
@@ -160,6 +173,10 @@ nav.cta-on .nav-cta {
     background: radial-gradient(ellipse at 50% -20%, rgba(15, 118, 110, 0.22), transparent 60%), #131212;
     overflow: hidden;
 }
+/* La mitad de particulas en telefono. js/hero.js lo lee de aqui para que el
+   corte de pantalla viva en un solo lugar. */
+.hero { --hero-particulas: 60; }
+@media (max-width: 760px) { .hero { --hero-particulas: 30; } }
 .hero canvas {
     position: absolute;
     top: 0;

@@ -17,6 +17,7 @@ El contenido fiscal es mío: qué dice la ley, cada cifra con su artículo y la 
 ```
 ├── index.html              # Página principal: solo el marcado
 ├── css/sitio.css           # Sus estilos
+├── fonts/                  # Inter y Source Serif 4: los archivos de Google Fonts, servidos desde el sitio
 ├── js/                     # Sus scripts, uno por sección, en el orden en que los carga el HTML
 │   └── datos/              # Diccionario ES/EN y tasas del mapa de hospedaje
 ├── aprende/
@@ -65,6 +66,6 @@ Cada push a `main` publica en GitHub Pages. Desde esta carpeta, `npm test` corre
 
 - Código (HTML, CSS, JavaScript y `tools/`): MIT, en `LICENSE`.
 - Textos, explicaciones de las cifras, láminas, ilustraciones y videos: CC BY 4.0, en `LICENSE-CONTENIDO.txt`. Puede reutilizarlos citando a Fisco Abierto con un enlace a fiscoabierto.org.
-- Las fuentes de `aprende/laminas/fuentes/` (Inter, JetBrains Mono y Source Serif 4) conservan su licencia SIL OFL 1.1, en `aprende/laminas/fuentes/OFL.txt`.
+- Las fuentes de `fonts/` (Inter y Source Serif 4, variables) y de `aprende/laminas/fuentes/` (Inter, JetBrains Mono y Source Serif 4) conservan su licencia SIL OFL 1.1, en el `OFL.txt` de cada carpeta. El sitio no pide fuentes a terceros.
 - El nombre, el logo y los favicons de Fisco Abierto no se licencian.
 - Las ilustraciones se generaron con IA; se licencian en la medida en que existan derechos sobre ellas.

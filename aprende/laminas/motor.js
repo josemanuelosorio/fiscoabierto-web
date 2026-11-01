@@ -158,7 +158,8 @@
       pausa() { corre = false; cancelAnimationFrame(raf); avisa('estado'); },
       final() { corre = false; cancelAnimationFrame(raf); t = window.FIN; seek(t); avisa('fin'); },
     };
-    window.addEventListener('message', e => { const d = e.data; if (d && d.faControl && ctl[d.faControl]) ctl[d.faControl](); });
+    // Solo obedece a la pagina que la contiene: otra ventana no puede manejarla.
+    window.addEventListener('message', e => { if (e.source !== window.parent) return; const d = e.data; if (d && d.faControl && ctl[d.faControl]) ctl[d.faControl](); });
     // Tocar la lámina pausa o reanuda; tocar un nodo con data-baja lleva al
     // peldaño que lo explica.
     stage.addEventListener('click', e => {
