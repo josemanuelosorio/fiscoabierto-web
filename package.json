@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "test": "node tools/correr.js node",
-    "test:navegador": "node tools/correr.js navegador",
-    "test:todo": "node tools/correr.js node navegador"
+    "test:navegador": "node tools/correr.js navegador laminas",
+    "test:todo": "node tools/correr.js node navegador laminas"
   },
   "devDependencies": {
     "html-validate": "11.16.3",
