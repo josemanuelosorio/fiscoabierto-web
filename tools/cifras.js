@@ -4,7 +4,7 @@
 // Si una cifra no aparece aqui, el sitio la afirma sin fuente rastreable, y
 // eso tambien es un hallazgo.
 //
-// Uso, desde web/:   node tools/cifras.js > ../CLAUDE_CTX/cifras-vigentes.md
+// Uso, desde web/:   node tools/cifras.js > cifras-vigentes.md
 const fs = require('fs');
 const path = require('path');
 

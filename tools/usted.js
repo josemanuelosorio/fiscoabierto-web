@@ -1,5 +1,5 @@
 // Tuteo en el texto en español de Fisco Abierto. Desde el 30 de septiembre de
-// 2026 el proyecto habla de usted (decisión de José). Este chequeo busca lo que
+// 2026 el proyecto habla de usted (decisión editorial). Este chequeo busca lo que
 // delata el tú en lo que el lector ve: pronombres y posesivos (tú, tu, tus, te,
 // ti, contigo, tuyo) y una lista de verbos en segunda persona que el sitio usó.
 //

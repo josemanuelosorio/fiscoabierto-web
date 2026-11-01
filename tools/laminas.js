@@ -1,6 +1,6 @@
 // Controles de las láminas en vivo de /aprende, en un navegador de verdad.
 //
-// Existe por el error 19 del CTX: la página marcaba una lámina como "ya vista"
+// Existe por un bug que llegó a producción: la página marcaba una lámina como "ya vista"
 // en cuanto pedía reproducirla, aunque el iframe (carga diferida) todavía no
 // estuviera listo para recibir la orden. Al llegar, la lámina saltaba al
 // diagrama completo con el botón de Repetir. Chromium pide los iframes
@@ -11,7 +11,7 @@
 // cuando su marco ya está en pantalla, 400 ms después. Con --rapido usa la
 // carga normal de Chromium. Sobre el código anterior al arreglo da 10 FALLAS.
 //
-// Uso, desde web/ (necesita Playwright, así que corre en la nube de Claude):
+// Uso, desde web/ (necesita Playwright):
 //     node tools/laminas.js [--rapido]
 // Tarda unos tres minutos, porque deja correr láminas completas.
 const http = require('http'), fs = require('fs'), path = require('path');
