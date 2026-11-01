@@ -4,8 +4,9 @@
     const ctx = canvas.getContext('2d');
     let particles = [];
     let w, h;
-    const isMobile = window.innerWidth < 768;
-    const PARTICLE_COUNT = isMobile ? 30 : 60;
+    // Cuantas particulas: lo dice el CSS (--hero-particulas), donde vive el
+    // corte de pantalla, como --stats-form en la banda de cifras.
+    const PARTICLE_COUNT = parseInt(getComputedStyle(canvas.parentElement).getPropertyValue('--hero-particulas'), 10) || 60;
     const CONNECTION_DIST = 150;
     const MOUSE_DIST = 200;
     let mouse = { x: -999, y: -999 };
@@ -13,10 +14,16 @@
     let animId = null;
     const reducedHero = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+    // El lienzo se dibuja a la densidad de la pantalla (tope 2, como el fondo
+    // de la seccion de confianza); w y h quedan en pixeles CSS para dibujar.
     function resize() {
         const hero = canvas.parentElement;
-        w = canvas.width = hero.offsetWidth;
-        h = canvas.height = hero.offsetHeight;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = hero.offsetWidth;
+        h = hero.offsetHeight;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
     function createParticles() {
@@ -37,7 +44,7 @@
     function draw() {
         ctx.clearRect(0, 0, w, h);
 
-        // connections
+        // Lineas entre particulas cercanas
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
                 const dx = particles[i].x - particles[j].x;
@@ -80,13 +87,13 @@
             ctx.fillStyle = 'rgba(94, 234, 212, ' + glow + ')';
             ctx.fill();
 
-            // bright core
+            // Centro brillante
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.r * 0.5, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(255, 255, 255, ' + (glow * 0.6) + ')';
             ctx.fill();
 
-            // move
+            // Movimiento, con rebote en los bordes
             p.x += p.vx;
             p.y += p.vy;
             if (p.x < 0 || p.x > w) p.vx *= -1;

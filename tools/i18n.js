@@ -44,6 +44,7 @@ const VOID = /^(br|img|input|meta|link|hr|path|circle|rect|line|use|source)$/i;
 const PERMITIDO = [
   /^[\s\d.,%$+:\-·|()\/]*[MK%]?$/,        // solo cifras y simbolos (1.66M, 2.5%)
   /^&[a-z]+;$/,                           // una entidad sola (&middot;)
+  /^▼$/,                                  // la flecha del FAQ (aria-hidden)
   /^(ES|EN|FA|Fisco|Abierto|SAT|IMSS|DOF|MXN)$/,
   /^(Mercado Libre|Amazon|Uber|DiDi|Rappi|Airbnb|YouTube|TikTok|Freelance|PayPal \/ Wise|Crypto \(Binance, Bitso\))$/,
   /^(svg-maps|V\. Cazanave,|CC BY 4\.0)$/,

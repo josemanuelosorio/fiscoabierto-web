@@ -38,8 +38,6 @@ function setLanguage(lang) {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.dataset.i18n;
         if (el.querySelector('[data-i18n]')) return;
-        // Las preguntas del FAQ conservan la flecha: se pintan abajo.
-        if (key.startsWith('faq.q')) return;
         if (key.startsWith('stats.callout') || key.startsWith('results.cta')) el.innerHTML = t(key);
         else el.textContent = t(key);
     });
@@ -49,14 +47,6 @@ function setLanguage(lang) {
     document.querySelectorAll('a[data-con-idioma]').forEach(function (a) {
         a.setAttribute('href', a.dataset.conIdioma + '?lang=' + lang);
     });
-
-    // Preguntas del FAQ: texto nuevo y la flecha de siempre.
-    for (var i = 1; i <= 6; i++) {
-        var el = document.querySelector('[data-i18n="faq.q' + i + '"]');
-        if (el) {
-            el.innerHTML = '\n                    ' + t('faq.q' + i) + '\n                    <span class="faq-arrow">▼</span>\n                ';
-        }
-    }
 
     // Lo que arma el JS (calculadora, mapa, diagnostico, videos...) no lo
     // alcanza el barrido de data-i18n: cada seccion escucha este evento y se

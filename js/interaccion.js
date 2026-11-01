@@ -6,6 +6,10 @@ document.querySelectorAll('.faq-question').forEach(btn => {
         // Un solo item abierto a la vez: se cierran todos y se abre el pulsado.
         document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
         if (!wasOpen) item.classList.add('open');
+        // El estado abierto o cerrado se anuncia al lector de pantalla.
+        document.querySelectorAll('.faq-question').forEach(b => {
+            b.setAttribute('aria-expanded', b.parentElement.classList.contains('open') ? 'true' : 'false');
+        });
     });
 });
 
