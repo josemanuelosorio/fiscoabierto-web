@@ -33,8 +33,4 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: node tools/correr.js navegador
-      # Las láminas fallan por tiempos en cerca de la mitad de las corridas desde
-      # antes de este workflow (medido en tools/README.md). Corren y se ven, pero
-      # no tumban el trabajo mientras la causa se investiga aparte.
       - run: node tools/correr.js laminas
-        continue-on-error: true
