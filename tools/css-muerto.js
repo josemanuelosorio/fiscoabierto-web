@@ -1,5 +1,5 @@
-// Selectores del <style> de index.html cuyas clases o ids no aparecen en el
-// HTML ni en el JS del mismo archivo. Un selector asi no puede aplicar nunca:
+// Selectores del CSS de index.html (en linea o en css/) cuyas clases o ids no
+// aparecen en el HTML ni en el JS que la pagina carga (tools/pagina.js). Un selector asi no puede aplicar nunca:
 // es CSS muerto y se puede podar sin cambiar el comportamiento.
 //
 // Estatico a proposito: no ejecuta nada. Una clase que el JS arma pegando
@@ -12,7 +12,7 @@
 const fs = require('fs');
 const path = require('path');
 const file = path.resolve(process.argv[2] || path.join(__dirname, '..', 'index.html'));
-const html = fs.readFileSync(file, 'utf8');
+const html = require('./pagina')(file).texto;
 
 const css = [...html.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(m => m[1]).join('\n');
 const sinStyle = html.replace(/<style>[\s\S]*?<\/style>/g, '');

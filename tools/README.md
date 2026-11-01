@@ -17,9 +17,18 @@ Y antes de cada push:
 salida solo de los que fallaron y sale con código 1 si falló al menos uno. El
 workflow `.github/workflows/pruebas.yml` corre los dos grupos en cada push.
 
+## pagina.js
+
+No es un chequeo: es la pieza que los demás usan para leer una página. Arma el
+HTML como lo ve el navegador, con cada hoja de estilo local y cada
+`<script src>` sustituidos por su contenido en su lugar, y para cada línea
+sabe de qué archivo y línea viene. Así `cifras.js`, `i18n.js` y `css-muerto.js`
+leen la página entera aunque el CSS viva en `css/` y el JS en `js/`, y sus
+reportes señalan `js/calculadora.js:17` en vez de una línea del HTML.
+
 ## smoke.js
 
-Corre un `<script>` de `index.html` contra un DOM de mentiras y reporta si el
+Corre los scripts de una página contra un DOM de mentiras y reporta si el
 camino de arranque revienta.
 
 Existe porque `node --check` valida sintaxis y nada más. Un identificador que
@@ -33,13 +42,16 @@ Uso, desde `web/`:
 
     node tools/smoke.js
 
-Sin argumentos recorre todos los `<script>` de `index.html`, cada uno con el
-rotulo `<!-- ... -->` que lo antecede, y un bloque vacio cuenta como FALLA
+Sin argumentos recorre los scripts de `index.html` (en línea o en `js/`) en el
+orden de carga y en un mismo contexto global, como el navegador: un script ve
+lo que declararon los anteriores, y si uno truena los siguientes corren igual.
+Cada uno se reporta con el rotulo `<!-- ... -->` que lo antecede, y un bloque
+vacio cuenta como FALLA
 (antes se extraia cada script con `sed` por rotulo, y un rotulo mal escrito
 daba 0 lineas y un OK vacio). Con un `.js` como argumento corre ese script
 suelto; con un `.html`, hace el recorrido sobre ese archivo.
 
-Sobre `aprende/index.html` corre sus cuatro scripts (idioma, nav, escalera y láminas). Los scripts se hablan por `window.faIdioma`, no por variables sueltas, porque el stub corre cada uno por separado.
+Sobre `aprende/index.html` corre sus cuatro scripts (idioma, nav, escalera y láminas). Los scripts se hablan por `window.faIdioma`.
 
 El stub es deliberadamente tonto: si un script empieza a usar una API del DOM
 que no está simulada, se agrega al stub. Un fallo por API faltante se distingue
@@ -123,8 +135,9 @@ push que toque la calculadora o sus constantes.
 
 ## css-muerto.js
 
-Selectores del `<style>` cuyas clases o ids no aparecen ni en el HTML ni en
-ninguna cadena del JS del mismo archivo: no pueden aplicar nunca. Estático,
+Selectores del CSS de la página (en `<style>` o en `css/`) cuyas clases o ids
+no aparecen ni en el HTML ni en ninguna cadena del JS que la página carga: no
+pueden aplicar nunca. Estático,
 sin navegador. Las clases que el JS arma pegando cadenas (`b1` a `b5` del
 mapa, `risk-alto` y compañía) van en la lista COMPUESTAS con su razón.
 
@@ -165,7 +178,7 @@ sitio usó. El inglés no dispara nada.
 
 Uso, desde `web/`:
 
-    node tools/usted.js                        # index.html, aprende/index.html, láminas y const.js
+    node tools/usted.js                        # index.html, js/, aprende/index.html, láminas y const.js
     node tools/usted.js otro-archivo.md      # cualquier .html, .md o .js
 
 Acepta `.html`, `.md` y `.js`. Sale con código 1 si encuentra algo. Primera

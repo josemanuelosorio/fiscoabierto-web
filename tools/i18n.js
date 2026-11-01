@@ -16,7 +16,8 @@ const fs = require('fs');
 const path = require('path');
 
 const file = path.resolve(process.argv.find((a, i) => i >= 2 && !a.startsWith('--')) || path.join(__dirname, '..', 'index.html'));
-const html = fs.readFileSync(file, 'utf8');
+// La pagina entera, con el CSS y el JS de sus archivos en linea (tools/pagina.js).
+const html = require('./pagina')(file).texto;
 let hallazgos = 0;
 function falla(msg) { hallazgos++; console.log('  x ' + msg); }
 
@@ -86,9 +87,9 @@ if (!('meta.title' in translations.en)) falla('falta meta.title en EN (document.
 // ---- 3. datos del mapa ----------------------------------------------------
 // Solo la página principal tiene mapa; en aprende/index.html no aplica.
 const conMapa = html.includes('id="mapPanel"');
-const st = html.match(/var ST = (\{.*?\});\s*$/m);
+const st = html.match(/(?:var ST|const HOSPEDAJE) = (\{.*?\});\s*$/m);
 if (!conMapa) console.log('3. mapa: no aplica en ' + path.relative(path.join(__dirname, '..'), file));
-else if (!st) falla('no encuentro var ST del mapa');
+else if (!st) falla('no encuentro los datos del mapa (HOSPEDAJE)');
 else {
   const ST = JSON.parse(st[1]);
   let conNota = 0;

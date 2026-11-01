@@ -15,7 +15,10 @@ El contenido fiscal es mío: qué dice la ley, cada cifra con su artículo y la 
 ## Estructura
 
 ```
-├── index.html              # Página principal
+├── index.html              # Página principal: solo el marcado
+├── css/sitio.css           # Sus estilos
+├── js/                     # Sus scripts, uno por sección, en el orden en que los carga el HTML
+│   └── datos/              # Diccionario ES/EN y tasas del mapa de hospedaje
 ├── aprende/
 │   ├── index.html          # Aprende: seis pasos de principios fiscales, con láminas en vivo
 │   ├── laminas/            # p1 a p6.html, motor.js, lamina.css, const.js, img/ y fuentes/

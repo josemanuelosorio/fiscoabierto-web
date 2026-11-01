@@ -1,0 +1,1922 @@
+/* Estilos de fiscoabierto.org (página principal). Sin preprocesador ni build. */
+
+:root {
+    --color-bg: #FAFAF9;
+    --color-surface: #FFFFFF;
+    --color-text: #1C1917;
+    --color-text-secondary: #57534E;
+    --color-accent: #0F766E;
+    --color-accent-light: #CCFBF1;
+    --color-accent-dark: #0D5E58;
+    --color-border: #E7E5E4;
+    --color-warning: #D97706;
+    --color-warning-bg: #FFFBEB;
+    --color-danger: #DC2626;
+    --color-danger-bg: #FEF2F2;
+    --color-safe: #16A34A;
+    --color-safe-bg: #F0FDF4;
+    --radius: 12px;
+    --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.04);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* NAV */
+nav {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: padding 0.25s ease;
+}
+nav .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Al compactarse, la barra se expande de la columna de 720px
+       al ancho completo: el FA viaja hasta el borde izquierdo. */
+    transition: max-width 0.4s ease;
+}
+nav.shrunk .container { max-width: 1560px; }
+.logo {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+/* Identidad en dos piezas: el badge FA (la marca corta, siempre
+   visible) y el wordmark en dos tonos. Al scrollear, el texto se
+   colapsa con transicion y queda
+   solo el FA. Nada de switch seco: max-width + opacity animados. */
+.logo { gap: 10px; }
+.logo-badge { height: 32px; width: auto; flex-shrink: 0; }
+.logo-word {
+    display: inline-flex;
+    gap: 0.18em;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 240px;
+    opacity: 1;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    transition: max-width 0.35s ease, opacity 0.25s ease;
+}
+.logo-word-a { color: var(--color-accent); }
+.logo-word-b { color: var(--color-text); }
+nav.shrunk .logo-word { max-width: 0; opacity: 0; }
+nav.shrunk { padding: 8px 0; }
+.nav-right { display: inline-flex; align-items: center; gap: 14px; }
+.nav-cta {
+    background: var(--color-text);
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: 999px;
+    white-space: nowrap;
+    /* Dos botones de Diagnostico a la vista es uno de mas: este
+       aparece cuando el del hero ya salio de pantalla. */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.25s ease, transform 0.25s ease,
+                visibility 0s linear 0.25s, background-color 0.2s;
+}
+nav.cta-on .nav-cta {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity 0.25s ease, transform 0.25s ease,
+                visibility 0s, background-color 0.2s;
+}
+@media (hover: hover) { .nav-cta:hover { background: var(--color-accent); } }
+@media (prefers-reduced-motion: reduce) {
+    nav, nav .container, .logo-word, .nav-cta { transition: none; }
+}
+.nav-links { display: flex; gap: 24px; }
+.nav-links a {
+    text-decoration: none;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+@media (hover: hover) { .nav-links a:hover { color: var(--color-accent); } }
+
+/* LANGUAGE SWITCH (nav) */
+.lang-switch {
+    display: inline-flex;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--color-bg);
+    flex-shrink: 0;
+}
+.lang-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--color-text-secondary);
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+.lang-btn + .lang-btn { border-left: 1px solid var(--color-border); }
+@media (hover: hover) { .lang-btn:hover { color: var(--color-accent); } }
+.lang-btn.active { background: var(--color-accent); color: #FFFFFF; }
+.lang-btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+/* HERO */
+.hero {
+    position: relative;
+    padding: 60px 0;
+    min-height: calc(100vh - 73px);
+    display: flex;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% -20%, rgba(15, 118, 110, 0.22), transparent 60%), #131212;
+    overflow: hidden;
+}
+.hero canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    will-change: transform;
+}
+.hero .container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+}
+.hero h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: #FFFFFF;
+}
+.hero h1 .hero-main { color: #FFFFFF; }
+.hero h1 .hero-accent { color: #5EEAD4; }
+.hero p {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.75);
+    max-width: 560px;
+    margin: 0 auto 36px;
+}
+.hero-cta {
+    display: inline-block;
+    background: #FFFFFF;
+    color: var(--color-accent-dark);
+    padding: 16px 36px;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+@media (hover: hover) {
+.hero-cta:hover {
+        background: #5EEAD4;
+        color: #042f2e;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+}
+
+/* SECTIONS */
+section { padding: 60px 0; }
+section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+section .section-subtitle {
+    color: var(--color-text-secondary);
+    margin-bottom: 32px;
+    font-size: 1rem;
+}
+
+/* APARICION AL DESPLAZAR */
+.reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(6px);
+    /* Antes: 1.2s con blur(10px) y curva ease-in-out en el filtro.
+       Se sentía lento porque el enfoque duraba TODA la transición.
+       Ahora todo va con ease-out y dura ~0.5s: el desenfoque se nota
+       al entrar pero se resuelve rápido. Blur de 6px en vez de 10px
+       porque animar blur repinta cada frame: radio menor = menos
+       trabajo de GPU = scroll más fluido. */
+    transition: opacity 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
+                transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
+                filter 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+/* El desenfoque en texto largo se siente pesado en teléfono, igual que
+   pasó con las cifras. Ahí solo entra la opacidad. */
+@media (max-width: 600px) {
+    .reveal { filter: none; }
+}
+
+/* Quien pidió menos movimiento no debería recibir nada de esto. */
+@media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal.visible, .stat-number {
+        transition: none;
+        filter: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+/* Escalonado más corto: con 0.54s de delay el tercer elemento
+   terminaba casi 2s después de entrar en pantalla. */
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+
+html { scroll-padding-top: 90px; }
+@media (max-width: 600px) { html { scroll-padding-top: 90px; } }
+
+/* DIAGNÓSTICO */
+#diagnostico {
+    background: radial-gradient(ellipse at 30% 0%, rgba(15, 118, 110, 0.14), transparent 55%), #131212;
+    border: none;
+    position: relative;
+    /* clip y no hidden: hidden sigue aceptando scroll programatico
+       (scrollIntoView lo desplazaba por dentro y el estado quedaba
+       corrido tras reiniciar); clip no es contenedor de scroll. */
+    overflow: hidden;
+    overflow: clip;
+}
+#diagnostico::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 40%, rgba(94,234,212,0.04) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(94,234,212,0.03) 0%, transparent 40%);
+    pointer-events: none;
+}
+#diagnostico .container { position: relative; z-index: 2; }
+
+.diag-intro { margin-bottom: 28px; text-align: center; }
+#diagnostico h2 { color: #FFFFFF; }
+#diagnostico .section-subtitle { color: rgba(255,255,255,0.6); max-width: 600px; margin-left: auto; margin-right: auto; }
+
+/* Progreso segmentado: un tramo por paso */
+.diag-progress {
+    display: flex;
+    gap: 6px;
+    max-width: 380px;
+    margin: 0 auto 40px;
+}
+.diag-seg {
+    flex: 1;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.12);
+    overflow: hidden;
+    position: relative;
+}
+.diag-seg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #5EEAD4, #0F766E);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.diag-seg.done::after { transform: scaleX(1); }
+
+/* Sin caja: el wizard vive directo sobre el escenario oscuro.
+   La pregunta serif es la protagonista, no un formulario. */
+#diag-wizard {
+    padding: 16px 0 8px;
+}
+
+.diag-step { display: none; position: relative; }
+.diag-step.active {
+    display: block;
+    animation: fadeSlideIn 0.4s ease-out;
+}
+/* WIZARD EN BANDA: en pantallas anchas cada paso usa la geometria
+   de la casa: pregunta serif a la izquierda, opciones a la
+   derecha, la misma banda que cifras y resultados. */
+@media (min-width: 861px) {
+    .diag-step.active {
+        display: grid;
+        grid-template-columns: 5fr 7fr;
+        grid-auto-rows: min-content;
+        column-gap: 4vw;
+        align-items: start;
+    }
+    .diag-step .diag-question {
+        grid-column: 1;
+        grid-row: 1;
+        text-align: left;
+        margin: 0 0 12px;
+        max-width: none;
+    }
+    .diag-step .diag-hint {
+        grid-column: 1;
+        grid-row: 2;
+        text-align: left;
+        margin-bottom: 0;
+    }
+    .diag-step .platform-grid,
+    .diag-step .income-options,
+    .diag-step .q-block,
+    .diag-step .diag-nav { grid-column: 2; }
+    .diag-step .platform-grid { justify-content: flex-start; margin: 0 0 20px; max-width: none; }
+    .diag-step .income-options { margin: 0 0 20px; max-width: none; }
+    .diag-step .diag-nav { justify-content: flex-end; }
+}
+/* Entrada en cascada de las opciones: cada chip y cada fila llega
+   con su propio compas, como el revelado de los resultados. */
+.diag-step.active .platform-btn,
+.diag-step.active .income-btn {
+    animation: fadeSlideIn 0.35s ease-out backwards;
+}
+.diag-step.active .platform-btn:nth-child(1) { animation-delay: 0.03s; }
+.diag-step.active .platform-btn:nth-child(2) { animation-delay: 0.06s; }
+.diag-step.active .platform-btn:nth-child(3) { animation-delay: 0.09s; }
+.diag-step.active .platform-btn:nth-child(4) { animation-delay: 0.12s; }
+.diag-step.active .platform-btn:nth-child(5) { animation-delay: 0.15s; }
+.diag-step.active .platform-btn:nth-child(6) { animation-delay: 0.18s; }
+.diag-step.active .platform-btn:nth-child(7) { animation-delay: 0.21s; }
+.diag-step.active .platform-btn:nth-child(8) { animation-delay: 0.24s; }
+.diag-step.active .platform-btn:nth-child(9) { animation-delay: 0.27s; }
+.diag-step.active .platform-btn:nth-child(10) { animation-delay: 0.3s; }
+.diag-step.active .platform-btn:nth-child(11) { animation-delay: 0.33s; }
+.diag-step.active .platform-btn:nth-child(12) { animation-delay: 0.36s; }
+.diag-step.active .income-btn:nth-child(1) { animation-delay: 0.05s; }
+.diag-step.active .income-btn:nth-child(2) { animation-delay: 0.1s; }
+.diag-step.active .income-btn:nth-child(3) { animation-delay: 0.15s; }
+.diag-step.active .income-btn:nth-child(4) { animation-delay: 0.2s; }
+.diag-step.active .income-btn:nth-child(5) { animation-delay: 0.25s; }
+/* Lineas vivas del paso 1: cada plataforma seleccionada se conecta
+   con la pregunta: el diagrama se dibuja mientras respondes. */
+.diag-links {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+.diag-links path {
+    fill: none;
+    stroke: rgba(94, 234, 212, 0.35);
+    stroke-width: 1.2;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.45s ease;
+}
+.diag-links.drawn path { stroke-dashoffset: 0; }
+.diag-question, .diag-hint, .platform-grid, .income-options, .q-block, .diag-nav {
+    position: relative;
+    z-index: 1;
+}
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.diag-question {
+    font-family: var(--font-serif);
+    font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 0 auto 10px;
+    max-width: 720px;
+    text-align: center;
+    color: #FFFFFF;
+}
+.diag-hint {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 26px;
+    text-align: center;
+}
+
+.platform-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    max-width: 620px;
+    margin: 0 auto 26px;
+}
+.platform-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    border-radius: 999px;
+    padding: 13px 16px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    transition: all 0.2s ease;
+    text-align: center;
+}
+@media (hover: hover) {
+.platform-btn:hover {
+        border-color: rgba(94,234,212,0.4);
+        background: rgba(94,234,212,0.08);
+        transform: translateY(-1px);
+    }
+}
+.platform-btn.selected {
+    border-color: #5EEAD4;
+    background: rgba(94,234,212,0.15);
+    color: #5EEAD4;
+    box-shadow: 0 0 20px rgba(94,234,212,0.1);
+    transform: scale(1.03);
+}
+/* Sin emojis (canon del proyecto): chips de texto limpios. */
+
+.income-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 560px;
+    margin: 0 auto 26px;
+}
+.income-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    border-radius: 0;
+    padding: 15px 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-align: left;
+    color: rgba(255,255,255,0.85);
+    transition: all 0.2s ease;
+}
+@media (hover: hover) {
+.income-btn:hover {
+        border-color: rgba(94,234,212,0.5);
+        background: rgba(94,234,212,0.04);
+    }
+}
+.income-btn.selected {
+    border-color: #5EEAD4;
+    background: transparent;
+    color: #5EEAD4;
+    position: relative;
+    padding-right: 48px;
+}
+.income-btn.selected::after {
+    content: '\2713';
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 700;
+}
+.threshold-tag {
+    display: block;
+    font-size: 0.75rem;
+    color: #FBBF24;
+    font-weight: 600;
+    margin-top: 4px;
+}
+.income-btn.threshold-marker {
+    border-color: rgba(251,191,36,0.4);
+    background: transparent;
+}
+.income-btn.threshold-marker.selected {
+    border-color: #5EEAD4;
+    background: transparent;
+}
+.income-btn.threshold-marker.selected .threshold-tag { color: #5EEAD4; }
+
+/* PROFILE SUMMARY */
+.profile-summary {
+    font-family: var(--font-serif);
+    max-width: 640px;
+    margin: 0 auto 30px;
+    text-align: center;
+    font-size: 1.02rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.75;
+}
+.profile-summary strong {
+    color: #5EEAD4;
+    font-weight: 600;
+}
+
+.diag-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin-top: 16px;
+}
+.step-indicator {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+}
+.btn-next, .btn-prev, .btn-results {
+    padding: 12px 28px;
+    border-radius: 999px;
+    border: none;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+.btn-next, .btn-results {
+    background: #5EEAD4;
+    color: #042f2e;
+}
+@media (hover: hover) {
+.btn-next:hover, .btn-results:hover {
+        transform: translateY(-1px);
+        background: #86F3E3;
+    }
+}
+.btn-next:disabled, .btn-results:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+.btn-prev {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.6);
+}
+@media (hover: hover) {
+.btn-prev:hover {
+        background: rgba(255,255,255,0.1);
+        color: rgba(255,255,255,0.85);
+    }
+}
+
+.step-indicator {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.35);
+}
+
+/* RESULTADOS */
+.results-panel { display: none; }
+.results-panel.active {
+    display: block;
+    padding-top: 48px;
+    animation: fadeSlideIn 0.5s ease-out;
+}
+
+/* El veredicto no es una alerta: es una declaracion editorial.
+   El color del nivel ES la informacion; la caja sobraba. */
+/* Cuando hay veredicto, la instruccion de "selecciona tus
+   plataformas" ya no aplica: los resultados se quedan con todo el
+   escenario y desaparece el doble centro. */
+#diagnostico .container.diag-wrap { max-width: 1140px; }
+#diagnostico:has(#results.active) .diag-intro,
+#diagnostico:has(#results.active) .diag-progress { display: none; }
+/* La pantalla final usa el patron de la casa: veredicto, perfil y
+   acciones fijos a la izquierda mientras la ficha desfila a la
+   derecha. La banda vive en un contenedor ancho propio. */
+#diagnostico .container.results-wrap { max-width: 1140px; }
+.results-band {
+    display: grid;
+    grid-template-columns: minmax(280px, 5fr) 7fr;
+    gap: 4vw;
+    align-items: start;
+}
+.results-aside { position: sticky; top: 96px; text-align: center; }
+.results-main .result-section:first-child { border-top: none; padding-top: 0; }
+@media (max-width: 760px) {
+    .results-band { grid-template-columns: 1fr; }
+    .results-aside { position: static; margin-bottom: 8px; }
+}
+.risk-banner {
+    padding: 8px 0 0;
+    margin-bottom: 30px;
+    text-align: center;
+}
+.risk-banner.risk-alto .risk-level { color: #FCA5A5; }
+.risk-banner.risk-medio .risk-level { color: #FCD34D; }
+.risk-banner.risk-bajo .risk-level { color: #86EFAC; }
+.risk-level {
+    font-family: var(--font-serif);
+    font-size: clamp(1.25rem, 2vw, 1.6rem);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    margin-bottom: 6px;
+}
+/* El mapa personal: TUS plataformas conectadas al nodo SAT, la
+   exposicion no es un adjetivo, es este dibujo. */
+.expo-map { margin-bottom: 20px; }
+.expo-map svg { width: 100%; height: auto; display: block; }
+.expo-map .em-chip { fill: rgba(255, 255, 255, 0.05); stroke: rgba(255, 255, 255, 0.2); }
+.expo-map .em-label { fill: #E7E5E4; font-family: Inter, system-ui, sans-serif; font-size: 12px; }
+.expo-map .em-sat { fill: #5EEAD4; }
+.expo-map .em-sat-label { fill: #042f2e; font-family: Inter, system-ui, sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; }
+.expo-map .em-thread {
+    fill: none;
+    stroke: rgba(94, 234, 212, 0.45);
+    stroke-width: 1.2;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.6s ease;
+}
+.expo-map.drawn .em-thread { stroke-dashoffset: 0; }
+@media (prefers-reduced-motion: reduce) {
+    .expo-map .em-thread { transition: none; stroke-dashoffset: 0; }
+}
+.risk-label {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.5);
+}
+/* Medidor de exposicion: 3 zonas, el nivel llena hasta su tramo */
+.risk-meter {
+    margin: 12px auto 2px;
+    max-width: 340px;
+    height: 6px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.12);
+    overflow: hidden;
+}
+.risk-meter-fill {
+    height: 100%;
+    width: 0;
+    border-radius: 6px;
+    transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.risk-banner.risk-bajo .risk-meter-fill { background: #86EFAC; }
+.risk-banner.risk-medio .risk-meter-fill { background: #FCD34D; }
+.risk-banner.risk-alto .risk-meter-fill { background: #FCA5A5; }
+
+/* Paso 3: revelado progresivo de la segunda pregunta */
+.q-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    color: #5EEAD4;
+}
+.q-block { margin-bottom: 28px; }
+.q-block:last-of-type { margin-bottom: 0; }
+#qFactura {
+    transition: opacity 0.45s ease, transform 0.45s ease, height 0.45s ease;
+}
+#qFactura.q-hidden {
+    opacity: 0;
+    transform: translateY(10px);
+    height: 0;
+    overflow: hidden;
+    margin: 0;
+    pointer-events: none;
+}
+
+/* Contador de seleccion (paso 1) */
+.sel-count {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #5EEAD4;
+    background: rgba(94,234,212,0.1);
+    border: 1px solid rgba(94,234,212,0.25);
+    border-radius: 999px;
+    padding: 4px 12px;
+}
+
+/* Direccion de la transicion entre pasos */
+#diag-wizard[data-dir="back"] .diag-step.active { animation-name: fadeSlideBack; }
+@keyframes fadeSlideBack {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Revelado escalonado de los resultados */
+.results-panel.active .profile-summary,
+.results-panel.active .result-section {
+    animation: fadeSlideIn 0.5s ease-out backwards;
+}
+.results-panel.active .profile-summary { animation-delay: 0.1s; }
+.results-panel.active .result-section:nth-of-type(1) { animation-delay: 0.2s; }
+.results-panel.active .result-section:nth-of-type(2) { animation-delay: 0.32s; }
+.results-panel.active .result-section:nth-of-type(3) { animation-delay: 0.44s; }
+
+/* Teclado visible */
+.platform-btn:focus-visible, .income-btn:focus-visible,
+.btn-next:focus-visible, .btn-prev:focus-visible, .btn-results:focus-visible {
+    outline: 2px solid #5EEAD4;
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .diag-step.active,
+    .diag-step.active .platform-btn,
+    .diag-step.active .income-btn,
+    .results-panel.active .profile-summary,
+    .results-panel.active .result-section { animation: none; }
+    .risk-meter-fill, .diag-seg::after, #qFactura { transition: none; }
+}
+
+.result-section {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 24px 0;
+}
+.result-section h3 {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    color: #5EEAD4;
+}
+.result-section ul {
+    list-style: none;
+    padding: 0;
+}
+.result-section li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+}
+.result-section li:last-child { border-bottom: none; }
+.result-section li strong { color: #5EEAD4; font-weight: 600; }
+/* Pasos del diagnostico: cada uno es un enlace al tramite. */
+.result-section li.paso { padding: 0; }
+.paso a { display: flex; gap: 14px; align-items: flex-start; padding: 12px 0; color: inherit; text-decoration: none; }
+.paso-n {
+    flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+    border: 1px solid rgba(94, 234, 212, 0.45); color: #5EEAD4; font-size: 0.78rem; font-weight: 700;
+}
+.paso-b { display: flex; flex-direction: column; gap: 2px; }
+.paso-b strong::after { content: " \2197\FE0E"; font-weight: 400; color: rgba(94, 234, 212, 0.55); }
+.paso-b span { font-size: 0.86rem; color: rgba(255, 255, 255, 0.6); }
+@media (hover: hover) { .paso a:hover strong { text-decoration: underline; text-underline-offset: 3px; } }
+.paso a:focus-visible { outline: 2px solid #5EEAD4; outline-offset: 2px; border-radius: 6px; }
+.result-section li.paso-nota { font-size: 0.84rem; color: rgba(255, 255, 255, 0.5); }
+
+.btn-restart {
+    display: inline-block;
+    margin-top: 16px;
+    padding: 12px 28px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+}
+@media (hover: hover) { .btn-restart:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85); } }
+
+/* NEWSLETTER */
+#newsletter { text-align: center; }
+.newsletter-box {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 40px 32px;
+    box-shadow: 0 8px 32px rgba(15,118,110,0.06);
+    max-width: 480px;
+    margin: 0 auto;
+    transition: box-shadow 0.3s ease;
+}
+@media (hover: hover) {
+.newsletter-box:hover {
+        box-shadow: 0 12px 40px rgba(15,118,110,0.1);
+    }
+}
+.newsletter-box h2 { font-size: 1.3rem; margin-bottom: 8px; }
+.newsletter-box p {
+    color: var(--color-text-secondary);
+    font-size: 0.92rem;
+    margin-bottom: 24px;
+}
+/* FOOTER */
+footer {
+    padding: 40px 0;
+    border-top: 1px solid var(--color-border);
+    text-align: center;
+}
+.footer-fine {
+    max-width: 64ch;
+    margin: 0 auto;
+    font-size: 0.78rem;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+}
+.footer-copy {
+    margin-top: 18px;
+    font-size: 0.74rem;
+    color: #78716C;
+    line-height: 1.8;
+}
+.footer-copy .sep { margin: 0 8px; opacity: 0.6; }
+.footer-copy a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+@media (hover: hover) { .footer-copy a:hover { color: var(--color-accent); } }
+.footer-mark { white-space: nowrap; }
+@media (max-width: 600px) {
+    .footer-copy .sep { display: none; }
+    .footer-mark { display: block; }
+}
+
+/* STATS */
+.stats-section { background: var(--color-text); color: white; padding: 0; }
+/* BANDA "UNO POR UNO": el titulo queda fijo a la izquierda mientras
+   cada dato pasa por su propia pantalla a la derecha. El fundido continuo lo maneja el JS del
+   BLOQUEO al final del body; aqui solo vive la geometria. */
+.stats-band {
+    display: grid;
+    grid-template-columns: minmax(220px, 32%) 1fr;
+    gap: 4vw;
+}
+.stats-aside { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; }
+.stats-aside h2 { color: white; text-align: left; margin-bottom: 10px; }
+.stats-aside .section-subtitle { color: #A8A29E; text-align: left; margin-bottom: 0; }
+/* EL BLOQUEO. La seccion mide varias pantallas (el track) pero el
+   marco se queda pegado, y las fichas viven APILADAS en la misma
+   celda: por eso quedan centradas siempre y deja de sentirse a la
+   deriva. El scroll ya no las desfila, las intercambia. El alto del
+   track lo pone el JS en pixeles, no en vh, porque la barra del
+   navegador movil cambia vh a media animacion. */
+/* La FORMA vive en el CSS, igual que --chain-form del panel de
+   confianza: el JS la lee con getComputedStyle y el breakpoint existe
+   en UN solo lugar. 'pin' = el bloqueo de escritorio. 'deck' = el
+   carrusel vertical del telefono. */
+.stats-items { --stats-form: pin; padding: 0; }
+.stats-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    display: grid;
+    align-content: center;
+}
+.stats-item {
+    grid-area: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    opacity: 0;
+    will-change: opacity, transform;
+}
+.stats-items:not(.pin-on) .stats-item { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+    /* sin movimiento no se traba nada y las fichas se despilan. El
+       carrusel del telefono NO cae aqui: deslizar no es una animacion,
+       es el dedo del usuario. Su bloque de 760px va despues y gana. */
+    .stats-items { height: auto !important; }
+    .stats-pin { position: static; height: auto; display: block; }
+    .stats-item { opacity: 1; margin-bottom: 12vh; }
+}
+/* El numero ya NO trae blur/opacity/transition propios: la opacidad
+   de esta seccion tiene UN solo dueno (el JS del BLOQUEO). Dos
+   sistemas escribiendo la misma propiedad fue el bug que evitamos. */
+.stat-number {
+    font-size: clamp(3.4rem, 7.5vw, 6.5rem);
+    font-weight: 700;
+    color: #5EEAD4;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+}
+.stat-label {
+    font-size: clamp(1.15rem, 2vw, 1.7rem);
+    color: #E7E5E4;
+    margin-top: 18px;
+    line-height: 1.45;
+    max-width: 26ch;
+}
+.stat-source {
+    font-size: 0.85rem;
+    color: #A8A29E; /* 6.9:1 sobre #1C1917; #78716C daba 3.6 */
+    margin-top: 14px;
+}
+
+.stats-callout {
+    padding: 26px 30px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    text-align: left;
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    line-height: 1.6;
+    color: #E7E5E4;
+    max-width: 54ch;
+}
+.stats-callout strong { color: #FCD34D; }
+@media (max-width: 760px) {
+    .stats-band { grid-template-columns: 1fr; gap: 0; }
+    .stats-aside { position: static; height: auto; padding-top: 22px; }
+    /* ESCALA PROPIA DE TELEFONO, no una reduccion de la de escritorio.
+       Medido en WebKit con perfil de iPhone 13 sobre los tres
+       referentes: los tres AGRANDAN la tipografia en movil y dejan que
+       el bloque vecino invada la pantalla (Riotters pone su titular en
+       65px sobre 390px de ancho). La profundidad no sale del fade por
+       si solo: sale de que el vecino es lo bastante grande como para
+       meterse en pantalla a media luz.
+       El tope de 26ch de la etiqueta se quita aqui: con el ancho
+       completo baja de 9 renglones a 5, el bloque cabe en 55vh y el
+       vecino alcanza a meter su CIFRA, no solo su pie. */
+    /* CARRUSEL VERTICAL. La pista de cuatro pantallas se acabo: el
+       telefono ya no alarga la pagina, la seccion mide una pantalla y
+       las fichas se deslizan DENTRO con snap. Mismo trato que el
+       carril de confianza, girado 90 grados (sin los puntos: el asomo
+       de abajo ya dice que hay mas). El contenedor es mas alto
+       que la ficha a proposito: ese sobrante es el asomo de la
+       siguiente, que es de donde sale la profundidad.
+       REPARTO DE LA PANTALLA (medido en WebKit, iPhone 13, con el
+       titular en INGLES que es el caso largo): titulo + carrusel +
+       marcas caben en una pantalla. Ese era el punto: antes la
+       seccion media 3220px, o sea casi cinco pantallas. */
+    .stats-items { --stats-form: deck; height: auto !important; padding: 0; }
+    .stats-pin {
+        position: relative;
+        display: block;
+        height: 60svh;
+        margin-top: 8px;
+        overflow-y: auto;
+        scroll-snap-type: y mandatory;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+        /* El sobrante va abajo (padding) para que la ULTIMA ficha
+           tambien alcance a pegarse arriba: sin el, su tope queda
+           fuera del alcance del scroll y nunca llega a su sitio. */
+        padding-bottom: 10svh;
+        /* Solo se disuelve el borde de abajo, que es el que dice
+           'hay mas'. Un asomo ARRIBA no dice nada y ademas caia a 8px
+           del subtitulo, leyendose como un choque de textos (medido). */
+        -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 78%, transparent 100%);
+        mask-image: linear-gradient(to bottom, #000 0, #000 78%, transparent 100%);
+    }
+    .stats-pin::-webkit-scrollbar { width: 0; height: 0; }
+    .stats-item {
+        grid-area: auto;
+        min-height: 50svh;
+        scroll-snap-align: start;
+        margin-bottom: 0;
+        transform: none !important;
+    }
+    .stat-number { font-size: 4.6rem; }
+    .stat-label { font-size: 1.4rem; max-width: none; }
+    .stat-source { font-size: 0.9rem; }
+}
+
+/* TRUST / QUIÉN ESTÁ DETRÁS */
+.trust-section {
+    background: var(--color-bg);
+    padding: 6vh 0 10vh;
+    position: relative;
+}
+.container.trust-wrap { max-width: 1160px; }
+/* La pista: la seccion mide mas que el panel y el panel se queda
+   pegado arriba. Ese sobrante es el recorrido con el que se dibuja
+   el diagrama; sin pista habria que dibujarlo en el instante en que
+   el panel cruza la pantalla. */
+.trust-stage { position: relative; height: 205vh; }
+.trust-panel {
+    background: #1C1917;
+    color: #E7E5E4;
+    border-radius: 28px;
+    padding: clamp(36px, 4.2vw, 60px) clamp(20px, 4.5vw, 56px);
+    position: sticky;
+    top: 4vh;
+    transform-origin: 50% 20%;
+    will-change: transform;
+    overflow: hidden;
+    min-height: 86vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.trust-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+.trust-kicker, .trust-chain { position: relative; z-index: 1; }
+/* EL BORDE DE LUZ: una chispa mint recorre el marco del panel en
+   un anillo de 1.5px, notorio pero sutil. Cuando el mundo y el
+   panel se funden al mismo negro, esta luz viajera es lo unico
+   que dibuja el cuadro. */
+@property --beam-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+.trust-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(from var(--beam-angle),
+        rgba(255, 255, 255, 0.07) 0%,
+        rgba(255, 255, 255, 0.07) 82%,
+        rgba(94, 234, 212, 0.55) 90%,
+        #CCFBF1 93%,
+        rgba(94, 234, 212, 0.55) 96%,
+        rgba(255, 255, 255, 0.07) 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 2;
+    animation: beam-spin 8s linear infinite;
+}
+@keyframes beam-spin { to { --beam-angle: 360deg; } }
+@media (prefers-reduced-motion: reduce) {
+    .trust-panel::after { animation: none; }
+}
+.trust-kicker {
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #5EEAD4;
+    margin: 0 auto clamp(24px, 4vh, 40px);
+    max-width: 900px;
+    width: 100%;
+}
+
+/* LA CADENA DE VERIFICACION
+   Un diagrama en lugar de un parrafo: entran seis fuentes oficiales, el sitio
+   las lee, y sale una cifra con el articulo que la sostiene.
+   La FORMA se declara aqui (--chain-form) y el JS la lee, para que el
+   breakpoint viva en un solo lugar: mover el media query mueve la geometria. */
+.trust-chain {
+    --chain-form: fan;
+    position: relative;
+    width: 100%;
+    max-width: 980px;
+    margin: 0 auto;
+}
+.chain-threads {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 0;
+}
+.chain-threads path {
+    fill: none;
+    stroke: rgba(94, 234, 212, 0.42);
+    stroke-width: 1.25;
+    stroke-linecap: round;
+}
+.chain-threads circle { fill: #5EEAD4; }
+.chain-dots { display: none; }
+.chain-core, .chain-out { position: relative; z-index: 1; }
+
+.chain-core {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-areas: "l n r";
+    align-items: center;
+    gap: 0 clamp(20px, 3vw, 48px);
+}
+/* En escritorio la banda no existe: sus hijas siguen siendo celdas
+   de la cuadricula l / n / r. En telefono se convierte en carril. */
+.chain-band { display: contents; }
+.chain-col { display: flex; flex-direction: column; gap: clamp(16px, 2.8vh, 30px); }
+.chain-col-l { grid-area: l; align-items: flex-end; }
+.chain-col-r { grid-area: r; align-items: flex-start; }
+
+.chain-src {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 9px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    background: rgba(255, 255, 255, 0.045);
+    border-radius: 999px;
+    padding: 10px 18px;
+    white-space: nowrap;
+    opacity: 0;
+    will-change: opacity, transform;
+}
+.chain-src b { font-size: 0.95rem; font-weight: 600; color: #F5F5F4; }
+.chain-src i { font-size: 0.82rem; font-style: normal; color: #A8A29E; }
+
+/* La pill ES el link a su fuente. La flecha va pegada al texto gris y no al
+   nombre, para no partirlo cuando la pill se apila. */
+a.chain-src {
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+a.chain-src i::after {
+    content: '\2197\FE0E';
+    margin-left: 5px;
+    font-weight: 400;
+    color: rgba(94, 234, 212, 0.45);
+    transition: color 0.2s ease;
+}
+a.chain-src:hover, a.chain-src:focus-visible, a.chain-src:active {
+    border-color: rgba(94, 234, 212, 0.5);
+    background: rgba(94, 234, 212, 0.09);
+}
+a.chain-src:hover i::after,
+a.chain-src:focus-visible i::after,
+a.chain-src:active i::after { color: #5EEAD4; }
+a.chain-src:focus-visible, a.chain-cite:focus-visible {
+    outline: 2px solid #5EEAD4;
+    outline-offset: 3px;
+}
+
+.chain-node {
+    grid-area: n;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    width: fit-content;
+    max-width: 100%;
+    border: 1px solid rgba(94, 234, 212, 0.42);
+    background: rgba(94, 234, 212, 0.07);
+    border-radius: 22px;
+    padding: 13px 24px 13px 15px;
+    opacity: 0;
+    will-change: opacity, transform;
+}
+.chain-mark { height: 32px; width: auto; flex-shrink: 0; }
+.chain-node span { display: flex; flex-direction: column; gap: 1px; }
+.chain-node b { font-size: 1.05rem; font-weight: 700; color: #FAFAF9; line-height: 1.25; }
+.chain-node i { font-size: 0.83rem; font-style: normal; color: #99F6E4; line-height: 1.3; }
+
+.chain-out {
+    width: fit-content;
+    max-width: 100%;
+    margin: clamp(44px, 7vh, 88px) auto 0;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.035);
+    border-radius: 20px;
+    padding: 24px 36px 20px;
+    opacity: 0;
+    will-change: opacity, transform;
+}
+.chain-figure {
+    display: block;
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: clamp(2.2rem, 4.6vw, 3.2rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #FAFAF9;
+}
+.chain-what { display: block; margin-top: 9px; font-size: 0.95rem; color: #A8A29E; }
+.chain-cite {
+    display: block;
+    margin-top: 15px;
+    padding-top: 13px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #5EEAD4;
+}
+a.chain-cite {
+    text-decoration: underline;
+    text-decoration-color: rgba(94, 234, 212, 0.35);
+    text-underline-offset: 4px;
+    transition: text-decoration-color 0.2s ease;
+}
+@media (hover: hover) { a.chain-cite:hover { text-decoration-color: #5EEAD4; } }
+
+/* EL TRADUCTOR. La salida del nodo ya no es una cifra fija: el lector
+   elige un tema y ve la cita literal de la ley (gris, en cursiva, en
+   español en los dos idiomas porque es la fuente), lo que significa
+   (blanco, con la cifra al lado), el artículo y el trámite que toca.
+   Las fuentes de donde sale se encienden arriba y el trámite, abajo. */
+.chain-out#traductor { width: min(680px, 100%); padding: 18px 28px 16px; text-align: center; }
+.tr-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 14px; }
+.tr-tab {
+    appearance: none; -webkit-appearance: none; cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.14); background: transparent; border-radius: 999px;
+    padding: 7px 12px; font-family: inherit; font-size: 0.76rem; font-weight: 600; color: #A8A29E;
+    transition: color 0.15s, border-color 0.15s, background-color 0.15s;
+}
+.tr-tab[aria-pressed="true"] { border-color: rgba(94, 234, 212, 0.6); background: rgba(94, 234, 212, 0.1); color: #CCFBF1; }
+@media (hover: hover) { .tr-tab:hover { color: #E7E5E4; } }
+.tr-tab:focus-visible { outline: 2px solid #5EEAD4; outline-offset: 2px; }
+.tr-lit {
+    margin: 0 auto; max-width: 60ch; font-family: var(--font-serif); font-style: italic;
+    font-size: 0.86rem; line-height: 1.55; color: #8F8984; quotes: "\201C" "\201D";
+}
+.tr-lit::before { content: open-quote; } .tr-lit::after { content: close-quote; }
+.tr-out {
+    display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 4px 22px;
+    text-align: left; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+.tr-out .chain-figure { font-size: clamp(1.9rem, 3.6vw, 2.6rem); white-space: nowrap; }
+.tr-out .chain-what { margin: 0; font-size: 0.94rem; line-height: 1.5; color: #E7E5E4; }
+.tr-foot {
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 18px;
+    margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.1); text-align: left;
+}
+.tr-foot .chain-cite { margin: 0; padding: 0; border: 0; letter-spacing: 0; text-transform: none; font-size: 0.78rem; }
+.tr-go { font-size: 0.84rem; font-weight: 600; color: #5EEAD4; text-decoration: none; white-space: nowrap; }
+.tr-go::after { content: " \2197\FE0E"; }
+@media (hover: hover) { .tr-go:hover { text-decoration: underline; text-underline-offset: 4px; } }
+.tr-go:focus-visible { outline: 2px solid #5EEAD4; outline-offset: 3px; border-radius: 4px; }
+.chain-src.is-sel { border-color: rgba(94, 234, 212, 0.6); background: rgba(94, 234, 212, 0.1); }
+
+/* LA RAMA DE TRÁMITES. Sale del panel hacia abajo sobre el mismo negro
+   (la sección ya se apagó a #1C1917 al llegar aquí). Tiene fondo propio
+   para que, con movimiento reducido, siga leyéndose como parte del
+   panel aunque la sección no se oscurezca. */
+.tram-rama {
+    position: relative; max-width: 980px; margin: 0 auto;
+    background: #1C1917; color: #E7E5E4; border-radius: 28px;
+    padding: 64px clamp(20px, 4.5vw, 56px) 40px;
+}
+.tram-rama::before {
+    content: ''; position: absolute; left: 50%; top: 0; width: 1.25px; height: 40px;
+    background: rgba(94, 234, 212, 0.42); transform: translateX(-50%);
+}
+.tram-kicker {
+    width: fit-content; margin: 0 auto 22px; padding: 6px 14px; border-radius: 999px;
+    border: 1px solid rgba(94, 234, 212, 0.42); background: rgba(94, 234, 212, 0.07);
+    font-size: 0.74rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #5EEAD4;
+}
+.tram-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.tram-card {
+    display: flex; flex-direction: column; gap: 6px; height: 100%;
+    padding: 16px 18px; border: 1px solid rgba(255, 255, 255, 0.13); border-radius: 18px;
+    background: rgba(255, 255, 255, 0.045); color: #E7E5E4; text-decoration: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+@media (hover: hover) { .tram-card:hover { border-color: rgba(94, 234, 212, 0.5); background: rgba(94, 234, 212, 0.07); } }
+.tram-card:focus-visible { outline: 2px solid #5EEAD4; outline-offset: 3px; }
+.tram-item.is-sel .tram-card, .tram-item.is-flash .tram-card { border-color: rgba(94, 234, 212, 0.6); background: rgba(94, 234, 212, 0.1); }
+.tram-n { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.74rem; color: #5EEAD4; }
+.tram-t { font-size: 0.98rem; font-weight: 600; line-height: 1.3; color: #F5F5F4; }
+.tram-t::after { content: " \2197\FE0E"; font-weight: 400; color: rgba(94, 234, 212, 0.5); }
+.tram-d { font-size: 0.84rem; line-height: 1.5; color: #A8A29E; }
+.tram-plazo { font-size: 0.84rem; line-height: 1.5; color: #CCFBF1; }
+.tram-plazo:empty { display: none; }
+.tram-foot { margin: 20px 0 0; text-align: center; font-size: 0.8rem; color: #A8A29E; }
+.tram-foot a { color: #5EEAD4; text-decoration: underline; text-decoration-color: rgba(94, 234, 212, 0.35); text-underline-offset: 3px; }
+@media (max-width: 900px) { .tram-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+@media (min-width: 761px) and (max-height: 780px) {
+    .trust-panel { padding-top: 26px; padding-bottom: 26px; }
+    .trust-kicker { margin-bottom: 14px; }
+    .chain-out { margin-top: clamp(30px, 5vh, 48px); }
+    .chain-out#traductor { padding: 14px 24px 12px; }
+    .tr-lit { font-size: 0.8rem; line-height: 1.45; }
+    .tr-out, .tr-foot { margin-top: 10px; padding-top: 10px; }
+}
+
+/* Si el JS no corre, el diagrama no se queda en blanco: la clase chain-on la
+   pone el propio script antes de apagar nada. */
+.trust-chain:not(.chain-on) .chain-src,
+.trust-chain:not(.chain-on) .chain-node,
+.trust-chain:not(.chain-on) .chain-out { opacity: 1; transform: none; }
+
+/* Antes de que las pills en linea dejen de caber, el texto gris baja debajo
+   del nombre en vez de encogerse. */
+@media (max-width: 1100px) {
+    .chain-src { flex-direction: column; gap: 1px; white-space: normal; }
+    .chain-col-l .chain-src { align-items: flex-end; text-align: right; }
+    .chain-col-r .chain-src { align-items: flex-start; text-align: left; }
+    .chain-src i { line-height: 1.3; }
+}
+
+/* TELEFONO: CARRIL HORIZONTAL (patron medido en apple.com/mac en
+   movil). Las seis fuentes en una fila que se desliza con el pulgar y
+   la siguiente asomando por el borde: ese asomo es la senal de
+   profundidad, el equivalente lateral del vecino atenuado. Cada tarjeta
+   gana el ancho que en columna no tenia, asi que la tipografia sube a
+   20px el nombre y 15px el detalle en vez de 14 y 11.
+   Los puntos de abajo conservan el argumento de la seccion: que las
+   fuentes son SEIS, aunque solo se vean una y pico a la vez.
+   El scroll vertical sigue mandando el dibujo; el horizontal es del
+   usuario y no toca el progreso. */
+@media (max-width: 760px) {
+    .trust-chain { --chain-form: deck; }
+    /* el campo de particulas es un fondo, no una textura encima: en
+       pantalla chica la misma densidad se lee como rayones sobre las
+       tarjetas */
+    .trust-canvas { opacity: 0.45; }
+    .trust-stage { height: auto; }
+    .trust-panel {
+        position: relative;
+        top: auto;
+        min-height: 0;
+        border-radius: 24px;
+        padding: 26px 0 28px;
+    }
+    .trust-kicker { text-align: center; margin-bottom: 20px; padding: 0 18px; }
+
+    .chain-core { display: block; grid-template-columns: none; grid-template-areas: none; }
+    .chain-band {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding: 4px 18px;
+    }
+    .chain-band::-webkit-scrollbar { display: none; }
+    .chain-col-l, .chain-col-r { display: contents; }
+    .chain-src {
+        flex: 0 0 82%;
+        scroll-snap-align: center;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 6px;
+        min-height: 118px;
+        padding: 18px 18px 20px;
+        border-radius: 20px;
+        white-space: normal;
+        text-align: left;
+    }
+    .chain-col-l .chain-src, .chain-col-r .chain-src { align-items: flex-start; text-align: left; }
+    .chain-src b {
+        font-size: 1.25rem;
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+    .chain-src i { font-size: 0.95rem; line-height: 1.35; }
+    a.chain-src i::after { content: none; }
+    a.chain-src b::after {
+        content: '\2197\FE0E';
+        margin-left: 12px;
+        font-weight: 400;
+        color: rgba(94, 234, 212, 0.5);
+    }
+    a.chain-src:hover b::after,
+    a.chain-src:focus-visible b::after,
+    a.chain-src:active b::after { color: #5EEAD4; }
+
+    .chain-dots { display: flex; gap: 7px; justify-content: center; margin-top: 16px; }
+    .chain-dots span {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: rgba(255, 255, 255, 0.18);
+        transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .chain-dots span.on { background: #5EEAD4; transform: scale(1.3); }
+
+    .chain-node {
+        margin: 30px auto 0;
+        align-self: auto;
+        padding: 12px 20px 12px 13px;
+        border-radius: 18px;
+        gap: 10px;
+        box-shadow: 0 0 40px rgba(94, 234, 212, 0.10);
+    }
+    .chain-mark { height: 28px; }
+    .chain-node b { font-size: 1rem; }
+    .chain-node i { font-size: 0.8rem; }
+    .chain-out {
+        width: auto;
+        margin: 28px 18px 0;
+        padding: 22px 20px 18px;
+        border-radius: 18px;
+        text-align: center;
+    }
+    .chain-figure { font-size: 2.6rem; }
+    .chain-out#traductor { width: auto; padding: 16px 16px 14px; }
+    .tr-tabs { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; margin: 0 -16px 12px; padding: 0 16px; }
+    .tr-tabs::-webkit-scrollbar { display: none; }
+    .tr-tab { flex: none; }
+    .tr-lit { font-size: 0.82rem; }
+    .tr-out { grid-template-columns: 1fr; text-align: center; }
+    .tr-out .chain-figure { font-size: 2.2rem; }
+    .tr-foot { flex-direction: column; align-items: center; text-align: center; }
+    .tram-rama { border-radius: 24px; padding: 56px 16px 28px; }
+    .tram-grid { grid-template-columns: 1fr; gap: 8px; }
+    .tram-card { padding: 14px 16px; border-radius: 16px; }
+    .chain-what { margin-top: 7px; font-size: 0.92rem; }
+    .chain-cite { margin-top: 13px; padding-top: 11px; font-size: 0.66rem; letter-spacing: 0.04em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .trust-stage { height: auto; }
+    .trust-panel { position: relative; top: auto; }
+    .chain-src, .chain-node, .chain-out { opacity: 1; }
+}
+
+/* La serif de acento tambien en los leads editoriales del mapa
+   y del FAQ: una sola voz tipografica en todo el sitio. */
+.map-section .blk-lead,
+#faq .section-subtitle { font-family: var(--font-serif); font-size: 1.05rem; }
+/* FAQ */
+.faq-list { max-width: 640px; margin: 0 auto; }
+.faq-item {
+    border-bottom: 1px solid var(--color-border);
+}
+.faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-align: left;
+    gap: 12px;
+    transition: color 0.2s ease;
+}
+@media (hover: hover) { .faq-question:hover { color: var(--color-accent); } }
+.faq-arrow {
+    font-size: 1.2rem;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    color: var(--color-text-secondary);
+}
+.faq-item.open .faq-arrow { transform: rotate(180deg); color: var(--color-accent); }
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.faq-answer-inner {
+    padding: 0 0 20px;
+    font-size: 0.88rem;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+}
+.faq-item.open .faq-answer { max-height: 560px; }
+.faq-do { margin: -8px 0 20px; font-size: 0.84rem; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.faq-do-l { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-text-secondary); }
+.faq-do a { color: var(--color-accent); font-weight: 600; text-decoration: none; }
+.faq-do a::after { content: " \2193"; }
+@media (hover: hover) { .faq-do a:hover { text-decoration: underline; } }
+
+
+/* ===== Recursos editoriales =====
+   Marcador sobre una frase del titular,
+   chip de categoria como antetitulo, mapa como ilustracion
+   interactiva, y bandas de color alternadas por seccion.
+   Paleta: la rampa teal ya existente (accent-light es teal-100,
+   accent es teal-700); los tres pasos intermedios son de la misma
+   familia. Sin fuentes nuevas: monoespaciada del sistema. */
+
+.mark-hl {
+    background: var(--color-accent-light);
+    padding: 0 0.28em;
+    border-radius: 5px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+/* Enfasis alterno para titulos: cifra en mono acento, sin fondo.
+   Un solo mark-hl por pagina (tabulador); el mapa usa este. */
+.num-hl {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: var(--color-accent);
+    letter-spacing: -0.01em;
+}
+/* Encabezado editorial a dos columnas:
+   titulo bold a la izquierda, parrafo de acento en serif a la
+   derecha. Solo la calculadora lo usa; el mapa conserva el suyo. */
+.blk-head {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 4vw;
+    align-items: start;
+    margin-bottom: 26px;
+}
+.blk-head .blk-title {
+    font-size: clamp(1.9rem, 3.1vw, 2.8rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 0;
+}
+.blk-head .blk-lead {
+    font-family: var(--font-serif);
+    font-size: 1.13rem;
+    line-height: 1.55;
+    margin-top: 6px;
+}
+.calc-section .container.blk-head-wrap { max-width: 1080px; }
+@media (max-width: 760px) {
+    .blk-head { grid-template-columns: 1fr; gap: 10px; }
+}
+.blk-title {
+    font-size: 1.7rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.28;
+    margin: 18px 0 14px;
+}
+.blk-lead {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    max-width: 62ch;
+}
+.blk-foot {
+    margin-top: 24px;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-border);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.66rem;
+    color: #78716C; /* 4.6:1 sobre el fondo; #A8A29E daba 2.4 */
+    line-height: 1.7;
+}
+.blk-foot .sep { margin: 0 7px; opacity: 0.55; }
+.blk-foot a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+@media (hover: hover) { .blk-foot a:hover { color: var(--color-accent); } }
+/* Fecha de verificacion por bloque. La fecha vive en data-verificado y
+   el texto lo pinta el JS en el idioma activo; tools/cifras.js la lee
+   y avisa cuando envejece. */
+.verif {
+    margin-top: 10px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.66rem;
+    color: #78716C;
+    line-height: 1.7;
+}
+.verif:empty { display: none; }
+.verif-date { white-space: nowrap; }
+.stats-aside .verif { color: #A8A29E; margin-top: 16px; }
+
+/* --- Calculadora de la retencion --- */
+.calc-section { background: var(--color-surface); }
+.calc-section .container, .map-section .container { max-width: 720px; }
+.calc-activity {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 26px;
+}
+.act-btn {
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 9px 16px;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+@media (hover: hover) { .act-btn:hover { border-color: var(--color-accent); color: var(--color-accent); } }
+.act-btn.active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #FFFFFF;
+}
+.act-btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.calc-slider { margin: 24px 0 6px; }
+.calc-slider label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: 10px;
+}
+.calc-amount {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--color-accent);
+    margin-bottom: 12px;
+}
+.calc-slider input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--color-border);
+    outline: none;
+}
+.calc-slider input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    border: 3px solid var(--color-surface);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+    cursor: pointer;
+}
+.calc-slider input[type=range]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    border: 3px solid var(--color-surface);
+    cursor: pointer;
+}
+.calc-verdict {
+    margin-top: 22px;
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    border-left: 3px solid var(--color-accent);
+    background: var(--color-bg);
+    font-size: 0.87rem;
+    line-height: 1.65;
+    color: var(--color-text);
+}
+.calc-verdict.is-advance { border-left-color: var(--color-text-secondary); }
+.calc-paso::after { content: " \2193"; }
+@media (hover: hover) { .calc-paso:hover { text-decoration: underline; } }
+.calc-caveat { margin-top: 12px; font-size: 0.8rem; color: var(--color-text-secondary); line-height: 1.6; }
+.results-cta { text-align: center; font-size: 0.88rem; color: rgba(255,255,255,0.5); margin-top: 24px; }
+.results-cta a { color: #5EEAD4; font-weight: 600; text-decoration: none; }
+.substack-frame { width: 100%; border: none; background: transparent; }
+.newsletter-fallback { font-size: 0.85rem; color: var(--color-text-secondary); margin-top: 12px; }
+/* Cubetas de la leyenda del mapa: los mismos cinco colores que asigna el JS a los paths */
+.sw-b1 { background: #CCFBF1; } .sw-b2 { background: #99F6E4; } .sw-b3 { background: #5EEAD4; }
+.sw-b4 { background: #14B8A6; } .sw-b5 { background: #0F766E; }
+/* El recibo del mes. La barra es lo que cobra la plataforma (tu precio
+   más el IVA) partido en lo que te deposita, el ISR y el IVA que
+   retiene; las filas dicen lo mismo en pesos. Los colores de la barra
+   reaparecen como marca en cada fila para ligar una con otra. */
+.calc-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; margin-top: 26px; }
+.calc-controls .calc-activity { margin-top: 0; }
+.calc-rfc { display: inline-flex; align-items: center; gap: 6px; }
+.calc-rfc-l { font-size: 0.8rem; color: var(--color-text-secondary); margin-right: 4px; }
+.rfc-btn {
+    appearance: none; -webkit-appearance: none; cursor: pointer;
+    background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 999px;
+    padding: 7px 14px; font-family: inherit; font-size: 0.8rem; font-weight: 600; color: var(--color-text-secondary);
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+.rfc-btn.active { background: var(--color-text); border-color: var(--color-text); color: #FFFFFF; }
+.rfc-btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+@media (hover: hover) { .rfc-btn:not(.active):hover { border-color: var(--color-text); color: var(--color-text); } }
+.calc-recibo {
+    margin-top: 22px; padding: 18px 20px 16px;
+    border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-bg);
+}
+.recibo-bar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; background: var(--color-border); }
+.recibo-bar span { display: block; height: 100%; transition: width 0.2s ease-out; }
+.rb-dep, .rr-dep i { background: var(--color-accent); }
+.rb-isr, .rr-isr i { background: #B45309; }
+.rb-iva, .rr-iva i { background: #F59E0B; }
+.recibo-rows { margin: 14px 0 0; }
+.recibo-rows div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--color-border); }
+.recibo-rows dt { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; font-size: 0.88rem; color: var(--color-text); margin: 0; }
+.recibo-rows dt i { width: 9px; height: 9px; border-radius: 2px; align-self: center; flex: none; }
+.recibo-rows dt small { flex-basis: 100%; font-size: 0.76rem; color: var(--color-text-secondary); }
+.rr-isr dt small, .rr-iva dt small { display: none; }
+.recibo-rows dd { margin: 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 1rem; font-weight: 700; white-space: nowrap; }
+.rr-isr dd, .rr-iva dd { color: #B45309; }
+.rr-dep { border-bottom: 0 !important; }
+.rr-dep dt span { font-weight: 700; }
+.rr-dep dd { font-size: 1.3rem; color: var(--color-accent); }
+.calc-contexto { margin: 10px 0 0; font-size: 0.86rem; line-height: 1.6; color: var(--color-text); }
+.calc-contexto a, .calc-paso { color: var(--color-accent); font-weight: 600; text-decoration: none; white-space: nowrap; }
+.calc-contexto a::after { content: " \2197\FE0E"; }
+@media (hover: hover) { .calc-contexto a:hover { text-decoration: underline; } }
+.calc-anual { margin: 6px 0 0; font-size: 0.8rem; color: var(--color-text-secondary); line-height: 1.6; }
+.calc-plazo { display: block; margin-top: 8px; font-weight: 600; }
+@media (max-width: 600px) {
+    .calc-controls { flex-direction: column; align-items: flex-start; }
+    .calc-recibo { padding: 14px 14px 12px; }
+    .rr-dep dd { font-size: 1.15rem; }
+}
+
+/* --- Mapa del impuesto estatal al hospedaje --- */
+/* --- Videos explicativos ---
+   Ayuda en video para el público. Arriba va el título del capítulo en
+   curso con su número, y debajo cuatro barras, una por capítulo, que
+   se llenan mientras corre su video; al terminar pasa solo al
+   siguiente y el título cambia con un fundido corto, así los cuatro se
+   leen como una presentación con secciones. El nombre de cada capítulo
+   vive en el título; las barras lo llevan solo para lectores de
+   pantalla, para no repetirlo en la misma vista. Arranca solo al verse
+   y se pausa al salir. Con movimiento reducido no arranca solo ni hay
+   fundidos: queda el póster, que es el diagrama terminado. 16:9 en
+   escritorio, 4:5 en teléfono. Los clips se rehacen en videos/ (README). */
+.vid-section { background: var(--color-surface); border-top: 1px solid var(--color-border); }
+.vid-section .container { max-width: 1080px; }
+.vid-oculto { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.vid-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.vid-now {
+    display: flex; align-items: baseline; gap: 14px; min-width: 0; margin: 0;
+    font-size: clamp(1.35rem, 2.3vw, 1.8rem); font-weight: 700; letter-spacing: -0.015em; line-height: 1.2;
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+/* Cambio de capítulo: el título sale hacia arriba y el nuevo entra desde abajo. */
+.vid-now.is-out { opacity: 0; transform: translateY(-6px); transition-duration: 0.18s; }
+.vid-now.is-in { opacity: 0; transform: translateY(8px); transition: none; }
+.vid-now-n { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.5em; font-weight: 600; letter-spacing: 0; color: var(--color-accent); flex: none; }
+.vid-play {
+    appearance: none; -webkit-appearance: none; cursor: pointer; flex: none;
+    width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--color-accent); border: 0;
+}
+@media (hover: hover) { .vid-play:hover { background: var(--color-accent-dark); } }
+.vid-play:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+.vid-play svg { width: 14px; height: 14px; fill: #FFFFFF; }
+.vid-play path { display: none; }
+.vid-play[data-estado="play"] .i-play, .vid-play[data-estado="pause"] .i-pause, .vid-play[data-estado="replay"] .i-replay { display: inline; }
+/* Cada barra es un botón: el trazo mide 3px, el área de toque 26px. */
+.vid-rail { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 10px; margin: 8px 0 12px; }
+.vid-ch {
+    appearance: none; -webkit-appearance: none; background: none; border: 0; cursor: pointer;
+    display: block; width: 100%; padding: 11px 0 12px;
+}
+.vid-ch-track { display: block; height: 3px; border-radius: 3px; background: var(--color-border); overflow: hidden; transition: background-color 0.2s ease; }
+.vid-ch-fill { display: block; height: 100%; width: 0; background: var(--color-accent); }
+/* timeupdate llega unas cuatro veces por segundo en Safari; la
+   transición rellena los huecos y la barra avanza parejo. */
+.vid-ch-fill.is-live { transition: width 0.3s linear; }
+@media (hover: hover) { .vid-ch:hover .vid-ch-track { background: #D6D3D1; } }
+.vid-ch:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 4px; }
+.vid-frame { position: relative; border: 1px solid var(--color-border); border-radius: 16px; overflow: hidden; background: #FAFAF9; aspect-ratio: 16 / 9; }
+/* Dos <video> apilados: mientras corre uno, el otro ya descargó el
+   capítulo siguiente, así el cambio es un fundido y no un hueco con
+   el póster asomando, que era lo que se veía en teléfono con red
+   lenta. El póster es una capa aparte: se funde al arrancar el clip
+   y vuelve solo cuando el clip no va a correr solo. */
+.vid-frame video { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: contain; background: #FAFAF9; cursor: pointer; transition: opacity 0.3s ease; }
+.vid-frame video.is-off { opacity: 0; pointer-events: none; }
+.vid-poster { position: absolute; inset: 0; background: #FAFAF9 center / contain no-repeat; pointer-events: none; transition: opacity 0.4s ease; }
+.vid-poster.is-off { opacity: 0; }
+.vid-text { margin-top: 22px; font-size: 0.85rem; color: var(--color-text-secondary); }
+.vid-text summary { cursor: pointer; font-weight: 600; color: var(--color-text-secondary); width: fit-content; }
+.vid-text p { margin-top: 8px; line-height: 1.7; max-width: 72ch; }
+@media (prefers-reduced-motion: reduce) { .vid-frame video, .vid-poster, .vid-ch-fill.is-live, .vid-now, .vid-ch-track { transition: none; } }
+@media (max-width: 600px) {
+    .vid-frame { aspect-ratio: 4 / 5; border-radius: 14px; }
+    /* Una sola línea hasta 320 px: si el título más largo se partiera,
+       el video bajaría de lugar al cambiar de capítulo. */
+    .vid-now { gap: 10px; font-size: clamp(0.95rem, 4.9vw, 1.35rem); }
+    .vid-rail { gap: 0 6px; margin: 4px 0 10px; }
+}
+
+.map-section {
+    background: var(--color-bg);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+.mxmap { width: 100%; height: auto; display: block; margin: 26px 0 0; }
+.mx-st {
+    stroke: var(--color-surface);
+    stroke-width: 0.7;
+    cursor: pointer;
+    transition: filter 0.12s, fill 0.7s ease;
+}
+/* El mapa se pinta solo al entrar: arranca en tierra palida y cada
+   estado florece a su color EN ORDEN DE TASA (2% -> 6%), contando
+   la historia del titulo mientras se dibuja. El JS solo quita una
+   clase; los delays por estado hacen la oleada. */
+.mxmap.unpainted .mx-st { fill: #E4E2DD; }
+.mx-st.b1 { fill: #CCFBF1; }
+.mx-st.b2 { fill: #99F6E4; }
+.mx-st.b3 { fill: #5EEAD4; }
+.mx-st.b4 { fill: #14B8A6; }
+.mx-st.b5 { fill: #0F766E; }
+.mx-st:focus { filter: brightness(0.88); outline: none; }
+@media (hover: hover) { .mx-st:hover { filter: brightness(0.88); outline: none; } }
+/* Confirmación parcial: la incertidumbre se ve en el mapa, no solo
+   se lee en la ficha. Va antes de is-active para que el resaltado
+   de selección gane por orden de fuente. */
+.mx-st.is-partial {
+    stroke: #57534E;
+    stroke-width: 1.1;
+    stroke-dasharray: 3 2.5;
+}
+.mx-st.is-active { stroke: var(--color-text); stroke-width: 1.6; stroke-dasharray: none; }
+.map-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin-top: 14px;
+    font-size: 0.7rem;
+    color: var(--color-text-secondary);
+}
+.map-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.map-legend i { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+.map-legend i.sw-partial { background: none; border: 1px dashed #57534E; }
+.map-panel {
+    margin-top: 18px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    min-height: 128px;
+}
+.map-panel-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+.map-panel-figure {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--color-accent);
+    line-height: 1.1;
+}
+.map-panel-text { margin-top: 8px; font-size: 0.84rem; color: var(--color-text-secondary); line-height: 1.65; }
+/* El mapa remata en pesos: un monto mensual y, con el estado elegido,
+   cuánto es de impuesto estatal. */
+.map-monto { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 18px; }
+.map-monto label { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-text-secondary); }
+.map-monto-in { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--color-border); border-radius: 10px; padding: 6px 10px; background: var(--color-surface); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; }
+.map-monto-in:focus-within { border-color: var(--color-accent); }
+.map-monto-in input { border: 0; outline: 0; width: 8.5ch; font: inherit; color: var(--color-text); background: transparent; -moz-appearance: textfield; }
+.map-monto-in input::-webkit-outer-spin-button, .map-monto-in input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.map-panel-pesos { margin-top: 10px; font-size: 0.92rem; font-weight: 600; color: var(--color-text); }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .hero h1 { font-size: 1.7rem; }
+    .hero { padding: 60px 0 40px; }
+    nav { padding: 9px 0; }
+    nav .container { flex-wrap: wrap; row-gap: 7px; }
+    .logo { gap: 7px; }
+    .logo-badge { height: 27px; }
+    .logo-word { font-size: 0.92rem; letter-spacing: -0.01em; max-width: 200px; }
+    .nav-right { gap: 8px; }
+    .nav-cta { padding: 6px 12px; font-size: 0.78rem; }
+    .nav-links { gap: 14px; order: 3; flex-basis: 100%; justify-content: center; }
+    .nav-links a { font-size: 0.82rem; }
+    .lang-btn { padding: 5px 9px; font-size: 0.76rem; }
+    section { padding: 40px 0; }
+    .blk-title { font-size: 1.35rem; }
+    .calc-amount { font-size: 1.6rem; }
+    .map-panel { padding: 14px 15px; }
+    .map-panel-figure { font-size: 1.5rem; }
+    .diag-nav { gap: 10px; }
+    .step-indicator { white-space: nowrap; }
+    .btn-next, .btn-prev, .btn-results { padding: 12px 20px; }
+}
+
+/* PROSA JUSTIFICADA: los párrafos de texto corrido
+   que no forman parte de un gráfico, como la transcripción bajo los
+   videos, las entradillas, la calculadora, el FAQ y los resultados del
+   diagnóstico. Con guiones silábicos para que en teléfono no se abran
+   huecos entre palabras; en los bloques centrados la última línea
+   sigue centrada. Los textos dentro de paneles y mapas no cambian. */
+.blk-lead, .calc-contexto, .calc-anual, .calc-caveat, .calc-verdict,
+.vid-text p, .faq-answer-inner, .profile-summary,
+#sat-visibility-list li, #obligations-list li,
+.newsletter-box p, #diagnostico .section-subtitle, .footer-fine {
+    text-align: justify;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+}
+.newsletter-box p, #diagnostico .section-subtitle, .footer-fine { text-align-last: center; }

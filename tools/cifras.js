@@ -1,4 +1,5 @@
-// Inventario de cifras del sitio con su fuente legal, leido de index.html.
+// Inventario de cifras del sitio con su fuente legal, leido de index.html y de
+// las hojas y scripts que carga (tools/pagina.js); cada fila dice archivo:linea.
 // No valida nada: enumera. Sirve como lista de trabajo cuando cambia una ley
 // (Paquete Economico, RMF, LIF) y como contrato de lo que un monitor vigila.
 // Si una cifra no aparece aqui, el sitio la afirma sin fuente rastreable, y
@@ -9,8 +10,10 @@ const fs = require('fs');
 const path = require('path');
 
 const file = process.argv[2] || path.join(__dirname, '..', 'index.html');
-const html = fs.readFileSync(file, 'utf8');
-const lines = html.split('\n');
+const pag = require('./pagina')(file);
+const html = pag.texto;
+const lines = pag.lineas;
+const donde = i => pag.origen(i);
 
 // Cita legal: articulo, ley, DOF, RMF, anexo. Lo que un cambio normativo puede mover.
 const CITA = /(Art(?:í|i)culo|Art\.|art\.)\s*\d+[\w-]*(?:\s*(?:BIS|Bis|TER|Ter))?(?:[^.;·]*?(?:LISR|LIVA|CFF|LIF(?:\s*\d{4})?|Ley de Hacienda|Ley de Ingresos))?|LIF\s*\d{4}|RMF\s*\d{4}|Anexo\s*\d+|DOF\s*\d{2}-[a-z]{3}-\d{4}|Regla\s*[\d.]+/g;
@@ -36,7 +39,7 @@ const out = [];
 const hoy = new Date().toISOString().slice(0, 10);
 out.push(`# Cifras vigentes en fiscoabierto.org`);
 out.push(``);
-out.push(`Generado ${hoy} por web/tools/cifras.js sobre ${path.basename(file)} (${lines.length} lineas). No editar a mano: regenerar.`);
+out.push(`Generado ${hoy} por web/tools/cifras.js sobre ${path.basename(file)} y lo que carga (${lines.length} lineas). No editar a mano: regenerar.`);
 out.push(``);
 
 // 0. Fecha de verificacion de cada bloque, leida de data-verificado. El sitio
@@ -70,7 +73,7 @@ for (let i = 0; i < lines.length; i++) {
   if (!m) continue;
   const label = limpiar((lines[i + 1] || '').replace(/.*data-i18n="[^"]+">/, ''));
   const src = limpiar((lines[i + 2] || '').replace(/.*class="stat-source"[^>]*>/, ''));
-  out.push(`| ${++n} | ${m[2]}${m[1]}${m[3]} | ${label} | ${src} | ${i + 1} |`);
+  out.push(`| ${++n} | ${m[2]}${m[1]}${m[3]} | ${label} | ${src} | ${donde(i)} |`);
 }
 out.push(``);
 
@@ -82,14 +85,14 @@ out.push(`|---|---|---|---|`);
 for (let i = 0; i < lines.length; i++) {
   const l = lines[i];
   const act = l.match(/^\s*(venta|transporte|hospedaje):\s*\{\s*past:\s*([\d.]+),\s*now:\s*([\d.]+),\s*frac:\s*'([^']+)'/);
-  if (act) { out.push(`| ACTS.${act[1]} | 2025 ${(act[2]*100).toFixed(1)}% / 2026 ${(act[3]*100).toFixed(1)}% | Art. 113-A parrafo tercero, fr. ${act[4]} | ${i + 1} |`); continue; }
-  const c = l.match(/^\s*var (THRESHOLD|SIN_RFC|IVA|IVA_RET)\s*=\s*([\d.]+);\s*\/\/\s*(.*)$/);
-  if (c) out.push(`| ${c[1]} | ${c[2]} | ${c[3].trim()} | ${i + 1} |`);
+  if (act) { out.push(`| ACTS.${act[1]} | 2025 ${(act[2]*100).toFixed(1)}% / 2026 ${(act[3]*100).toFixed(1)}% | Art. 113-A parrafo tercero, fr. ${act[4]} | ${donde(i)} |`); continue; }
+  const c = l.match(/^\s*(?:var|const|let) (THRESHOLD|SIN_RFC|IVA|IVA_RET)\s*=\s*([\d.]+);\s*\/\/\s*(.*)$/);
+  if (c) out.push(`| ${c[1]} | ${c[2]} | ${c[3].trim()} | ${donde(i)} |`);
 }
 out.push(``);
 
 // 3. Mapa de hospedaje: 32 tasas estatales con su fuente y su grado de confirmacion.
-const st = html.match(/var ST = (\{.*?\});\s*$/m);
+const st = html.match(/(?:var ST|const HOSPEDAJE) = (\{.*?\});\s*$/m);
 if (st) {
   const ST = JSON.parse(st[1]);
   const R = { si: 'confirmada', nv: 'no verificada en fuente vigente', par: 'confirmacion parcial' };
@@ -111,7 +114,7 @@ if (st) {
 // diagnostico, pies de seccion). Es la red de seguridad: lo que 1-3 no cubren.
 out.push(`## Afirmaciones con cita legal en el resto del archivo`);
 out.push(``);
-out.push(`Una fila por linea del index que contiene una cita. Se omiten las lineas en ingles (el dict en empieza en la linea ${lines.findIndex(l => /^\s*en: \{/.test(l)) + 1}) y las ya listadas arriba.`);
+out.push(`Una fila por linea del index que contiene una cita. Se omiten las lineas en ingles (el dict en empieza en ${donde(lines.findIndex(l => /^\s*en: \{/.test(l)))}) y las ya listadas arriba.`);
 out.push(``);
 out.push(`| Linea | Seccion | Citas | Cifras en la misma linea | Fragmento |`);
 out.push(`|---|---|---|---|---|`);
@@ -121,13 +124,13 @@ for (let i = 0; i < lines.length; i++) {
   const l = lines[i];
   if (i >= enStart && i <= enEnd) continue;
   if (/^\s*\?\s*'/.test(l)) continue;                 // rama inglesa de un ternario
-  if (/class="stat-source"|^\s*var (THRESHOLD|SIN_RFC|IVA|IVA_RET)|^\s*(venta|transporte|hospedaje):\s*\{|var ST = /.test(l)) continue;
+  if (/class="stat-source"|^\s*(?:var|const|let) (THRESHOLD|SIN_RFC|IVA|IVA_RET)|^\s*(venta|transporte|hospedaje):\s*\{|(?:var ST|const HOSPEDAJE) = /.test(l)) continue;
   const citas = l.match(CITA);
   if (!citas) continue;
   const cifras = l.match(CIFRA) || [];
   const texto = limpiar(l);
   const frag = texto.length > 140 ? texto.slice(0, 140) + '...' : texto;
-  out.push(`| ${i + 1} | ${seccionDe(i)} | ${[...new Set(citas.map(c => c.trim()))].join('; ')} | ${[...new Set(cifras)].join(', ') || '(ninguna)'} | ${frag.replace(/\|/g, '/')} |`);
+  out.push(`| ${donde(i)} | ${seccionDe(i)} | ${[...new Set(citas.map(c => c.trim()))].join('; ')} | ${[...new Set(cifras)].join(', ') || '(ninguna)'} | ${frag.replace(/\|/g, '/')} |`);
 }
 out.push(``);
 
@@ -158,7 +161,7 @@ for (let i = 0; i < lines.length; i++) {
   if (!cifras.length) continue;
   const texto = limpiar(l);
   if (texto.length < 12) continue;
-  out.push(`| ${i + 1} | ${seccionDe(i)} | ${[...new Set(cifras)].join(', ')} | ${(texto.length > 120 ? texto.slice(0, 120) + '...' : texto).replace(/\|/g, '/')} |`);
+  out.push(`| ${donde(i)} | ${seccionDe(i)} | ${[...new Set(cifras)].join(', ')} | ${(texto.length > 120 ? texto.slice(0, 120) + '...' : texto).replace(/\|/g, '/')} |`);
 }
 out.push(``);
 
@@ -194,7 +197,7 @@ for (let i = 0; i < lines.length; i++) {
   if (!m || !(m[0] in dict)) continue;
   comparados++;
   const a = norm(m[1]), b = norm(dict[m[0]]);
-  if (a !== b) { divergencias++; filas.push(`| ${m[0]} | ${i + 1} | ${a.slice(0, 90).replace(/\|/g, '/')} | ${b.slice(0, 90).replace(/\|/g, '/')} |`); }
+  if (a !== b) { divergencias++; filas.push(`| ${m[0]} | ${donde(i)} | ${a.slice(0, 90).replace(/\|/g, '/')} | ${b.slice(0, 90).replace(/\|/g, '/')} |`); }
 }
 out.push(`Comparados ${comparados} elementos de una linea; divergencias: ${divergencias}.`);
 if (filas.length) {
