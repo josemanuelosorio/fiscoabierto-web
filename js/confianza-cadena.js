@@ -360,7 +360,7 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
     if (reduced.addEventListener) reduced.addEventListener('change', relayout);
     // Al cambiar de idioma las pills cambian de ancho: se retrazan los hilos.
-    document.querySelectorAll('.lang-switch .lang-btn').forEach(function (b) { b.addEventListener('click', function () { pintarTraductor(false); }); });
+    document.addEventListener('idioma', function () { pintarTraductor(false); });
     document.addEventListener('click', function(e) {
         var el = e.target;
         while (el && el.classList) {

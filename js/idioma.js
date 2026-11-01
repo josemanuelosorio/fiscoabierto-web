@@ -57,6 +57,12 @@ function setLanguage(lang) {
             el.innerHTML = '\n                    ' + t('faq.q' + i) + '\n                    <span class="faq-arrow">▼</span>\n                ';
         }
     }
+
+    // Lo que arma el JS (calculadora, mapa, diagnostico, videos...) no lo
+    // alcanza el barrido de data-i18n: cada seccion escucha este evento y se
+    // vuelve a pintar. Un solo aviso en lugar de un listener por boton en
+    // cada archivo, igual que en aprende/index.html.
+    document.dispatchEvent(new CustomEvent('idioma'));
 }
 
 // Resalta el idioma activo en el switch del nav
