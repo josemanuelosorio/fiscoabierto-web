@@ -2,14 +2,21 @@
 // valida que el camino de arranque no truene. Es el chequeo que node --check
 // no puede hacer, porque un identificador libre es sintaxis valida.
 //
+// Los scripts de una pagina corren en orden y en un mismo contexto global,
+// como en el navegador: un script ve lo que declararon los anteriores (por
+// ejemplo, tramites.js usa el faPlazo de plazos.js), y si uno truena los
+// siguientes corren igual. Cada uno se reporta con su rotulo <!-- ... -->.
+//
 // Uso, desde web/:
-//   node tools/smoke.js              todos los <script> de index.html, uno por uno
+//   node tools/smoke.js              los scripts de index.html, en linea o en js/
 //   node tools/smoke.js otro.html    lo mismo sobre otro archivo html
-//   node tools/smoke.js archivo.js   un script suelto (extraido a mano)
+//   node tools/smoke.js archivo.js   un script suelto, en un contexto propio
 // Un bloque vacio cuenta como FALLA: un sed con el rotulo equivocado no debe
 // pasar en silencio.
 const fs = require('fs');
 const path = require('path');
+const vm = require('vm');
+const pagina = require('./pagina');
 function el(cls) {
   return {
     className: cls || '', classList: { add(){}, remove(){}, toggle(){return false}, contains(){return false} },
@@ -37,6 +44,7 @@ const doc = {
   createElement: () => el(), createElementNS: () => el(),
   addEventListener(){}, dispatchEvent(){}, fonts: { ready: { then(){} } }
 };
+function contexto() {
 const win = {
   innerHeight: 900, innerWidth: 1440, scrollY: 0, devicePixelRatio: 2,
   location: { search: '', hash: '', pathname: '/', href: 'https://fiscoabierto.org/' },
@@ -53,18 +61,21 @@ const win = {
   IntersectionObserver: function(){ this.observe = function(){}; },
   MutationObserver: function(){ this.observe = function(){}; this.disconnect = function(){}; }
 };
-win.window = win; win.document = doc;
+// Lo que el navegador da y node no pone en un contexto nuevo.
+Object.assign(win, { console, URLSearchParams, URL, CustomEvent, Event, performance, setTimeout: () => 0, clearTimeout(){} });
+win.window = win; win.self = win; win.document = doc;
+return vm.createContext(win);
+}
 
-function corre(nombre, src) {
-  win._frames = 0;
+function corre(ctx, nombre, src) {
+  ctx._frames = 0;
   if (!src.trim()) {
     console.log('  FALLA ' + nombre + ': bloque vacio (rotulo mal escrito o script borrado)');
     process.exitCode = 1;
     return;
   }
   try {
-    new Function('window','document','navigator','getComputedStyle','requestAnimationFrame','cancelAnimationFrame','setTimeout','IntersectionObserver','ResizeObserver','MutationObserver',src)
-      (win, doc, win.navigator, win.getComputedStyle, win.requestAnimationFrame, win.cancelAnimationFrame, (f)=>0, win.IntersectionObserver, win.ResizeObserver, win.MutationObserver);
+    vm.runInContext(src, ctx, { filename: nombre });
     console.log('  OK   ' + nombre + ': el arranque corre sin reventar');
   } catch (e) {
     console.log('  FALLA ' + nombre + ': ' + e.constructor.name + ' -> ' + e.message);
@@ -74,12 +85,10 @@ function corre(nombre, src) {
 
 const arg = process.argv[2];
 if (arg && !/\.html?$/.test(arg)) {
-  corre(arg.split('/').pop(), fs.readFileSync(arg, 'utf8'));
+  corre(contexto(), arg.split('/').pop(), fs.readFileSync(arg, 'utf8'));
 } else {
-  // Cada <script> del index, con el rotulo <!-- ... --> que lo antecede si lo hay.
-  const html = fs.readFileSync(arg || path.join(__dirname, '..', 'index.html'), 'utf8');
-  const re = /(?:<!-- ([^\n]*?) -->\s*)?<script>\n([\s\S]*?)\n<\/script>/g;
-  let m, n = 0;
-  while ((m = re.exec(html))) { n++; corre(m[1] || 'script ' + n + ' (sin rotulo)', m[2]); }
-  if (!n) { console.log('  FALLA no encontre ningun <script> en index.html'); process.exitCode = 1; }
+  const { scripts } = pagina(arg || path.join(__dirname, '..', 'index.html'));
+  const ctx = contexto();
+  scripts.forEach(s => corre(ctx, s.etiqueta, s.codigo));
+  if (!scripts.length) { console.log('  FALLA no encontre ningun script'); process.exitCode = 1; }
 }

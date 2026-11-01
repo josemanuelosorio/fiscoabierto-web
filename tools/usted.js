@@ -57,6 +57,8 @@ const archivos = args.length ? args : [
   path.join(raiz, 'index.html'),
   path.join(raiz, 'aprende', 'index.html'),
   ...fs.readdirSync(path.join(raiz, 'aprende', 'laminas')).filter(f => /^p\d+\.html$|^const\.js$/.test(f)).sort().map(f => path.join(raiz, 'aprende', 'laminas', f)),
+  // Los scripts de la página principal, incluido el diccionario.
+  ...(fs.existsSync(path.join(raiz, 'js')) ? fs.readdirSync(path.join(raiz, 'js'), { recursive: true }).filter(f => f.endsWith('.js')).sort().map(f => path.join(raiz, 'js', f)) : []),
 ];
 
 let total = 0;
