@@ -4,9 +4,11 @@
 //   node        solo necesitan node: unitarias, arranque, cifras, idioma, CSS
 //               muerto, tuteo
 //   navegador   necesitan Playwright (Chromium) o html-validate: calculadora,
-//               idioma en el DOM real, láminas y validación HTML
+//               idioma en el DOM real y validación HTML
+//   laminas     los controles de las láminas de /aprende (tres minutos;
+//               intermitente por tiempos, ver tools/README.md)
 //
-// Uso, desde web/:   node tools/correr.js node [navegador]
+// Uso, desde web/:   node tools/correr.js node [navegador] [laminas]
 // Corre todos los chequeos del grupo aunque alguno falle, para ver el cuadro
 // completo, y sale con código 1 si falló al menos uno.
 const { spawnSync } = require('child_process');
@@ -33,13 +35,15 @@ const GRUPOS = {
     ['node', 'tools/calc-goldens.js'],
     ['node', 'tools/i18n.js', '--dom'],
     ['node', 'tools/i18n.js', 'aprende/index.html', '--dom'],
+  ],
+  laminas: [
     ['node', 'tools/laminas.js'],
   ],
 };
 
 const pedidos = process.argv.slice(2);
 if (!pedidos.length || pedidos.some(g => !GRUPOS[g])) {
-  console.error('Uso: node tools/correr.js node [navegador]');
+  console.error('Uso: node tools/correr.js node [navegador] [laminas]');
   process.exit(2);
 }
 
