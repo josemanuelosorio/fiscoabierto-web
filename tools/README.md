@@ -18,13 +18,10 @@ subir:
 salida solo de los que fallaron y sale con código 1 si falló al menos uno. El
 workflow `.github/workflows/pruebas.yml` corre los grupos en cada push.
 
-`laminas.js` es intermitente por tiempos. Sobre el código del 31 de octubre,
-antes de cualquier cambio, falló 4 de 6 corridas: «p1 arranca sola al entrar»
-(llega al 100% antes de revisarse) en 2 de 4 corridas normales, y «p2 pausada
-queda pausada en inglés» en las 2 con `--rapido`. Después de partir el index y
-de los demás cambios del 1 de noviembre: 3 de 6, con las mismas dos pruebas. Por eso en el CI corre en su propio paso, que se ve pero no tumba el
-trabajo. Puede ser la prueba o una carrera que quedó del error de las láminas
-terminadas al entrar; está por investigar.
+`laminas.js` fallaba de forma intermitente en «p1 arranca sola al entrar», y
+después del refactor del 1 de noviembre en todas las corridas. La causa estaba
+en la prueba, no en el sitio: detalle en la sección de `laminas.js`. Con el
+arreglo, 0 fallas en 12 corridas alternadas sobre el código anterior y el nuevo.
 
 ## unitarias.js
 
@@ -235,3 +232,21 @@ Uso, desde la raíz del repo (necesita Playwright):
 Levanta su propio servidor sobre la raíz del repo. Tarda unos tres minutos y sale con
 código 1 si algo falla. Correrlo antes de cualquier push que toque el script
 LÁMINAS EN VIVO de `aprende/index.html` o el modo en vivo de `laminas/motor.js`.
+
+En modo WebKit la prueba espera `domcontentloaded`, no `load`. El evento `load`
+espera los iframes que Chromium ya pidió, y la ruta que simula a WebKit retiene
+hasta 20 s los que no están en pantalla: cuando Chromium los pedía antes de
+`load`, la carga tardaba unos 22 s y p1, que está en pantalla desde el inicio,
+se reproducía completa antes de revisarla («p1 arranca sola al entrar» con
+Repetir y 100%). Medido el 1 de noviembre de 2026: con `load`, la carga duraba
+~21.8 s en cada corrida que fallaba y ~0.1 s en las que pasaban; con
+`domcontentloaded`, 0 fallas en 6 corridas sobre el código anterior al refactor
+y 6 sobre el nuevo, alternadas.
+
+Con `--rapido`, «p2 pausada queda pausada en inglés» falla siempre, desde antes
+del refactor. Al cambiar de idioma la página recarga las láminas, y una lámina
+que ya corrió (aunque esté en pausa a la mitad) vuelve en el diagrama completo
+con Repetir, como dice el comentario del script. En modo WebKit la prueba pasa
+solo porque revisa antes de que llegue la recarga de p2. Falta decidir cuál es
+el comportamiento correcto; mientras, `npm run test:navegador` y el CI corren
+el modo WebKit.

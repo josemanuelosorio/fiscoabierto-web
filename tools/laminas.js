@@ -46,7 +46,12 @@ async function abre(b, base, opts) {
     }
     await new Promise(z => setTimeout(z, 400)); r.continue().catch(() => {});
   });
-  await p.goto(base + '/aprende/', { waitUntil: 'load' });
+  // En modo WebKit no se espera 'load': ese evento espera los iframes que
+  // Chromium ya pidió, y la ruta de arriba retiene hasta 20 s los que no están
+  // en pantalla. Si Chromium los pedía antes de 'load', la carga tardaba ~22 s
+  // y p1, que está en pantalla desde el inicio, se reproducía completa antes de
+  // revisarla. Era una carrera de la prueba, no del sitio.
+  await p.goto(base + '/aprende/', { waitUntil: lento ? 'domcontentloaded' : 'load' });
   await p.waitForTimeout(800);
   return { ctx, p, errores };
 }
