@@ -1,7 +1,7 @@
 // Pruebas unitarias de la lógica que no necesita navegador: plazos y cálculo
 // de la retención. Corren con el ejecutor de pruebas que trae node.
 //
-// Uso, desde web/:   node tools/unitarias.js
+// Uso, desde la raiz del repo:   node tools/unitarias.js
 // Sale con código 1 si alguna falla.
 //
 // Las fechas esperadas no salen del código que se prueba: se calcularon

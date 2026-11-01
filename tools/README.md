@@ -2,16 +2,17 @@
 
 ## Correr todo
 
-Desde `web/`, una vez:
+Desde la raíz del repo, una vez:
 
     npm install
     npx playwright install chromium
 
-Y antes de cada push:
+GitHub Actions los corre solos en cada push; para correrlos en local antes de
+subir:
 
     npm test                    # chequeos que solo necesitan node
     npm run test:navegador      # html-validate, calculadora, idioma en el DOM y láminas
-    npm run test:todo           # los dos grupos
+    npm run test:todo           # todos
 
 `correr.js` corre todos los chequeos del grupo aunque alguno falle, muestra la
 salida solo de los que fallaron y sale con código 1 si falló al menos uno. El
@@ -59,7 +60,7 @@ perfectamente válido: solo truena al ejecutarse. Ese error se publicó una vez
 en escritorio, porque el script moría después de haber puesto la clase que
 apaga el respaldo de "si no hay JS, muestra todo".
 
-Uso, desde `web/`:
+Uso, desde la raíz del repo:
 
     node tools/smoke.js
 
@@ -102,7 +103,7 @@ No valida contra la ley: enumera. Es la lista de trabajo cuando cambia una
 norma (Paquete Económico, LIF, RMF) y el contrato de lo que un monitor tiene
 que vigilar.
 
-Uso, desde `web/`:
+Uso, desde la raíz del repo:
 
     node tools/cifras.js > cifras-vigentes.md
 
@@ -125,7 +126,7 @@ Existe porque el bug de septiembre de 2026 vivía en la cuarta pieza: el panel
 del mapa inyectaba `f` y `nota` en español en los 32 estados, y ningún chequeo
 lo veía porque el diccionario estaba completo.
 
-Uso, desde `web/`:
+Uso, desde la raíz del repo:
 
     node tools/i18n.js          # piezas 1 a 3, solo node
     node tools/i18n.js --dom    # además la 4; pide playwright instalado
@@ -145,7 +146,7 @@ las tasas escritas a mano en el propio script. 30 casos: 3 actividades, con y
 sin RFC, por 5 montos; tres quedan debajo del umbral de $300,000 anuales y dos
 arriba.
 
-Uso, desde `web/`:
+Uso, desde la raíz del repo:
 
     node tools/calc-goldens.js
 
@@ -162,7 +163,7 @@ pueden aplicar nunca. Estático,
 sin navegador. Las clases que el JS arma pegando cadenas (`b1` a `b5` del
 mapa, `risk-alto` y compañía) van en la lista COMPUESTAS con su razón.
 
-Uso, desde `web/`:
+Uso, desde la raíz del repo:
 
     node tools/css-muerto.js
 
@@ -173,9 +174,10 @@ otros estados (idioma, diagnóstico, mapa, móvil).
 
 ## html-validate
 
-No es nuestro: `npm i -g html-validate`, y desde `web/`:
+No es nuestro: viene en las dependencias de desarrollo (`npm install`). Desde
+la raíz del repo:
 
-    html-validate index.html
+    npx html-validate index.html
 
 La configuración vive en `.htmlvalidate.json`. La única excepción declarada
 es `style="width:..."` en las dos barras de la calculadora: es estado
@@ -197,7 +199,7 @@ los literales de cadena de los `<script>`. Marca pronombres y posesivos (tú, tu
 tus, te, ti, contigo, tuyo) y una lista de verbos en segunda persona que el
 sitio usó. El inglés no dispara nada.
 
-Uso, desde `web/`:
+Uso, desde la raíz del repo:
 
     node tools/usted.js                        # index.html, js/, aprende/index.html, láminas y const.js
     node tools/usted.js otro-archivo.md      # cualquier .html, .md o .js
@@ -224,11 +226,11 @@ pide al entrar, y en iPhone y en Safari de Mac salían todas terminadas. Por
 eso la prueba sirve cada lámina cuando su marco ya está en pantalla, 400 ms
 después, como WebKit. Sobre el código anterior al arreglo da 10 FALLAS.
 
-Uso, desde `web/` (necesita Playwright):
+Uso, desde la raíz del repo (necesita Playwright):
 
     node tools/laminas.js            # carga estilo WebKit
     node tools/laminas.js --rapido   # carga normal de Chromium
 
-Levanta su propio servidor sobre `web/`. Tarda unos tres minutos y sale con
+Levanta su propio servidor sobre la raíz del repo. Tarda unos tres minutos y sale con
 código 1 si algo falla. Correrlo antes de cualquier push que toque el script
 LÁMINAS EN VIVO de `aprende/index.html` o el modo en vivo de `laminas/motor.js`.

@@ -7,7 +7,7 @@
 // ejemplo, tramites.js usa el faPlazo de plazos.js), y si uno truena los
 // siguientes corren igual. Cada uno se reporta con su rotulo <!-- ... -->.
 //
-// Uso, desde web/:
+// Uso, desde la raiz del repo:
 //   node tools/smoke.js              los scripts de index.html, en linea o en js/
 //   node tools/smoke.js otro.html    lo mismo sobre otro archivo html
 //   node tools/smoke.js archivo.js   un script suelto, en un contexto propio

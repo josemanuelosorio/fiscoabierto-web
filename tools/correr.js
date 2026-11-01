@@ -8,7 +8,7 @@
 //   laminas     los controles de las láminas de /aprende (tres minutos;
 //               intermitente por tiempos, ver tools/README.md)
 //
-// Uso, desde web/:   node tools/correr.js node [navegador] [laminas]
+// Uso, desde la raiz del repo:   node tools/correr.js node [navegador] [laminas]
 // Corre todos los chequeos del grupo aunque alguno falle, para ver el cuadro
 // completo, y sale con código 1 si falló al menos uno.
 const { spawnSync } = require('child_process');

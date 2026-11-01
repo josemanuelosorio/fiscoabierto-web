@@ -5,7 +5,7 @@
     //        apiladas en la misma celda: el scroll no las desfila, las
     //        intercambia, y el centro nunca se mueve.
     //   deck (telefono): carrusel vertical con snap DENTRO de una pantalla:
-    //        la pagina ya no se alarga cuatro pantallas y el foco lo dicta el
+    //        la pagina no se alarga y el foco lo dicta el
     //        scroll del propio carrusel, no el de la ventana. Aqui el fundido
     //        lo hace el navegador con el snap; el foco solo sirve para saber
     //        que cifra arrancar.
