@@ -156,8 +156,8 @@
         vids.forEach(function (v) { v.dataset.base = ''; });
         cargar(corria);
     }
-    // Corre despues de setLanguage: el mismo clic ya cambio currentLanguage.
-    document.querySelectorAll('.lang-switch .lang-btn').forEach(function (b) { b.addEventListener('click', recargar); });
+    // setLanguage avisa cuando currentLanguage ya cambio.
+    document.addEventListener('idioma', recargar);
     if (narrow.addEventListener) narrow.addEventListener('change', recargar);
     pintarCapitulos();
     pintarBoton();

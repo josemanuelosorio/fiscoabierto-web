@@ -69,7 +69,5 @@
     });
 
     paintPanel(null);
-    document.querySelectorAll('.lang-switch .lang-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() { paintPanel(activeId); });
-    });
+    document.addEventListener('idioma', function() { paintPanel(activeId); });
 })();

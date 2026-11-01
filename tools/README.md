@@ -22,7 +22,10 @@ workflow `.github/workflows/pruebas.yml` corre los dos grupos en cada push.
 Pruebas de la lógica que no necesita navegador, con el ejecutor que trae node
 (`node:test`): las fechas límite de `js/plazos.js` (día 17 y 30 de abril,
 corridas al siguiente día hábil según el art. 12 CFF) y el recibo de
-`js/retencion.js` (con y sin RFC, y el umbral del 113-B). Las cifras esperadas
+`js/retencion.js` (con y sin RFC, y el umbral del 113-B) y la evaluación de
+`js/evaluacion.js`: los umbrales de exposición en su borde exacto, el pago
+definitivo del 113-B, el orden de los pasos y que toda clave que devuelve exista
+en ES y en EN y se alcance con alguna respuesta. Las cifras esperadas
 se calcularon aparte, desde el texto de la ley, no con el código que se prueba.
 Quitar un día inhábil de la lista hace fallar la prueba de plazos.
 

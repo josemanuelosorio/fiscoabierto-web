@@ -84,3 +84,79 @@ test('umbral del 113-B: más de 300,000 al año', () => {
   assert.equal(calculoRetencion.rebasaUmbral(25001), true);
   assert.equal(calculoRetencion.rebasaUmbral(10000), false);
 });
+
+// ---- Diagnóstico -----------------------------------------------------------
+const evaluarDiagnostico = require('../js/evaluacion.js');
+const translations = require('../js/datos/traducciones.js');
+const resp = (categorias, ingreso, fiscal, factura) =>
+  ({ categorias, nPlataformas: categorias.length, ingreso, fiscal, factura });
+
+test('diagnóstico: los umbrales de exposición en su borde exacto (8 alta, 5 media)', () => {
+  // transporte 2 + umbral 3 + declara parcial 2 + factura algunas 1 = 8
+  let ev = evaluarDiagnostico(resp(['transporte'], 'umbral', 'declaro_parcial', 'algunas'));
+  assert.equal(ev.puntos, 8); assert.equal(ev.nivel, 'alto');
+  // transporte 2 + medio 2 + declara parcial 2 + algunas 1 = 7
+  ev = evaluarDiagnostico(resp(['transporte'], 'medio', 'declaro_parcial', 'algunas'));
+  assert.equal(ev.puntos, 7); assert.equal(ev.nivel, 'medio');
+  // transporte 2 + medio 2 + al corriente 0 + algunas 1 = 5
+  ev = evaluarDiagnostico(resp(['transporte'], 'medio', 'al_corriente', 'algunas'));
+  assert.equal(ev.puntos, 5); assert.equal(ev.nivel, 'medio');
+  // transporte 2 + bajo 1 + al corriente 0 + algunas 1 = 4
+  ev = evaluarDiagnostico(resp(['transporte'], 'bajo', 'al_corriente', 'algunas'));
+  assert.equal(ev.puntos, 4); assert.equal(ev.nivel, 'bajo');
+});
+
+test('diagnóstico: sin brecha de cumplimiento el nivel es bajo aunque el SAT vea mucho', () => {
+  // marketplace 3 + hospedaje 3 + crypto 2 + muy alto 4 = 12 puntos
+  const ev = evaluarDiagnostico(resp(['marketplace', 'hospedaje', 'crypto'], 'muy_alto', 'al_corriente', 'si_todas'));
+  assert.equal(ev.puntos, 12); assert.equal(ev.nivel, 'bajo');
+});
+
+test('diagnóstico: el pago definitivo del 113-B', () => {
+  // Plataformas del régimen, debajo del umbral: puede optar.
+  let ev = evaluarDiagnostico(resp(['marketplace'], 'bajo', 'al_corriente', 'si_todas'));
+  assert.ok(ev.obligaciones.includes('diag.ob.definitivo'));
+  assert.ok(!ev.obligaciones.includes('diag.ob.mensuales'));
+  // Con cripto u otros ingresos que el 113-B no admite: no le aplica.
+  ev = evaluarDiagnostico(resp(['marketplace', 'crypto'], 'bajo', 'al_corriente', 'si_todas'));
+  assert.ok(ev.obligaciones.includes('diag.ob.definitivoNo'));
+  assert.ok(!ev.obligaciones.includes('diag.ob.definitivo'));
+  // Cerca del umbral: ni una ni otra; declara cada mes y la anual.
+  ev = evaluarDiagnostico(resp(['marketplace'], 'umbral', 'al_corriente', 'si_todas'));
+  assert.ok(!ev.obligaciones.some(k => k.startsWith('diag.ob.definitivo')));
+  assert.ok(ev.obligaciones.includes('diag.ob.umbralCerca'));
+  assert.ok(ev.obligaciones.includes('diag.ob.mensuales') && ev.obligaciones.includes('diag.ob.anual'));
+});
+
+test('diagnóstico: pasos en orden según la situación fiscal', () => {
+  // Sin alta en el SAT: RFC, firma, obligaciones, situación, buzón; y la factura.
+  let ev = evaluarDiagnostico(resp(['marketplace'], 'muy_alto', 'ninguna', 'no'));
+  assert.deepEqual(ev.pasos.map(p => p.n), ['01', '02', '05', '04', '03', 'cfdi']);
+  assert.equal(ev.pasos[2].nota, 'pasos.oblig');
+  assert.deepEqual(ev.notas, ['pasos.contador']);
+  // No sabe su situación; con tres plataformas se sugiere mapearlas.
+  ev = evaluarDiagnostico(resp(['marketplace', 'transporte', 'delivery'], 'bajo', 'no_se', 'si_todas'));
+  assert.deepEqual(ev.pasos.map(p => p.n + (p.nota ? ':' + p.nota : '')), ['04:pasos.revisa', '02:pasos.sinPass']);
+  assert.deepEqual(ev.notas, ['pasos.contador', 'pasos.mapea']);
+});
+
+test('diagnóstico: toda clave que devuelve la evaluación existe, y todas se alcanzan', () => {
+  // Todas las respuestas posibles con dos y con tres plataformas.
+  const CATS = ['marketplace', 'transporte', 'delivery', 'hospedaje', 'contenido', 'freelance', 'pagos', 'crypto', 'otro'];
+  const vistas = new Set();
+  for (const ingreso of ['bajo', 'medio', 'umbral', 'alto', 'muy_alto'])
+    for (const fiscal of ['ninguna', 'alta_sin_declarar', 'declaro_parcial', 'al_corriente', 'no_se'])
+      for (const factura of ['si_todas', 'algunas', 'no', 'no_se'])
+        for (const a of CATS) for (const b of CATS) for (const extra of [[], ['otro']]) {
+          const ev = evaluarDiagnostico(resp([a, b, ...extra], ingreso, fiscal, factura));
+          [...ev.visibilidad, ...ev.obligaciones, ...ev.notas, 'diag.nivel.' + ev.nivel,
+           ...ev.pasos.map(p => p.nota).filter(n => n && n !== 'plazo')].forEach(k => vistas.add(k));
+        }
+  for (const k of vistas) {
+    assert.ok(k in translations.es, 'falta en ES: ' + k);
+    assert.ok(k in translations.en, 'falta en EN: ' + k);
+  }
+  // Y al revés: ningún texto del diagnóstico en el diccionario queda inalcanzable.
+  const posibles = Object.keys(translations.es).filter(k => /^diag\.(ve|ob|nivel)\.|^pasos\.(oblig|revisa|sinPass|contador|mapea)$/.test(k));
+  assert.deepEqual(posibles.filter(k => !vistas.has(k)), [], 'claves que ninguna respuesta produce');
+});

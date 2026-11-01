@@ -94,7 +94,5 @@
     range.addEventListener('input', paint);
     paint();
     // El recibo se arma en JS, asi que el barrido de data-i18n no lo alcanza.
-    document.querySelectorAll('.lang-switch .lang-btn').forEach(function(btn) {
-        btn.addEventListener('click', paint);
-    });
+    document.addEventListener('idioma', paint);
 })();

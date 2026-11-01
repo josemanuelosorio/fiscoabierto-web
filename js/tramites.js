@@ -6,7 +6,7 @@
     var plazo = document.getElementById('tramPlazo');
     function pintar() { if (plazo) plazo.textContent = faPlazo.textoMensual() + ' ' + faPlazo.textoAnual(); }
     pintar();
-    document.querySelectorAll('.lang-switch .lang-btn').forEach(function (b) { b.addEventListener('click', pintar); });
+    document.addEventListener('idioma', pintar);
     document.addEventListener('click', function (e) {
         var a = e.target.closest && e.target.closest('a[data-tram]');
         if (!a) return;

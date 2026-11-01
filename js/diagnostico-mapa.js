@@ -70,7 +70,5 @@
         if (results.classList.contains('active')) { build(); }
     });
     mo.observe(results, { attributes: true, attributeFilter: ['class'] });
-    document.querySelectorAll('.lang-switch .lang-btn').forEach(function(b) {
-        b.addEventListener('click', function() { if (results.classList.contains('active')) build(); });
-    });
+    document.addEventListener('idioma', function() { if (results.classList.contains('active')) build(); });
 })();
