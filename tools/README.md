@@ -54,7 +54,7 @@ que vigilar.
 
 Uso, desde `web/`:
 
-    node tools/cifras.js > ../CLAUDE_CTX/cifras-vigentes.md
+    node tools/cifras.js > cifras-vigentes.md
 
 Correrlo después de cualquier cambio de contenido y antes de cada pasada de
 verificación. Divergencias distintas de 0 se corrigen antes del push. Al
@@ -91,15 +91,17 @@ lector va a buscar.
 Mueve la barra de la calculadora y cambia de actividad en la página real
 (Playwright) y compara cada cifra pintada (ISR 2025/2026 o con/sin RFC, IVA
 retenido con y sin RFC, totales y umbral) contra una cuenta hecha aparte, con
-las tasas escritas a mano en el propio script. 15 casos: 3 actividades por 5
-montos, con dos a cada lado del umbral de $300,000.
+las tasas escritas a mano en el propio script. 30 casos: 3 actividades, con y
+sin RFC, por 5 montos; tres quedan debajo del umbral de $300,000 anuales y dos
+arriba.
 
 Uso, desde `web/`:
 
     node tools/calc-goldens.js
 
 Sale con código 1 si una cifra no coincide. Probado contra una copia con
-IVA_RET cambiado a 0.40: falla en los 15 casos. Correrlo antes de cualquier
+IVA_RET cambiado a 0.40: fallaron los 15 casos que había entonces (10 sep 2026,
+antes de separar con y sin RFC). Correrlo antes de cualquier
 push que toque la calculadora o sus constantes.
 
 ## css-muerto.js
@@ -130,14 +132,14 @@ inicial que el JS reescribe, no estilo. Primera corrida (10 sep 2026): 53
 errores (38 botones sin `type`, 11 estilos en línea, iframe sin `title` y con
 atributos obsoletos); ahora 0.
 
-También `html-validate aprende/index.html`. Primera corrida (30 sep 2026, s19):
+También `html-validate aprende/index.html`. Primera corrida (30 sep 2026):
 6 errores, el nivel de la escalera en `style="--nivel: N"`; pasó a
 `data-nivel` y ahora da 0.
 
 ## usted.js
 
 Busca tuteo en el texto en español. Desde el 30 de septiembre de 2026 Fisco
-Abierto habla de usted (decisión de José): "su", "le", "lo" e imperativos como
+Abierto habla de usted (decisión editorial): "su", "le", "lo" e imperativos como
 "Consulte". El chequeo lee lo que el lector ve o lo que se indexa: nodos de
 texto, los atributos `title`, `alt`, `aria-label`, `content` y `placeholder`, y
 los literales de cadena de los `<script>`. Marca pronombres y posesivos (tú, tu,
@@ -147,13 +149,13 @@ sitio usó. El inglés no dispara nada.
 Uso, desde `web/`:
 
     node tools/usted.js                        # index.html, aprende/index.html, láminas y const.js
-    node tools/usted.js ../videos/v1.html ../newsletters/02-retencion-por-venta.md
+    node tools/usted.js otro-archivo.md      # cualquier .html, .md o .js
 
 Acepta `.html`, `.md` y `.js`. Sale con código 1 si encuentra algo. Primera
 corrida sobre el sitio convertido (30 sep 2026): sin tuteo. Una clase o una
 variable que se llame como una marca (`.tu`, `tuyo`) también dispara; se
 renombra, porque el chequeo no distingue código de texto dentro de un literal.
-El medidor de la newsletter (`medir_estilo.py`) trae la misma lista.
+El medidor de estilo de la newsletter, que vive fuera de este repo, usa la misma lista.
 
 ## laminas.js
 
@@ -163,15 +165,15 @@ salir y siga al volver, termine en Repetir, respete la pausa hecha con el
 botón y el cambio de idioma, y que con movimiento reducido quede en el
 diagrama completo con Reproducir.
 
-Existe por el error 19 del CTX. La página daba una lámina por vista en cuanto
+Existe por un bug que llegó a producción. La página daba una lámina por vista en cuanto
 pedía reproducirla, aunque el iframe, que tiene carga diferida, todavía no
 pudiera recibir la orden; al llegar, la lámina saltaba al final. Chromium pide
 esos iframes mucho antes de que entren en pantalla y lo escondía. Safari los
-pide al entrar, y en el teléfono y la Mac de José salían todas terminadas. Por
+pide al entrar, y en iPhone y en Safari de Mac salían todas terminadas. Por
 eso la prueba sirve cada lámina cuando su marco ya está en pantalla, 400 ms
 después, como WebKit. Sobre el código anterior al arreglo da 10 FALLAS.
 
-Uso, desde `web/`, en la nube de Claude (la Mac no tiene Playwright):
+Uso, desde `web/` (necesita Playwright):
 
     node tools/laminas.js            # carga estilo WebKit
     node tools/laminas.js --rapido   # carga normal de Chromium

@@ -29,7 +29,8 @@
   };
   // Entrada estándar: sube 14 px y aparece.
   window.enter = (t, t0, d = 0.6, dy = 14) => at(t, t0, d, { o: 0, dy: dy }, { o: 1, dy: 0 }, 'out');
-  // Salida desde la opacidad que el elemento tenga en t0 (error 15 del CTX).
+  // Salida desde la opacidad que el elemento tenga en t0: partir siempre de 1
+  // revivía elementos que ya estaban ocultos.
   window.leave = (t, t0, d = 0.4) => at(t, t0, d, { o: null }, { o: 0 }, 'in');
   window.place = (target, x, y) => at(target, -1, 0.0001, { x, y }, { x, y }, 'lin');
   window.draw = (target, t0, d) => at(target, t0, d, { draw: 0 }, { draw: 1 }, 'io');
@@ -145,7 +146,7 @@
     let t = 0, corre = false, antes = 0, raf = 0;
     const avisa = tipo => { if (window.parent !== window) window.parent.postMessage({ faLamina: 1, tipo, t, fin: window.FIN, corre }, '*'); };
     // Avanza por reloj con dt acotado: un cuadro lento no salta la animación
-    // (error 3 del CTX) y una pestaña en segundo plano no la adelanta.
+    // y una pestaña en segundo plano no la adelanta.
     const paso = ahora => {
       t = Math.min(t + Math.min((ahora - antes) / 1000, 1 / 15), window.FIN); antes = ahora;
       seek(t); avisa('t');

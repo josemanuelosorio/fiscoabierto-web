@@ -62,8 +62,7 @@
             justify-content: space-between;
             align-items: center;
             /* Al compactarse, la barra se expande de la columna de 720px
-               al ancho completo: el FA viaja hasta el borde izquierdo,
-               como el logo de anthropic.com. */
+               al ancho completo: el FA viaja hasta el borde izquierdo. */
             transition: max-width 0.4s ease;
         }
         nav.shrunk .container { max-width: 1560px; }
@@ -74,7 +73,7 @@
         }
         /* Identidad en dos piezas: el badge FA (la marca corta, siempre
            visible) y el wordmark en dos tonos. Al scrollear, el texto se
-           colapsa con transicion (el morph de anthropic.com) y queda
+           colapsa con transicion y queda
            solo el FA. Nada de switch seco: max-width + opacity animados. */
         .logo { gap: 10px; }
         .logo-badge { height: 32px; width: auto; flex-shrink: 0; }
@@ -879,8 +878,7 @@
         /* STATS */
         .stats-section { background: var(--color-text); color: white; padding: 0; }
         /* BANDA "UNO POR UNO": el titulo queda fijo a la izquierda mientras
-           cada dato pasa por su propia pantalla a la derecha (patron del demo
-           scroll_fade / riotters). El fundido continuo lo maneja el JS del
+           cada dato pasa por su propia pantalla a la derecha. El fundido continuo lo maneja el JS del
            BLOQUEO al final del body; aqui solo vive la geometria. */
         .stats-band {
             display: grid;
@@ -1520,8 +1518,8 @@
         @media (hover: hover) { .faq-do a:hover { text-decoration: underline; } }
 
 
-        /* ===== Personalidad prestada de sedlakovalegal.cz =====
-           Recursos trasladados: marcador sobre una frase del titular,
+        /* ===== Recursos editoriales =====
+           Marcador sobre una frase del titular,
            chip de categoria como antetitulo, mapa como ilustracion
            interactiva, y bandas de color alternadas por seccion.
            Paleta: la rampa teal ya existente (accent-light es teal-100,
@@ -1542,7 +1540,7 @@
             color: var(--color-accent);
             letter-spacing: -0.01em;
         }
-        /* Encabezado editorial dos columnas (patron anthropic.com):
+        /* Encabezado editorial a dos columnas:
            titulo bold a la izquierda, parrafo de acento en serif a la
            derecha. Solo la calculadora lo usa; el mapa conserva el suyo. */
         .blk-head {
@@ -1917,7 +1915,7 @@
             .btn-next, .btn-prev, .btn-results { padding: 12px 20px; }
         }
 
-        /* PROSA JUSTIFICADA (30 sep 2026, José): los párrafos de texto corrido
+        /* PROSA JUSTIFICADA: los párrafos de texto corrido
            que no forman parte de un gráfico, como la transcripción bajo los
            videos, las entradillas, la calculadora, el FAQ y los resultados del
            diagnóstico. Con guiones silábicos para que en teléfono no se abran
@@ -4290,7 +4288,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 <!-- TRUST PANEL GROW -->
 <script>
 (function() {
-    // El panel crece al entrar (anthropic.com): scale continuo 0.93 -> 1
+    // El panel crece al entrar: scale continuo 0.93 -> 1
     // segun cuanto ha subido en el viewport. Misma familia que el
     // scroll-fade: sin umbrales, el scroll manda y el freno congela.
     var panel = document.querySelector('.trust-panel');

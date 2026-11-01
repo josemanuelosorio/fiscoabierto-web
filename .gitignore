@@ -11,3 +11,6 @@ node_modules/
 
 # Variables de entorno
 .env
+
+# Salida local de tools/cifras.js
+cifras-vigentes.md

@@ -1,5 +1,7 @@
 # Revisión de mantenimiento del 24 de octubre de 2026
 
+Etiquetas: VERIFICADO = comprobado en la fuente oficial enlazada; ALTA_CONFIANZA = conclusión sólida sin confirmación final en la fuente (por ejemplo, el DOF); SIN_CONFIRMAR = no se pudo comprobar en esta pasada.
+
 ## Cambios publicados
 
 - Informalidad laboral: se sustituye el 55% de agosto por el 54.3% de septiembre. VERIFICADO en el boletín 634/26 del INEGI, publicado el 22 de octubre. [Fuente](https://www.inegi.org.mx/contenidos/saladeprensa/boletines/2026/iooe/IOE2026_10.pdf).
