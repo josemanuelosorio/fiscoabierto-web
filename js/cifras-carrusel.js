@@ -10,33 +10,33 @@
     //        lo hace el navegador con el snap; el foco solo sirve para saber
     //        que cifra arrancar.
     // Cual toca lo dice el CSS en --stats-form, no un media query repetido aqui.
-    var track = document.querySelector('.stats-items');
-    var pin = document.querySelector('.stats-pin');
+    const track = document.querySelector('.stats-items');
+    const pin = document.querySelector('.stats-pin');
     if (!track || !pin) return;
-    var items = Array.prototype.slice.call(pin.querySelectorAll('.stats-item'));
+    const items = Array.prototype.slice.call(pin.querySelectorAll('.stats-item'));
     if (!items.length) return;
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     function forma() {
-        var v = getComputedStyle(track).getPropertyValue('--stats-form');
+        const v = getComputedStyle(track).getPropertyValue('--stats-form');
         return (v || 'pin').trim() === 'deck' ? 'deck' : 'pin';
     }
 
     // El alto de ventana se cachea: en telefono la barra del navegador lo
     // cambia en pleno scroll y la pista no debe re-medirse por eso.
-    var vhCache = window.innerHeight;
+    let vhCache = window.innerHeight;
     function stableVH() {
-        var v = window.innerHeight;
+        const v = window.innerHeight;
         if (Math.abs(v - vhCache) > 120) vhCache = v;
         return vhCache;
     }
 
-    var POR_FICHA = 0.36;      // pantallas de scroll que dura cada ficha (pin)
-    var PERSIGUE = 55;         // ms de la constante del seguidor: mas chico, mas rapido
-    var focus = 0, target = 0, chase = null, lastTs = 0, ticking = false;
+    const POR_FICHA = 0.36;      // pantallas de scroll que dura cada ficha (pin)
+    const PERSIGUE = 55;         // ms de la constante del seguidor: mas chico, mas rapido
+    let focus = 0, target = 0, chase = null, lastTs = 0, ticking = false;
     // Arranca en 0 a proposito: la primera cifra la dispara el observer al
     // entrar la seccion, aqui solo pedimos de la segunda en adelante.
-    var ultimoActivo = 0;
+    let ultimoActivo = 0;
 
     // Cuanto se desplaza cada ficha por paso de foco (solo en pin). Con 26px las
     // dos fichas del relevo ocupaban exactamente los mismos renglones y se veian
@@ -46,16 +46,16 @@
     // dejaba la ficha en reposo hasta 100px fuera del centro, que es justo la
     // deriva que veniamos a matar. 13% deja ese error en 33px como maximo.
     // Se recalcula al medir la pista: leer el alto en el paint es un reflow.
-    var DESP = 110;
+    let DESP = 110;
     function sizeTrack() {
         if (forma() === 'deck' || reduced.matches) { track.style.height = ''; return; }
-        var ph = pin.offsetHeight;
+        const ph = pin.offsetHeight;
         DESP = Math.max(70, Math.min(130, Math.round(ph * 0.13)));
-        var h = Math.round(ph + items.length * stableVH() * POR_FICHA);
+        const h = Math.round(ph + items.length * stableVH() * POR_FICHA);
         if (track.style.height !== h + 'px') track.style.height = h + 'px';
     }
     function smooth(a, b, x) {
-        var t = (x - a) / (b - a);
+        let t = (x - a) / (b - a);
         t = t < 0 ? 0 : (t > 1 ? 1 : t);
         return t * t * (3 - 2 * t);
     }
@@ -67,9 +67,9 @@
     }
     function paint() {
         if (reduced.matches || forma() === 'deck') return;
-        var activo = Math.round(focus);
-        for (var i = 0; i < items.length; i++) {
-            var d = Math.abs(focus - i);
+        const activo = Math.round(focus);
+        for (let i = 0; i < items.length; i++) {
+            const d = Math.abs(focus - i);
             // El relevo tiene dos formas de salir mal y las dos se midieron:
             // con la ventana corta (0.18-0.52) las dos fichas caian a 0.01 en el
             // punto medio y la pantalla se apagaba un 13% del recorrido; con la
@@ -77,7 +77,7 @@
             // doble exposicion ilegible. 0.30-0.55 no hace ninguna de las dos:
             // brillo minimo 0.10, solape maximo 0.10, y la ficha activa sigue al
             // 90% durante casi todo su tramo.
-            var a = 1 - smooth(0.30, 0.55, d);
+            const a = 1 - smooth(0.30, 0.55, d);
             items[i].style.opacity = a.toFixed(3);
             items[i].style.transform = 'translateY(' + ((i - focus) * DESP).toFixed(1) + 'px)';
             items[i].style.pointerEvents = a > 0.5 ? 'auto' : 'none';
@@ -87,9 +87,9 @@
     // El foco persigue al scroll por TIEMPO, no por frame: a cualquier fps
     // converge en el mismo tiempo de reloj.
     function tick(ts) {
-        var dt = lastTs ? Math.min(64, ts - lastTs) : 16;
+        const dt = lastTs ? Math.min(64, ts - lastTs) : 16;
         lastTs = ts;
-        var d = target - focus;
+        const d = target - focus;
         if (Math.abs(d) < 0.002) { focus = target; chase = null; lastTs = 0; paint(); return; }
         focus += d * (1 - Math.exp(-dt / PERSIGUE));
         paint();
@@ -106,12 +106,12 @@
         // Se mide con rectangulos de viewport, NO con offsetTop: en el telefono
         // el carrusel es position static, asi que offsetTop de las fichas cuelga
         // de otro ancestro y las ultimas marcas nunca se encendian.
-        var pr = pin.getBoundingClientRect();
-        var centro = pr.top + pr.height / 2;
-        var mejor = 0, dMin = Infinity;
-        for (var i = 0; i < items.length; i++) {
-            var r = items[i].getBoundingClientRect();
-            var d = Math.abs(r.top + r.height / 2 - centro);
+        const pr = pin.getBoundingClientRect();
+        const centro = pr.top + pr.height / 2;
+        let mejor = 0, dMin = Infinity;
+        for (let i = 0; i < items.length; i++) {
+            const r = items[i].getBoundingClientRect();
+            const d = Math.abs(r.top + r.height / 2 - centro);
             if (d < dMin) { dMin = d; mejor = i; }
         }
         tomaElFoco(mejor);
@@ -121,9 +121,9 @@
         if (forma() === 'deck') { track.style.height = ''; updateDeck(); return; }
         if (reduced.matches) { track.style.height = ''; return; }
         sizeTrack();
-        var runway = track.offsetHeight - pin.offsetHeight;
+        const runway = track.offsetHeight - pin.offsetHeight;
         if (runway <= 0) return;
-        var p = -track.getBoundingClientRect().top / runway;
+        let p = -track.getBoundingClientRect().top / runway;
         p = p < 0 ? 0 : (p > 1 ? 1 : p);
         target = p * (items.length - 1);
         if (chase === null) chase = requestAnimationFrame(tick);
@@ -132,14 +132,14 @@
     function onDeckScroll() { if (!ticking) { ticking = true; requestAnimationFrame(updateDeck); } }
 
     function refrescarForma() {
-        var f = forma();
+        const f = forma();
         // pin-on es lo que apaga el respaldo "sin JS, todo visible". Solo debe
         // estar puesta cuando el JS de verdad va a escribir opacidades.
         if (f === 'pin' && !reduced.matches) track.classList.add('pin-on');
         else {
             track.classList.remove('pin-on');
             track.style.height = '';
-            for (var i = 0; i < items.length; i++) {
+            for (let i = 0; i < items.length; i++) {
                 items[i].style.opacity = '';
                 items[i].style.transform = '';
                 items[i].style.pointerEvents = '';

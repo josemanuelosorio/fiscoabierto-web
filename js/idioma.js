@@ -6,9 +6,9 @@ function t(key) {
 }
 
 function fechaCorta(iso) {
-    var MESES = { es: ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],
+    const MESES = { es: ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],
                   en: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] };
-    var p = iso.split('-');
+    const p = iso.split('-');
     return p[2] + '-' + MESES[currentLanguage][+p[1] - 1] + '-' + p[0];
 }
 
@@ -58,7 +58,7 @@ function setLanguage(lang) {
 // Resalta el idioma activo en el switch del nav
 function updateLangToggle() {
     document.querySelectorAll('.lang-switch .lang-btn').forEach(function(btn) {
-        var isActive = btn.dataset.lang === currentLanguage;
+        const isActive = btn.dataset.lang === currentLanguage;
         btn.classList.toggle('active', isActive);
         btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
@@ -76,11 +76,11 @@ document.querySelectorAll('.lang-switch .lang-btn').forEach(function(btn) {
 // muestre un idioma distinto al que esta renderizado.
 // Precedencia: ?lang= (intencion explicita) > idioma del navegador > espanol.
 (function resolveInitialLanguage() {
-    var requested = new URLSearchParams(window.location.search).get('lang');
+    const requested = new URLSearchParams(window.location.search).get('lang');
     if (requested === 'es' || requested === 'en') {
         setLanguage(requested);
     } else {
-        var browserLang = navigator.language || navigator.userLanguage || 'es';
+        const browserLang = navigator.language || navigator.userLanguage || 'es';
         setLanguage(browserLang.toLowerCase().indexOf('en') === 0 ? 'en' : 'es');
     }
     updateLangToggle();
