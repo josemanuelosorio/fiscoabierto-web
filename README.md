@@ -6,6 +6,8 @@ Sitio de Fisco Abierto: herramienta fiscal gratuita de utilidad pública para qu
 
 El contenido fiscal es mío: qué dice la ley, cada cifra con su artículo y la fecha en que la verifiqué contra la fuente oficial. El código lo escribe un asistente de IA (Claude Code) bajo las pruebas de `tools/`; por eso muchos commits llevan su firma. Las ilustraciones de las láminas se generaron con Gemini.
 
+El historial se limpió el 1 de noviembre de 2026: los correos de los commits pasaron a la dirección privada de GitHub y se quitaron de los mensajes enlaces privados y frases que no describían el cambio. El contenido y las fechas de cada commit no cambiaron.
+
 ## Stack
 
 - HTML, CSS y JavaScript sin frameworks ni paso de build, en español e inglés: la página principal (`index.html`) y la página Aprende (`aprende/index.html`).
