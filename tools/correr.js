@@ -5,8 +5,7 @@
 //               muerto, tuteo
 //   navegador   necesitan Playwright (Chromium) o html-validate: calculadora,
 //               idioma en el DOM real y validación HTML
-//   laminas     los controles de las láminas de /aprende (tres minutos;
-//               intermitente por tiempos, ver tools/README.md)
+//   laminas     los controles de las láminas de /aprende (tres minutos)
 //
 // Uso, desde la raiz del repo:   node tools/correr.js node [navegador] [laminas]
 // Corre todos los chequeos del grupo aunque alguno falle, para ver el cuadro
