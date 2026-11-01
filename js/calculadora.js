@@ -1,27 +1,15 @@
 // ==================== RETENCION EN PESOS ====================
-// Contrato: entran actividad, monto mensual sin IVA y si la plataforma tiene
-// el RFC; sale el recibo del mes (lo que cobra la plataforma, lo que retiene
-// de ISR y de IVA, lo que deposita), el acumulado del ano y el umbral del
-// 113-B. El umbral se mide con el ejercicio anterior; la calculadora solo
-// conoce el ingreso de este ano, asi que el veredicto condiciona al lector.
+// Contrato: pinta el recibo del mes que calcula js/retencion.js, el acumulado
+// del ano y el umbral del 113-B. El umbral se mide con el ejercicio anterior;
+// la calculadora solo conoce el ingreso de este ano, asi que el veredicto
+// condiciona al lector.
 (function() {
     var range = document.getElementById('calcRange');
     if (!range) return;
     var $ = function (id) { return document.getElementById(id); };
     var amountEl = $('calcAmount'), verdict = $('calcVerdict');
 
-    // Las tres tasas del Art. 113-A, parrafo tercero. La LIF 2026 solo sustituyo
-    // la fraccion III; las fracciones I y II quedaron intactas, asi que para
-    // transporte y hospedaje la tasa de 2025 y la de 2026 son la misma.
-    var ACTS = {
-        venta:      { past: 0.010, now: 0.025, frac: 'III' },
-        transporte: { past: 0.021, now: 0.021, frac: 'I' },
-        hospedaje:  { past: 0.040, now: 0.040, frac: 'II' }
-    };
-    var THRESHOLD = 300000; // Umbral del Art. 113-B LISR
-    var SIN_RFC = 0.20; // Art. 113-C, fraccion IV LISR: sin RFC, retencion del 20%
-    var IVA = 0.16; // Tasa general de IVA; el calculo supone que la actividad la causa
-    var IVA_RET = 0.50; // Art. 18-J, fraccion II, inciso a) LIVA: la plataforma retiene el 50% del IVA cobrado; 100% sin RFC
+    var ACTS = calculoRetencion.ACTS;
     var act = 'venta', rfc = true;
     var actBtns = document.querySelectorAll('.act-btn');
     var rfcBtns = document.querySelectorAll('.rfc-btn');
@@ -35,14 +23,7 @@
         var v = r * 100;
         return (v % 1 === 0 ? v.toFixed(0) : v.toFixed(1)) + '%';
     }
-    // Un recibo para una combinacion dada; se usa dos veces cuando falta el
-    // RFC, para decir cuanto mas te depositarian con el.
-    function recibo(base, conRfc) {
-        var iva = base * IVA;
-        var isrR = base * (conRfc ? ACTS[act].now : SIN_RFC);
-        var ivaR = iva * (conRfc ? IVA_RET : 1);
-        return { base: base, iva: iva, cobra: base + iva, isr: isrR, ivaR: ivaR, dep: base + iva - isrR - ivaR, tasa: conRfc ? ACTS[act].now : SIN_RFC };
-    }
+    function recibo(base, conRfc) { return calculoRetencion.recibo(act, base, conRfc); }
 
     function paint() {
         var monthly = +range.value;
@@ -79,7 +60,7 @@
 
         // Umbral del 113-B y, si la retencion es anticipo, cuando vence la
         // siguiente declaracion. Remata en la seccion de tramites.
-        var overThreshold = monthly * 12 > THRESHOLD;
+        var overThreshold = calculoRetencion.rebasaUmbral(monthly);
         verdict.classList.toggle('is-advance', overThreshold);
         verdict.textContent = t(overThreshold ? 'calc.thAdvance' : 'calc.thFinal') + ' ';
         if (overThreshold) {

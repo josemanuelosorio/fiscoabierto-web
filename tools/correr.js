@@ -1,7 +1,8 @@
 // Corre los chequeos del sitio y resume cuáles pasaron.
 //
 // Grupos:
-//   node        solo necesitan node: arranque, cifras, idioma, CSS muerto, tuteo
+//   node        solo necesitan node: unitarias, arranque, cifras, idioma, CSS
+//               muerto, tuteo
 //   navegador   necesitan Playwright (Chromium) o html-validate: calculadora,
 //               idioma en el DOM real, láminas y validación HTML
 //
@@ -16,6 +17,7 @@ const LAMINAS = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6'].map(p => `aprende/laminas/$
 
 const GRUPOS = {
   node: [
+    ['node', 'tools/unitarias.js'],
     ['node', 'tools/smoke.js'],
     ['node', 'tools/smoke.js', 'aprende/index.html'],
     ['node', 'tools/cifras.js'],

@@ -17,6 +17,17 @@ Y antes de cada push:
 salida solo de los que fallaron y sale con código 1 si falló al menos uno. El
 workflow `.github/workflows/pruebas.yml` corre los dos grupos en cada push.
 
+## unitarias.js
+
+Pruebas de la lógica que no necesita navegador, con el ejecutor que trae node
+(`node:test`): las fechas límite de `js/plazos.js` (día 17 y 30 de abril,
+corridas al siguiente día hábil según el art. 12 CFF) y el recibo de
+`js/retencion.js` (con y sin RFC, y el umbral del 113-B). Las cifras esperadas
+se calcularon aparte, desde el texto de la ley, no con el código que se prueba.
+Quitar un día inhábil de la lista hace fallar la prueba de plazos.
+
+    node tools/unitarias.js
+
 ## pagina.js
 
 No es un chequeo: es la pieza que los demás usan para leer una página. Arma el
