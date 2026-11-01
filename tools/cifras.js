@@ -5,7 +5,7 @@
 // Si una cifra no aparece aqui, el sitio la afirma sin fuente rastreable, y
 // eso tambien es un hallazgo.
 //
-// Uso, desde web/:   node tools/cifras.js > cifras-vigentes.md
+// Uso, desde la raiz del repo:   node tools/cifras.js > cifras-vigentes.md
 const fs = require('fs');
 const path = require('path');
 
@@ -39,7 +39,7 @@ const out = [];
 const hoy = new Date().toISOString().slice(0, 10);
 out.push(`# Cifras vigentes en fiscoabierto.org`);
 out.push(``);
-out.push(`Generado ${hoy} por web/tools/cifras.js sobre ${path.basename(file)} y lo que carga (${lines.length} lineas). No editar a mano: regenerar.`);
+out.push(`Generado ${hoy} por tools/cifras.js sobre ${path.basename(file)} y lo que carga (${lines.length} lineas). No editar a mano: regenerar.`);
 out.push(``);
 
 // 0. Fecha de verificacion de cada bloque, leida de data-verificado. El sitio

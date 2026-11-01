@@ -4,7 +4,7 @@
 // escritas a mano. Si las dos cuentas coinciden, el error tendria que estar
 // en las dos.
 //
-// Uso, desde web/:   node tools/calc-goldens.js          (pide playwright)
+// Uso, desde la raiz del repo:   node tools/calc-goldens.js          (pide playwright)
 // Sale con codigo 1 si alguna cifra no coincide.
 const path = require('path');
 let pw;

@@ -8,7 +8,7 @@
 //   4. (opcional) el DOM real en EN, con Playwright: recorre el mapa y el
 //      diagnostico y busca texto con marcas de espanol
 //
-// Uso, desde web/:   node tools/i18n.js [archivo]  (1 a 3, solo node)
+// Uso, desde la raiz del repo:   node tools/i18n.js [archivo]  (1 a 3, solo node)
 //                    node tools/i18n.js --dom      (ademas 4; pide playwright)
 //                    node tools/i18n.js aprende/index.html --dom  (la pagina Aprende y sus laminas)
 // Sale con codigo 1 si hay hallazgos, para poder encadenarlo antes del push.

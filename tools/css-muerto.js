@@ -7,7 +7,7 @@
 // compuestas conocidas van en COMPUESTAS. Si aparece una nueva y el chequeo
 // la reporta, se agrega ahi con su razon.
 //
-// Uso, desde web/:   node tools/css-muerto.js [archivo]
+// Uso, desde la raiz del repo:   node tools/css-muerto.js [archivo]
 // Sale con codigo 1 si hay selectores muertos.
 const fs = require('fs');
 const path = require('path');

@@ -11,7 +11,7 @@
 // cuando su marco ya está en pantalla, 400 ms después. Con --rapido usa la
 // carga normal de Chromium. Sobre el código anterior al arreglo da 10 FALLAS.
 //
-// Uso, desde web/ (necesita Playwright):
+// Uso, desde la raiz del repo (necesita Playwright):
 //     node tools/laminas.js [--rapido]
 // Tarda unos tres minutos, porque deja correr láminas completas.
 const http = require('http'), fs = require('fs'), path = require('path');

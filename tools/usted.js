@@ -8,7 +8,7 @@
 // los literales de cadena de los <script>. El inglés no dispara nada, porque
 // ninguna marca de la lista existe en inglés.
 //
-// Uso, desde web/:
+// Uso, desde la raiz del repo:
 //   node tools/usted.js                        index.html, aprende/index.html, aprende/laminas/p*.html y const.js
 //   node tools/usted.js archivo.html otro.md   esos archivos (.html, .md o .js: newsletter, videos, generadores)
 // Sale con código 1 si encuentra algo.

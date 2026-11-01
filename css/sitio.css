@@ -1,7 +1,7 @@
 /* Estilos de fiscoabierto.org (página principal). Sin preprocesador ni build. */
 
 /* Fuentes servidas desde el sitio (SIL OFL 1.1, avisos en fonts/OFL.txt): las
-   tipografías ya no se piden a un tercero. Son los mismos archivos variables
+   tipografías no se piden a terceros. Son los mismos archivos variables
    que entregaba Google Fonts (alfabeto latino), declarados con los mismos
    pesos que se le pedían: un peso fuera de la lista (800 en tres titulares)
    se sigue dibujando con el más cercano, como antes. */
@@ -245,12 +245,9 @@ section .section-subtitle {
     opacity: 0;
     transform: translateY(16px);
     filter: blur(6px);
-    /* Antes: 1.2s con blur(10px) y curva ease-in-out en el filtro.
-       Se sentía lento porque el enfoque duraba TODA la transición.
-       Ahora todo va con ease-out y dura ~0.5s: el desenfoque se nota
-       al entrar pero se resuelve rápido. Blur de 6px en vez de 10px
-       porque animar blur repinta cada frame: radio menor = menos
-       trabajo de GPU = scroll más fluido. */
+    /* Entrada corta (~0.5s, ease-out): el desenfoque se nota al entrar
+       pero se resuelve rápido. Blur de 6px porque animar blur repinta
+       cada cuadro: radio menor, menos trabajo de GPU, scroll más fluido. */
     transition: opacity 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
                 transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1),
                 filter 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -486,7 +483,7 @@ html { scroll-padding-top: 90px; }
     box-shadow: 0 0 20px rgba(94,234,212,0.1);
     transform: scale(1.03);
 }
-/* Sin emojis (canon del proyecto): chips de texto limpios. */
+/* Chips de texto, sin emojis. */
 
 .income-options {
     display: flex;
@@ -897,8 +894,8 @@ footer {
 .stats-aside .section-subtitle { color: #A8A29E; text-align: left; margin-bottom: 0; }
 /* EL BLOQUEO. La seccion mide varias pantallas (el track) pero el
    marco se queda pegado, y las fichas viven APILADAS en la misma
-   celda: por eso quedan centradas siempre y deja de sentirse a la
-   deriva. El scroll ya no las desfila, las intercambia. El alto del
+   celda: por eso quedan centradas siempre. El scroll no las desfila:
+   las intercambia. El alto del
    track lo pone el JS en pixeles, no en vh, porque la barra del
    navegador movil cambia vh a media animacion. */
 /* La FORMA vive en el CSS, igual que --chain-form del panel de
@@ -970,27 +967,23 @@ footer {
 @media (max-width: 760px) {
     .stats-band { grid-template-columns: 1fr; gap: 0; }
     .stats-aside { position: static; height: auto; padding-top: 22px; }
-    /* ESCALA PROPIA DE TELEFONO, no una reduccion de la de escritorio.
-       Medido en WebKit con perfil de iPhone 13 sobre los tres
-       referentes: los tres AGRANDAN la tipografia en movil y dejan que
-       el bloque vecino invada la pantalla (Riotters pone su titular en
-       65px sobre 390px de ancho). La profundidad no sale del fade por
-       si solo: sale de que el vecino es lo bastante grande como para
-       meterse en pantalla a media luz.
+    /* ESCALA PROPIA DE TELEFONO, no una reduccion de la de escritorio:
+       en movil la tipografia crece y el bloque vecino alcanza a entrar
+       en pantalla. La profundidad no sale del fade por si solo: sale de
+       que el vecino es lo bastante grande como para meterse en pantalla
+       a media luz.
        El tope de 26ch de la etiqueta se quita aqui: con el ancho
        completo baja de 9 renglones a 5, el bloque cabe en 55vh y el
        vecino alcanza a meter su CIFRA, no solo su pie. */
-    /* CARRUSEL VERTICAL. La pista de cuatro pantallas se acabo: el
-       telefono ya no alarga la pagina, la seccion mide una pantalla y
-       las fichas se deslizan DENTRO con snap. Mismo trato que el
+    /* CARRUSEL VERTICAL. En el telefono la seccion mide una pantalla y
+       las fichas se deslizan DENTRO con snap, sin alargar la pagina. Mismo trato que el
        carril de confianza, girado 90 grados (sin los puntos: el asomo
        de abajo ya dice que hay mas). El contenedor es mas alto
        que la ficha a proposito: ese sobrante es el asomo de la
        siguiente, que es de donde sale la profundidad.
        REPARTO DE LA PANTALLA (medido en WebKit, iPhone 13, con el
        titular en INGLES que es el caso largo): titulo + carrusel +
-       marcas caben en una pantalla. Ese era el punto: antes la
-       seccion media 3220px, o sea casi cinco pantallas. */
+       marcas caben en una pantalla. */
     .stats-items { --stats-form: deck; height: auto !important; padding: 0; }
     .stats-pin {
         position: relative;
@@ -1252,7 +1245,7 @@ a.chain-cite {
 }
 @media (hover: hover) { a.chain-cite:hover { text-decoration-color: #5EEAD4; } }
 
-/* EL TRADUCTOR. La salida del nodo ya no es una cifra fija: el lector
+/* EL TRADUCTOR. La salida del nodo no es una cifra fija: el lector
    elige un tema y ve la cita literal de la ley (gris, en cursiva, en
    español en los dos idiomas porque es la fuente), lo que significa
    (blanco, con la cifra al lado), el artículo y el trámite que toca.
@@ -1352,8 +1345,7 @@ a.chain-cite {
     .chain-src i { line-height: 1.3; }
 }
 
-/* TELEFONO: CARRIL HORIZONTAL (patron medido en apple.com/mac en
-   movil). Las seis fuentes en una fila que se desliza con el pulgar y
+/* TELEFONO: CARRIL HORIZONTAL. Las seis fuentes en una fila que se desliza con el pulgar y
    la siguiente asomando por el borde: ese asomo es la senal de
    profundidad, el equivalente lateral del vecino atenuado. Cada tarjeta
    gana el ancho que en columna no tenia, asi que la tipografia sube a
