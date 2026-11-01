@@ -36,7 +36,7 @@ El contenido fiscal es mío: qué dice la ley, cada cifra con su artículo y la 
 └── LICENSE-CONTENIDO.txt   # CC BY 4.0, para textos, láminas, ilustraciones y videos
 ```
 
-Los MP4, sus portadas y `aprende/laminas/const.js` salen de un pipeline de render que no vive en este repo; aquí solo se publican.
+Los MP4, sus portadas y `aprende/laminas/const.js` salen de un pipeline de render que no vive en este repo; aquí solo se publican. Cada video que se vuelve a subir queda en el historial (hoy la mayor parte de `.git` son MP4), así que antes de subir uno re-renderizado se compara su contenido decodificado con el anterior (`ffmpeg -i video.mp4 -f md5 -`): un render sin cambios trae otros bytes y no se sube. El historial no se reescribe para adelgazarlo, porque `main` es la rama que sirve el sitio.
 
 ## Herramientas
 
