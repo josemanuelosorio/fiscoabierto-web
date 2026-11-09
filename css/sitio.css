@@ -1699,10 +1699,10 @@ a.chain-cite {
 /* Cubetas de la leyenda del mapa: los mismos cinco colores que asigna el JS a los paths */
 .sw-b1 { background: #CCFBF1; } .sw-b2 { background: #99F6E4; } .sw-b3 { background: #5EEAD4; }
 .sw-b4 { background: #14B8A6; } .sw-b5 { background: #0F766E; }
-/* El recibo del mes. La barra es lo que cobra la plataforma (tu precio
-   más el IVA) partido en lo que te deposita, el ISR y el IVA que
-   retiene; las filas dicen lo mismo en pesos. Los colores de la barra
-   reaparecen como marca en cada fila para ligar una con otra. */
+/* El recibo del mes: lo que cobra la plataforma (el precio más el IVA)
+   partido en el ISR y el IVA que retiene y lo que deposita. Cada fila
+   lleva la marca de su color; con JS, la marca se cambia por su haz de
+   hilos (más abajo, «El recibo como hilos»). */
 .calc-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px; margin-top: 26px; }
 .calc-controls .calc-activity { margin-top: 0; }
 .calc-rfc { display: inline-flex; align-items: center; gap: 6px; }
@@ -1717,15 +1717,15 @@ a.chain-cite {
 .rfc-btn:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 @media (hover: hover) { .rfc-btn:not(.active):hover { border-color: var(--color-text); color: var(--color-text); } }
 .calc-recibo {
-    margin-top: 22px; padding: 18px 20px 16px;
+    --lado: 20px;   /* margen interior a los lados; el lienzo de hilos lo lee */
+    position: relative;
+    margin-top: 22px; padding: 12px var(--lado) 16px;
     border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-bg);
 }
-.recibo-bar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; background: var(--color-border); }
-.recibo-bar span { display: block; height: 100%; transition: width 0.2s ease-out; }
-.rb-dep, .rr-dep i { background: var(--color-accent); }
-.rb-isr, .rr-isr i { background: #B45309; }
-.rb-iva, .rr-iva i { background: #F59E0B; }
-.recibo-rows { margin: 14px 0 0; }
+.rr-dep i { background: var(--color-accent); }
+.rr-isr i { background: #B45309; }
+.rr-iva i { background: #F59E0B; }
+.recibo-rows { margin: 0; }
 .recibo-rows div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--color-border); }
 .recibo-rows dt { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; font-size: 0.88rem; color: var(--color-text); margin: 0; }
 .recibo-rows dt i { width: 9px; height: 9px; border-radius: 2px; align-self: center; flex: none; }
@@ -1744,8 +1744,65 @@ a.chain-cite {
 .calc-plazo { display: block; margin-top: 8px; font-weight: 600; }
 @media (max-width: 600px) {
     .calc-controls { flex-direction: column; align-items: flex-start; }
-    .calc-recibo { padding: 14px 14px 12px; }
+    .calc-recibo { --lado: 14px; padding: 8px var(--lado) 12px; }
     .rr-dep dd { font-size: 1.15rem; }
+}
+
+/* El recibo como hilos. js/flujo.js pone .con-flujo y tiende los hilos en la
+   franja izquierda: salen juntos de lo que cobra la plataforma y cada haz
+   termina en su fila. Un hilo completo vale $1,000 (js/hilos.js), así que el
+   grosor de un haz se puede contar y dos haces se comparan a ojo. Cada fila
+   toma el alto de su haz; por eso el recibo se alarga al subir el monto. */
+.recibo-flujo, .recibo-leyenda { display: none; }
+.con-flujo { --franja: 0.4; }   /* parte del ancho que ocupan los hilos */
+.con-flujo .recibo-flujo {
+    display: block; position: absolute; left: var(--lado);
+    width: calc((100% - 2 * var(--lado)) * var(--franja) - 12px);
+    overflow: visible; pointer-events: none;
+}
+.con-flujo .rr-total { border-bottom: 1px solid var(--color-border); padding-bottom: 12px; margin-bottom: 8px; }
+.con-flujo .rr-isr, .con-flujo .rr-iva, .con-flujo .rr-dep {
+    align-items: center; min-height: max(42px, var(--alto-hilos, 0px));   /* --alto-hilos: alto del haz de la fila, lo pone js/flujo.js */
+    padding: 0 0 0 calc(100% * var(--franja)); border-bottom: 0;
+}
+.con-flujo .recibo-rows dt i { display: none; }
+.con-flujo .recibo-leyenda {
+    display: block; margin: 10px 0 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.66rem; line-height: 1.7; color: #78716C;
+}
+.hilo { fill: none; stroke-width: 1.1px; transition: opacity 0.18s; }
+.hilo-isr { stroke: #B45309; }
+.hilo-iva { stroke: #F59E0B; }
+.hilo-dep { stroke: var(--color-accent); }
+@media (prefers-reduced-motion: reduce) { .hilo { transition: none; } }
+/* Al pasar por una fila se apagan los hilos de las otras dos. */
+@media (hover: hover) {
+    .con-flujo:has(.rr-isr:hover) .hilo:not(.hilo-isr),
+    .con-flujo:has(.rr-iva:hover) .hilo:not(.hilo-iva),
+    .con-flujo:has(.rr-dep:hover) .hilo:not(.hilo-dep) { opacity: 0.2; }
+}
+/* Los hilos se tienden conforme el recibo entra en pantalla: la animación
+   avanza con el desplazamiento, no con el reloj, y termina cuando el lienzo
+   ya se ve completo. Donde el navegador no la conoce, o con movimiento
+   reducido, el dibujo aparece terminado. */
+@keyframes hilo-entra { from { stroke-dashoffset: var(--largo, 640); } to { stroke-dashoffset: 0; } }
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .recibo-flujo { view-timeline: --recibo block; }
+        .hilo {
+            stroke-dasharray: var(--largo, 640);   /* --largo: lo pone js/flujo.js */
+            animation: hilo-entra linear both;
+            animation-timeline: --recibo;
+            animation-range: entry 0% entry 100%;
+        }
+    }
+}
+@media (max-width: 600px) {
+    .con-flujo { --franja: 0.36; }
+    .con-flujo .rr-isr, .con-flujo .rr-iva, .con-flujo .rr-dep {
+        flex-direction: column; align-items: flex-start; justify-content: center; gap: 1px;
+        min-height: max(56px, var(--alto-hilos, 0px)); padding-top: 5px; padding-bottom: 5px;
+    }
 }
 
 /* --- Mapa del impuesto estatal al hospedaje --- */

@@ -2,7 +2,7 @@
 // actividad y de "tiene RFC" en la pagina REAL (Playwright) y compara el
 // recibo que pinta contra cifras calculadas aqui, por separado, con las tasas
 // escritas a mano. Si las dos cuentas coinciden, el error tendria que estar
-// en las dos.
+// en las dos. Tambien cuenta los hilos del recibo: uno por cada 1,000 pesos.
 //
 // Uso, desde la raiz del repo:   node tools/calc-goldens.js          (pide playwright)
 // Sale con codigo 1 si alguna cifra no coincide.
@@ -19,7 +19,10 @@ const ISR_2025_VENTA = 0.01;
 const SIN_RFC = 0.20;   // 113-C fr. IV LISR
 const IVA = 0.16;       // tasa general
 const IVA_RET = 0.5;    // 18-J fr. II a) LIVA; 100% sin RFC
+const PESOS_POR_HILO = 1000; // escrito aparte de js/hilos.js, igual que las tasas
 const money = n => '$' + Math.round(n).toLocaleString('es-MX');
+// Hilos completos de un monto y si sobra un hilo delgado (5 pesos o menos no se dibujan).
+const hilos = n => { const h = n / PESOS_POR_HILO, e = Math.floor(h + 1e-9); return e + (h - e > 0.005 ? '+' : ''); };
 const menos = n => '−' + money(n);
 
 function recibo(act, base, rfc) {
@@ -41,6 +44,7 @@ for (const act of ['venta', 'transporte', 'hospedaje']) {
         act, rfc, mensual,
         cobra: money(r.cobra), isr: menos(r.isr), ivaR: menos(r.ivaR), dep: money(r.dep),
         anual: [money(r.isr * 12), money(r.ivaR * 12)], ctx,
+        hilos: [hilos(r.isr), hilos(r.ivaR), hilos(r.dep)].join(' '),
         umbral: mensual * 12 > 300000,
       });
     }
@@ -67,14 +71,17 @@ for (const act of ['venta', 'transporte', 'hospedaje']) {
       anual: document.getElementById('calcAnual').textContent,
       ctx: document.getElementById('calcContexto').textContent,
       umbral: document.getElementById('calcVerdict').classList.contains('is-advance'),
-      barra: ['rbDep', 'rbIsr', 'rbIva'].reduce((a, id) => a + parseFloat(document.getElementById(id).style.width), 0),
+      // Por haz: cuantos hilos completos trae el trazo y si hay hilo delgado.
+      hilos: ['Isr', 'Iva', 'Dep'].map(k =>
+        (document.getElementById('hilos' + k).getAttribute('d').match(/M/g) || []).length +
+        (document.getElementById('resto' + k).getAttribute('d') ? '+' : '')).join(' '),
     }));
     const errs = [];
     for (const k of ['cobra', 'isr', 'ivaR', 'dep']) if (got[k] !== c[k]) errs.push(k + ' esperado ' + c[k] + ' pintado ' + got[k]);
     for (const e of c.anual) if (!got.anual.includes(e)) errs.push('anual no contiene ' + e);
     for (const e of c.ctx) if (!got.ctx.includes(e)) errs.push('contexto no contiene ' + e);
     if (got.umbral !== c.umbral) errs.push('umbral esperado ' + c.umbral + ' pintado ' + got.umbral);
-    if (Math.abs(got.barra - 100) > 0.05) errs.push('la barra suma ' + got.barra.toFixed(2) + '%');
+    if (got.hilos !== c.hilos) errs.push('hilos esperados ' + c.hilos + ' pintados ' + got.hilos);
     if (errs.length) { fallas++; console.log('  x ' + c.act + (c.rfc ? ' con RFC ' : ' sin RFC ') + money(c.mensual) + '/mes: ' + errs.join('; ')); }
   }
   errores.forEach(e => { fallas++; console.log('  x error de pagina: ' + e); });
