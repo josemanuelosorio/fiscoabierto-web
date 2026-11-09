@@ -132,19 +132,20 @@
             <input type="range" id="calcRange" min="5000" max="60000" step="1000" value="20000" aria-describedby="calcAmount">
         </div>
 
-        <div class="calc-recibo" id="calcRecibo">
-            <dl class="recibo-rows" aria-live="polite">
-                <div class="rr-total"><dt><span data-i18n="calc.rCobra">La plataforma cobra</span><small id="calcCobraNota" data-i18n-js>el precio de su venta más $3,200 de IVA</small></dt><dd id="calcCobra">$23,200</dd></div>
-                <div class="rr-isr" id="filaIsr"><dt><i aria-hidden="true"></i><span id="calcIsrL" data-i18n-js>Retiene de ISR, 2.5%</span></dt><dd id="calcIsr" data-i18n-js>&minus;$500</dd></div>
-                <div class="rr-iva" id="filaIva"><dt><i aria-hidden="true"></i><span id="calcIvaL" data-i18n-js>Retiene de IVA, la mitad</span></dt><dd id="calcIvaR" data-i18n-js>&minus;$1,600</dd></div>
-                <div class="rr-dep" id="filaDep"><dt><i aria-hidden="true"></i><span data-i18n="calc.rDeposita">Le deposita</span><small data-i18n="calc.rComision">antes de su comisión</small></dt><dd id="calcDeposito">$21,100</dd></div>
-            </dl>
-            <svg class="recibo-flujo" id="reciboFlujo" aria-hidden="true" focusable="false">
-                <path class="hilo hilo-isr" id="hilosIsr" d=""></path><path class="hilo hilo-isr" id="restoIsr" d=""></path>
-                <path class="hilo hilo-iva" id="hilosIva" d=""></path><path class="hilo hilo-iva" id="restoIva" d=""></path>
-                <path class="hilo hilo-dep" id="hilosDep" d=""></path><path class="hilo hilo-dep" id="restoDep" d=""></path>
-            </svg>
-            <p class="recibo-leyenda" id="reciboLeyenda" data-i18n-js>Cada hilo equivale a $1,000; el más delgado de cada grupo es la fracción que sobra.</p>
+        <div class="calc-recibo">
+            <p class="vid-oculto" id="calcResumen" aria-live="polite" data-i18n-js>La plataforma cobra $23,200, retiene $500 de ISR y $1,600 de IVA y le deposita $21,100.</p>
+            <div class="escena" id="calcEscena" data-act="venta" aria-hidden="true">
+                <div class="esc-nodo esc-cliente"><span class="esc-disco"><img src="img/telefono.webp" alt="" width="104" height="168" decoding="async"></span><b data-i18n="esc.cliente">Cliente</b><small data-i18n="esc.clienteS">paga en la app</small></div>
+                <div class="esc-nodo esc-plataforma"><span class="esc-disco esc-menta"><img src="img/tablero.webp" alt="" width="168" height="129" decoding="async"></span><b data-i18n="esc.plataforma">Plataforma</b><small data-i18n="esc.plataformaS">cobra y retiene</small></div>
+                <div class="esc-nodo esc-usted"><span class="esc-disco"><img class="esc-arte arte-venta" src="img/caja.webp" alt="" width="168" height="138" decoding="async"><img class="esc-arte arte-transporte" src="img/auto.webp" alt="" width="168" height="85" decoding="async"><img class="esc-arte arte-hospedaje" src="img/casa.webp" alt="" width="156" height="168" decoding="async"></span><b data-i18n="esc.usted">Usted</b><small data-i18n="esc.ustedS">recibe el pago</small></div>
+                <div class="esc-ficha esc-cobra"><span class="ficha ficha-piedra" id="calcCobra">$23,200</span><small id="calcCobraNota" data-i18n-js>el precio de su venta más $3,200 de IVA</small></div>
+                <div class="esc-baja"></div>
+                <div class="esc-ficha esc-dep"><span class="ficha ficha-dep" id="calcDeposito">$21,100</span><small data-i18n="calc.rComision">antes de su comisión</small></div>
+                <div class="esc-ficha esc-isr"><span class="ficha ficha-isr" id="calcIsr" data-i18n-js>$500</span><small id="calcIsrL" data-i18n-js>ISR, 2.5%</small></div>
+                <div class="esc-nodo esc-sat"><span class="esc-disco"><img src="img/sat.webp" alt="" width="168" height="156" decoding="async"></span><b data-i18n="esc.sat">SAT</b><small data-i18n="esc.satS">a nombre de usted</small></div>
+                <div class="esc-ficha esc-iva"><span class="ficha ficha-iva" id="calcIvaR" data-i18n-js>$1,600</span><small id="calcIvaL" data-i18n-js>IVA, la mitad</small></div>
+            </div>
+            <div class="recibo-barra" aria-hidden="true"><span class="rb-dep" id="rbDep"></span><span class="rb-isr" id="rbIsr"></span><span class="rb-iva" id="rbIva"></span></div>
             <p class="calc-contexto" id="calcContexto" data-i18n-js></p>
             <p class="calc-anual" id="calcAnual" data-i18n-js></p>
         </div>
@@ -578,10 +579,6 @@
 <script src="js/tramites.js"></script>
 <!-- CALCULO DE LA RETENCION -->
 <script src="js/retencion.js"></script>
-<!-- HILOS DEL RECIBO -->
-<script src="js/hilos.js"></script>
-<!-- FLUJO DEL RECIBO -->
-<script src="js/flujo.js"></script>
 <!-- CALCULADORA DE RETENCION -->
 <script src="js/calculadora.js"></script>
 <!-- DATOS DEL MAPA DE HOSPEDAJE -->

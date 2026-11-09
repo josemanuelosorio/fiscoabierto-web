@@ -28,16 +28,14 @@ arreglo, 0 fallas en 12 corridas alternadas sobre el código anterior y el nuevo
 Pruebas de la lógica que no necesita navegador, con el ejecutor que trae node
 (`node:test`): las fechas límite de `js/plazos.js` (día 17 y 30 de abril,
 corridas al siguiente día hábil según el art. 12 CFF) y el recibo de
-`js/retencion.js` (con y sin RFC, y el umbral del 113-B), los hilos de
-`js/hilos.js` (un hilo por cada 1,000 pesos, lo dibujado suma lo que cobra la
-plataforma y los haces no se enciman) y la evaluación de
+`js/retencion.js` (con y sin RFC, el umbral del 113-B y las partes de lo
+cobrado que pinta la barra) y la evaluación de
 `js/evaluacion.js`: los umbrales de exposición en su borde exacto, el pago
 definitivo del 113-B, el orden de los pasos y que toda clave que devuelve exista
 en ES y en EN y se alcance con alguna respuesta. Las cifras esperadas
 se calcularon aparte, desde el texto de la ley, no con el código que se prueba.
-Quitar un día inhábil de la lista hace fallar la prueba de plazos. Con el hilo
-en 900 pesos fallan dos pruebas de hilos, y con 3 pixeles entre hilos falla la
-de haces encimados (9 nov 2026).
+Quitar un día inhábil de la lista hace fallar la prueba de plazos. Con la parte
+del IVA calculada sobre el ISR falla la prueba de partes (9 nov 2026).
 
     node tools/unitarias.js
 
@@ -78,8 +76,7 @@ suelto; con un `.html`, hace el recorrido sobre ese archivo.
 Sobre `aprende/index.html` corre sus cuatro scripts (idioma, nav, escalera y láminas). Los scripts se hablan por `window.faIdioma`.
 
 El stub es deliberadamente tonto: si un script empieza a usar una API del DOM
-que no está simulada, se agrega al stub (así entró `style.setProperty`, que usa
-el lienzo de hilos del recibo). Un fallo por API faltante se distingue
+que no está simulada, se agrega al stub. Un fallo por API faltante se distingue
 de uno real por el mensaje (TypeError sobre un método del stub contra
 ReferenceError sobre una función del propio script). `requestAnimationFrame`
 corre el primer frame en el acto y deja de encolar después de cuatro, para que
@@ -153,16 +150,15 @@ Uso, desde la raíz del repo:
 
     node tools/calc-goldens.js
 
-En cada caso cuenta además los hilos del recibo: cuántos hilos completos trae
-el trazo de cada haz (ISR, IVA y depósito) y si hay hilo delgado, contra el
-monto esperado entre 1,000. Antes sumaba los anchos de la barra de colores,
-que ya no existe.
+En cada caso revisa además la barra del recibo, tramo por tramo (depósito, ISR
+e IVA) contra la parte que le toca de lo cobrado, y que la escena muestre la
+ilustración de la actividad elegida.
 
 Sale con código 1 si una cifra no coincide. Probado contra una copia con
 IVA_RET cambiado a 0.40: fallaron los 15 casos que había entonces (10 sep 2026,
-antes de separar con y sin RFC). Probado contra una copia con el hilo en 900
-pesos: 27 de 30 casos fallan (9 nov 2026). Correrlo antes de cualquier
-push que toque la calculadora, sus constantes o los hilos.
+antes de separar con y sin RFC). Probado contra una copia con el tramo del
+ISR pintado con la parte del IVA: fallan los 30 casos (9 nov 2026). Correrlo antes
+de cualquier push que toque la calculadora o sus constantes.
 
 ## css-muerto.js
 
@@ -189,8 +185,8 @@ la raíz del repo:
     npx html-validate index.html
 
 La configuración vive en `.htmlvalidate.json` y no declara excepciones: la
-única que hubo, `style="width:..."` en la barra de la calculadora, salió con
-la barra el 9 de noviembre de 2026. Primera corrida (10 sep 2026): 53
+única que hubo, `style="width:..."` en la barra de la calculadora, salió el 9
+de noviembre de 2026: el ancho inicial de cada tramo lo pone ahora el CSS. Primera corrida (10 sep 2026): 53
 errores (38 botones sin `type`, 11 estilos en línea, iframe sin `title` y con
 atributos obsoletos); ahora 0.
 
