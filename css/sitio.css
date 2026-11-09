@@ -1832,6 +1832,10 @@ a.chain-cite {
    continuo cuando el paso siguiente ya ocurrió, así que al publicarse la ley
    basta cambiar el estado de ese paso. */
 .lif { margin-top: 30px; padding-top: 24px; border-top: 1px solid var(--color-border); }
+.lif-cabeza { display: grid; grid-template-columns: auto 1fr; grid-template-areas: "arte titulo" "arte lead"; align-items: start; column-gap: 16px; }
+.lif-cabeza .esc-disco { --disco: 64px; grid-area: arte; margin-top: 2px; }
+.lif-cabeza .lif-titulo { grid-area: titulo; }
+.lif-cabeza .lif-lead { grid-area: lead; }
 .lif-titulo { font-size: 1.12rem; font-weight: 800; letter-spacing: -0.015em; line-height: 1.3; text-wrap: balance; }
 .lif-lead { margin-top: 8px; font-size: 0.86rem; line-height: 1.65; color: var(--color-text); }
 .lif-ruta { list-style: none; margin: 24px 0 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); }
@@ -1856,25 +1860,23 @@ a.lif-nombre:focus-visible { outline: 2px solid var(--color-accent); outline-off
 .lif-fecha { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.7rem; color: #78716C; }
 .lif-paso[data-estado="falta"] .lif-fecha { color: var(--color-text); font-weight: 700; }
 .lif-nota { font-size: 0.76rem; line-height: 1.4; color: var(--color-text-secondary); }
-/* La tasa de cada año, con la misma regla: hilos continuos si ya fue ley,
-   hilos punteados si todavía no. El largo es proporcional a la tasa. */
-.lif-tasas-t { margin-top: 26px; font-size: 0.8rem; font-weight: 600; color: var(--color-text); }
-.lif-anios { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 8px; }
-.lif-anio { display: grid; grid-template-columns: 2.4rem 130px 2.8rem 1fr; align-items: center; column-gap: 10px; }
+/* La tasa de cada año en grande, con la misma regla de la ruta: tarjeta de
+   borde continuo si ya fue ley y de borde punteado si falta. */
+.lif-tasas-t { margin-top: 28px; font-size: 0.8rem; font-weight: 600; color: var(--color-text); }
+.lif-anios { list-style: none; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.lif-anio {
+    display: flex; flex-direction: column; gap: 3px; padding: 14px 16px 15px;
+    border: 1.5px solid var(--color-border); border-radius: var(--radius); background: var(--color-bg);
+}
 .lif-ano { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.72rem; color: #78716C; }
-.lif-barra {
-    height: 9px; width: 100%;
-    background: repeating-linear-gradient(to bottom, var(--color-accent) 0 1.1px, transparent 1.1px 2px);
-}
-.lif-a25 .lif-barra { width: 40%; }   /* 1% frente a 2.5% */
-.lif-a27 .lif-barra {
-    -webkit-mask-image: repeating-linear-gradient(to right, #000 0 5px, transparent 5px 9px);
-    mask-image: repeating-linear-gradient(to right, #000 0 5px, transparent 5px 9px);
-}
-.lif-tasa { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.9rem; font-weight: 700; }
-.lif-ley { font-size: 0.76rem; line-height: 1.4; color: var(--color-text-secondary); }
+.lif-tasa { font-size: 2.3rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; color: var(--color-text); }
+.lif-ley { margin-top: 4px; font-size: 0.74rem; line-height: 1.4; color: var(--color-text-secondary); }
+.lif-a26 { border-color: var(--color-accent); background: var(--color-surface); }
+.lif-a26 .lif-tasa { color: var(--color-accent); }
+.lif-a27 { border-style: dashed; border-color: var(--color-accent); background: none; }
+.lif-a27 .lif-tasa { color: var(--color-accent); }
 .lif .blk-foot { margin-top: 20px; }
-/* Los tramos se trazan al entrar en pantalla, igual que los hilos del recibo. */
+/* Los tramos se trazan al entrar en pantalla, igual que los cables de la escena. */
 @keyframes tramo-entra { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes tramo-baja { from { transform: scaleY(0); } to { transform: scaleY(1); } }
 @supports (animation-timeline: view()) {
@@ -1891,6 +1893,9 @@ a.lif-nombre:focus-visible { outline: 2px solid var(--color-accent); outline-off
     }
 }
 @media (max-width: 600px) {
+    .lif-cabeza { grid-template-areas: "arte titulo" "lead lead"; align-items: center; column-gap: 12px; }
+    .lif-cabeza .esc-disco { --disco: 52px; margin-top: 0; }
+    .lif-cabeza .lif-lead { margin-top: 12px; }
     .lif-ruta { grid-template-columns: 1fr; }
     .lif-paso { padding: 0 0 16px 24px; }
     .lif-paso::after { top: 3px; }
@@ -1899,8 +1904,11 @@ a.lif-nombre:focus-visible { outline: 2px solid var(--color-accent); outline-off
         border-top: 0; border-left: 2px dashed #A8A29E;
     }
     .lif-paso:has(+ .lif-paso[data-estado="hecho"])::before { border-left: 2px solid var(--color-accent); }
-    .lif-anio { grid-template-columns: 2.4rem 84px 1fr; row-gap: 2px; }
-    .lif-ley { grid-column: 1 / -1; }
+    .lif-anios { grid-template-columns: 1fr; gap: 8px; }
+    .lif-anio { display: grid; grid-template-columns: 5.2rem 1fr; align-items: center; column-gap: 12px; padding: 10px 14px; }
+    .lif-ano { grid-column: 1 / -1; }
+    .lif-tasa { font-size: 1.9rem; }
+    .lif-ley { margin-top: 0; }
 }
 
 /* --- Mapa del impuesto estatal al hospedaje --- */
