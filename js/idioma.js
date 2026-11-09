@@ -26,9 +26,17 @@ function setLanguage(lang) {
 
     // Fecha de verificacion por bloque. Entra la fecha ISO de data-verificado;
     // sale la linea en el idioma activo, con el mismo formato de fecha que
-    // usan las citas del sitio (07-nov-2025).
+    // usan las citas del sitio (07-nov-2025). Un bloque que no verifica una
+    // cifra sino un estado (la ruta de una ley) trae su propia frase en
+    // data-verif-clave.
     document.querySelectorAll('[data-verificado]').forEach(el => {
-        el.innerHTML = t('verif.line').replace('{fecha}', '<span class="verif-date">' + fechaCorta(el.dataset.verificado) + '</span>');
+        el.innerHTML = t(el.dataset.verifClave || 'verif.line').replace('{fecha}', '<span class="verif-date">' + fechaCorta(el.dataset.verificado) + '</span>');
+    });
+
+    // Fechas sueltas: la fecha ISO vive una sola vez, en data-fecha, y aquí
+    // toma el formato del idioma activo.
+    document.querySelectorAll('[data-fecha]').forEach(el => {
+        el.textContent = fechaCorta(el.dataset.fecha);
     });
 
     // Cada elemento con data-i18n recibe su texto. Los contenedores cuyos

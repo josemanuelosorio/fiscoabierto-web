@@ -56,7 +56,10 @@ for (let i = 0; i < lines.length; i++) {
   const dias = Math.floor((Date.parse(hoy) - Date.parse(m[1])) / 86400000);
   const vencido = dias > 90;
   if (vencido) vencidos++;
-  out.push(`| ${seccionDe(i)} | ${m[1]} | ${dias} | ${vencido ? 'VENCIDO (mas de 90 dias)' : 'vigente'} |`);
+  // Un bloque con frase propia (data-verif-clave) se nombra con ella: dos
+  // bloques de la misma seccion no deben verse iguales en la tabla.
+  const clave = lines[i].match(/data-verif-clave="([^"]+)"/);
+  out.push(`| ${seccionDe(i)}${clave ? ' · ' + clave[1] : ''} | ${m[1]} | ${dias} | ${vencido ? 'VENCIDO (mas de 90 dias)' : 'vigente'} |`);
 }
 out.push(``);
 out.push(vencidos ? `${vencidos} bloque(s) con verificacion vencida: re-verificar antes del siguiente push de contenido.` : `Ningun bloque pasa de 90 dias.`);
