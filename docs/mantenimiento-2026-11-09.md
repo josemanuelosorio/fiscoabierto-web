@@ -5,7 +5,9 @@ Etiquetas: VERIFICADO = comprobado en la fuente oficial enlazada; ALTA_CONFIANZA
 ## Cambios publicados
 
 - Ley de Ingresos 2027: el aviso bajo la calculadora decía que la ley seguía en comisiones del Senado al 24 de octubre. Se sustituye por un bloque con la ruta de la ley (iniciativa, Cámara de Diputados, Senado, Diario Oficial y entrada en vigor), cada paso con su fecha y su enlace a la fuente, y con la tasa de 2025, 2026 y 2027. El trazo continuo marca lo que ya ocurrió o ya es ley; el punteado, lo que falta. El estado es el del 9 de noviembre: aprobada por las dos cámaras y sin publicar. No se aplica una tasa de 2027 a la calculadora.
-- Recibo de la calculadora: la barra de tres colores se sustituye por hilos. Cada hilo completo vale $1,000 y lo que no alcanza para un hilo se dibuja como un hilo más delgado; los hilos salen juntos de lo que cobra la plataforma y cada grupo termina en su fila (ISR retenido, IVA retenido y depósito). Las cifras del recibo no cambian: salen de la misma función que antes.
+- Recibo de la calculadora: se pinta como la escena del video «Cómo le retienen», con las cifras de quien usa la calculadora. Arriba el cliente, la plataforma y usted; abajo el SAT; y una ficha por cada monto junto a quien lo recibe. La ilustración de «Usted» cambia con la actividad (caja, auto o casa) y sin RFC las fichas del SAT toman color de aviso. Debajo, una barra reparte lo cobrado en depósito, ISR e IVA. Las cifras del recibo no cambian: salen de la misma función que antes. Las ilustraciones son las de los videos, generadas con Gemini.
+- El mismo día se publicó y se retiró una primera versión del recibo, con hilos de $1,000: no se entendía y a densidad normal se veía como un bloque rayado.
+- Tasas por año del bloque de la Ley de Ingresos 2027: van en numerales grandes, en una tarjeta de borde continuo si ya fueron ley y de borde punteado si falta.
 
 ## Fuentes de la ruta de la Ley de Ingresos 2027
 
@@ -36,15 +38,15 @@ Al publicarse la Ley de Ingresos 2027: el paso del Diario Oficial pasa a `data-e
 
 ## Medición
 
-Chromium sin ventana, misma máquina, antes y después del cambio:
+Chromium sin ventana, misma máquina, antes del cambio y con la escena, en la misma corrida:
 
-- Pintar el recibo al mover la barra: de 0.26 a 0.99 milisegundos por movimiento (mediana de 5 corridas de 400 movimientos). El aumento es medir las filas y trazar los hilos; un cuadro a 60 por segundo dura 16.7 milisegundos.
-- Peso de `index.html`, `css/` y `js/` sin comprimir: de 353,863 a 379,047 bytes.
-- Pruebas unitarias: de 10 a 13. Con el hilo en 900 pesos fallan dos; con 3 pixeles entre hilos falla la tercera.
-- Los 30 casos de la calculadora cuentan ahora los hilos dibujados. Con el hilo en 900 pesos fallan 27.
+- Pintar el recibo al mover la barra: de 0.08 a 0.10 milisegundos por movimiento (mediana de 5 corridas de 400 movimientos). Un cuadro a 60 por segundo dura 16.7 milisegundos.
+- Peso de `index.html`, `css/` y `js/` sin comprimir: de 353,863 a 374,044 bytes, más 28,646 bytes de las siete ilustraciones de `img/`.
+- Pruebas unitarias: de 10 a 11. Con la parte del IVA calculada sobre el ISR falla la nueva.
+- Los 30 casos de la calculadora revisan ahora los tramos de la barra y la ilustración de la actividad. Con el tramo del ISR pintado con la parte del IVA fallan los 30.
 
 ## Validación
 
-VERIFICADO en esta ejecución: pruebas unitarias; arranque de scripts de las dos páginas; inventario con cero divergencias entre el HTML y el diccionario; diccionarios y marcado de idiomas; selectores CSS; tratamiento de usted; 30 casos de la calculadora sin fallas; DOM en inglés de la página principal y de Aprende; validación HTML de las dos páginas y las seis láminas, ya sin excepción para estilos en línea; controles de las láminas. Revisado en navegador a 1280 y 390 pixeles de ancho, en español e inglés: sin errores de página ni desborde horizontal; con movimiento reducido los hilos y la ruta aparecen completos y sin animación; sin JavaScript el recibo queda como lista con su marca de color.
+VERIFICADO en esta ejecución: pruebas unitarias; arranque de scripts de las dos páginas; inventario con cero divergencias entre el HTML y el diccionario; diccionarios y marcado de idiomas; selectores CSS; tratamiento de usted; 30 casos de la calculadora sin fallas; DOM en inglés de la página principal y de Aprende; validación HTML de las dos páginas y las seis láminas, ya sin excepción para estilos en línea; controles de las láminas. Revisado en navegador a 1440, 1280, 390 y 375 pixeles de ancho, en español e inglés: sin errores de página ni desborde horizontal, y ninguna ficha se sale de la tarjeta; con movimiento reducido la escena y la ruta aparecen completas y sin animación; sin JavaScript la escena muestra el ejemplo de $20,000.
 
-La entrada de los hilos y de los tramos de la ruta usa animaciones ligadas al desplazamiento (`animation-timeline`). Se comprobó en Chromium; donde el navegador no las conoce el dibujo aparece terminado, que es también el estado con movimiento reducido. No se probó en Safari ni en Firefox.
+La entrada de los cables y las fichas de la escena y de los tramos de la ruta usa animaciones ligadas al desplazamiento (`animation-timeline`). Se comprobó en Chromium; donde el navegador no las conoce el dibujo aparece terminado, que es también el estado con movimiento reducido. No se probó en Safari ni en Firefox.
