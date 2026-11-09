@@ -132,14 +132,19 @@
             <input type="range" id="calcRange" min="5000" max="60000" step="1000" value="20000" aria-describedby="calcAmount">
         </div>
 
-        <div class="calc-recibo">
-            <div class="recibo-bar" aria-hidden="true"><span class="rb-dep" id="rbDep" style="width:90.95%"></span><span class="rb-isr" id="rbIsr" style="width:2.16%"></span><span class="rb-iva" id="rbIva" style="width:6.9%"></span></div>
+        <div class="calc-recibo" id="calcRecibo">
             <dl class="recibo-rows" aria-live="polite">
                 <div class="rr-total"><dt><span data-i18n="calc.rCobra">La plataforma cobra</span><small id="calcCobraNota" data-i18n-js>el precio de su venta más $3,200 de IVA</small></dt><dd id="calcCobra">$23,200</dd></div>
-                <div class="rr-isr"><dt><i aria-hidden="true"></i><span id="calcIsrL" data-i18n-js>Retiene de ISR, 2.5%</span></dt><dd id="calcIsr" data-i18n-js>&minus;$500</dd></div>
-                <div class="rr-iva"><dt><i aria-hidden="true"></i><span id="calcIvaL" data-i18n-js>Retiene de IVA, la mitad</span></dt><dd id="calcIvaR" data-i18n-js>&minus;$1,600</dd></div>
-                <div class="rr-dep"><dt><i aria-hidden="true"></i><span data-i18n="calc.rDeposita">Le deposita</span><small data-i18n="calc.rComision">antes de su comisión</small></dt><dd id="calcDeposito">$21,100</dd></div>
+                <div class="rr-isr" id="filaIsr"><dt><i aria-hidden="true"></i><span id="calcIsrL" data-i18n-js>Retiene de ISR, 2.5%</span></dt><dd id="calcIsr" data-i18n-js>&minus;$500</dd></div>
+                <div class="rr-iva" id="filaIva"><dt><i aria-hidden="true"></i><span id="calcIvaL" data-i18n-js>Retiene de IVA, la mitad</span></dt><dd id="calcIvaR" data-i18n-js>&minus;$1,600</dd></div>
+                <div class="rr-dep" id="filaDep"><dt><i aria-hidden="true"></i><span data-i18n="calc.rDeposita">Le deposita</span><small data-i18n="calc.rComision">antes de su comisión</small></dt><dd id="calcDeposito">$21,100</dd></div>
             </dl>
+            <svg class="recibo-flujo" id="reciboFlujo" aria-hidden="true" focusable="false">
+                <path class="hilo hilo-isr" id="hilosIsr" d=""></path><path class="hilo hilo-isr" id="restoIsr" d=""></path>
+                <path class="hilo hilo-iva" id="hilosIva" d=""></path><path class="hilo hilo-iva" id="restoIva" d=""></path>
+                <path class="hilo hilo-dep" id="hilosDep" d=""></path><path class="hilo hilo-dep" id="restoDep" d=""></path>
+            </svg>
+            <p class="recibo-leyenda" id="reciboLeyenda" data-i18n-js>Cada hilo equivale a $1,000; el más delgado de cada grupo es la fracción que sobra.</p>
             <p class="calc-contexto" id="calcContexto" data-i18n-js></p>
             <p class="calc-anual" id="calcAnual" data-i18n-js></p>
         </div>
@@ -556,6 +561,10 @@
 <script src="js/tramites.js"></script>
 <!-- CALCULO DE LA RETENCION -->
 <script src="js/retencion.js"></script>
+<!-- HILOS DEL RECIBO -->
+<script src="js/hilos.js"></script>
+<!-- FLUJO DEL RECIBO -->
+<script src="js/flujo.js"></script>
 <!-- CALCULADORA DE RETENCION -->
 <script src="js/calculadora.js"></script>
 <!-- DATOS DEL MAPA DE HOSPEDAJE -->

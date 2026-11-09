@@ -44,11 +44,11 @@ Los MP4, sus portadas y `aprende/laminas/const.js` salen de un pipeline de rende
 
 | Script | Qué revisa |
 |---|---|
-| `unitarias.js` | Plazos (art. 12 CFF), recibo de la retención y evaluación del diagnóstico (pesos, umbrales y 113-B), en node, contra cifras calculadas aparte. |
+| `unitarias.js` | Plazos (art. 12 CFF), recibo de la retención, hilos del recibo y evaluación del diagnóstico (pesos, umbrales y 113-B), en node, contra cifras calculadas aparte. |
 | `smoke.js` | Corre cada `<script>` contra un DOM simulado y detecta arranques rotos. |
 | `cifras.js` | Lista cada cifra con su fuente legal y su fecha de verificación, marca los bloques con más de 90 días y compara el HTML con `translations.es`. No valida contra la ley: esa revisión es manual. |
 | `i18n.js` | Lo que se quedaría en español al cambiar a inglés. |
-| `calc-goldens.js` | 30 casos de la calculadora (3 actividades, con y sin RFC, por 5 montos) contra una cuenta hecha aparte. Necesita Playwright. |
+| `calc-goldens.js` | 30 casos de la calculadora (3 actividades, con y sin RFC, por 5 montos) contra una cuenta hecha aparte: las cifras del recibo y los hilos que se dibujan. Necesita Playwright. |
 | `css-muerto.js` | Selectores sin clase ni id en el HTML o el JS. |
 | `usted.js` | Tuteo en el texto en español: el sitio habla de usted. |
 | `laminas.js` | Controles de las láminas en un navegador real. Necesita Playwright. |

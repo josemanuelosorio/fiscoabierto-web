@@ -20,7 +20,7 @@ const pagina = require('./pagina');
 function el(cls) {
   return {
     className: cls || '', classList: { add(){}, remove(){}, toggle(){return false}, contains(){return false} },
-    style: {}, children: [], firstChild: null, textContent: '', innerHTML: '',
+    style: { setProperty(){} }, children: [], firstChild: null, textContent: '', innerHTML: '',
     // dataset devuelve '' para cualquier data-* que el script pida: el DOM real
     // solo entrega elementos que SI traen el atributo, el stub no discrimina.
     dataset: new Proxy({}, { get: (o, k) => (k in o ? o[k] : '') }),

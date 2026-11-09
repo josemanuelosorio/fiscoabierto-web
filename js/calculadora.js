@@ -2,7 +2,7 @@
 // Contrato: pinta el recibo del mes que calcula js/retencion.js, el acumulado
 // del ano y el umbral del 113-B. El umbral se mide con el ejercicio anterior;
 // la calculadora solo conoce el ingreso de este ano, asi que el veredicto
-// condiciona al lector.
+// condiciona al lector. Los hilos del recibo los tiende js/flujo.js.
 (function() {
     const range = document.getElementById('calcRange');
     if (!range) return;
@@ -25,7 +25,9 @@
     }
     function recibo(base, conRfc) { return calculoRetencion.recibo(act, base, conRfc); }
 
-    function paint() {
+    // suave: true cuando el recibo salta de un estado a otro (cambio de
+    // actividad o de RFC) y los hilos deben recorrer el cambio.
+    function paint(suave) {
         const monthly = +range.value;
         const r = recibo(monthly, rfc);
         amountEl.textContent = money(monthly);
@@ -36,9 +38,8 @@
         $('calcIvaL').textContent = t(rfc ? 'calc.rIvaMitad' : 'calc.rIvaTodo');
         $('calcIvaR').textContent = '−' + money(r.ivaR);
         $('calcDeposito').textContent = money(r.dep);
-        $('rbDep').style.width = (r.dep / r.cobra * 100).toFixed(2) + '%';
-        $('rbIsr').style.width = (r.isr / r.cobra * 100).toFixed(2) + '%';
-        $('rbIva').style.width = (r.ivaR / r.cobra * 100).toFixed(2) + '%';
+        $('reciboLeyenda').textContent = t('calc.hilos').replace('{unidad}', money(hilosRecibo.UNIDAD));
+        faFlujo.pintar(r, suave === true);
 
         // Contexto: sin RFC, cuanto mas te depositarian con el; con RFC, que
         // cambio en 2026 para tu actividad.
@@ -81,16 +82,18 @@
         btn.addEventListener('click', function() {
             act = btn.dataset.act;
             actBtns.forEach(function(b) { b.classList.toggle('active', b === btn); });
-            paint();
+            paint(true);
         });
     });
     rfcBtns.forEach(function(btn) {
         btn.addEventListener('click', function() {
             rfc = btn.dataset.rfc === 'si';
             rfcBtns.forEach(function(b) { b.classList.toggle('active', b === btn); b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
-            paint();
+            paint(true);
         });
     });
+    // La barra y el cambio de idioma pintan sin recorrido: llegan con un
+    // evento como argumento, que no es el `true` que pide el cambio suave.
     range.addEventListener('input', paint);
     paint();
     // El recibo se arma en JS, asi que el barrido de data-i18n no lo alcanza.
