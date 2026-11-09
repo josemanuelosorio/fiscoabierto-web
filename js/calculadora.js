@@ -2,12 +2,13 @@
 // Contrato: pinta el recibo del mes que calcula js/retencion.js, el acumulado
 // del ano y el umbral del 113-B. El umbral se mide con el ejercicio anterior;
 // la calculadora solo conoce el ingreso de este ano, asi que el veredicto
-// condiciona al lector. Los hilos del recibo los tiende js/flujo.js.
+// condiciona al lector. El recibo se pinta como la escena del video: quien
+// paga, quien cobra y retiene, y a donde va cada parte.
 (function() {
     const range = document.getElementById('calcRange');
     if (!range) return;
     const $ = function (id) { return document.getElementById(id); };
-    const amountEl = $('calcAmount'), verdict = $('calcVerdict');
+    const amountEl = $('calcAmount'), verdict = $('calcVerdict'), escena = $('calcEscena');
 
     const ACTS = calculoRetencion.ACTS;
     let act = 'venta', rfc = true;
@@ -25,21 +26,29 @@
     }
     function recibo(base, conRfc) { return calculoRetencion.recibo(act, base, conRfc); }
 
-    // suave: true cuando el recibo salta de un estado a otro (cambio de
-    // actividad o de RFC) y los hilos deben recorrer el cambio.
-    function paint(suave) {
+    function paint() {
         const monthly = +range.value;
         const r = recibo(monthly, rfc);
         amountEl.textContent = money(monthly);
+        // La escena: una ficha por cada monto, junto a quien lo recibe.
         $('calcCobra').textContent = money(r.cobra);
         $('calcCobraNota').textContent = t('calc.rCobraNota').replace('{iva}', money(r.iva));
-        $('calcIsrL').textContent = t('calc.rIsr').replace('{rate}', pct(r.tasa));
-        $('calcIsr').textContent = '−' + money(r.isr);
-        $('calcIvaL').textContent = t(rfc ? 'calc.rIvaMitad' : 'calc.rIvaTodo');
-        $('calcIvaR').textContent = '−' + money(r.ivaR);
+        $('calcIsrL').textContent = t('esc.isr').replace('{rate}', pct(r.tasa));
+        $('calcIsr').textContent = money(r.isr);
+        $('calcIvaL').textContent = t(rfc ? 'esc.ivaMitad' : 'esc.ivaTodo');
+        $('calcIvaR').textContent = money(r.ivaR);
         $('calcDeposito').textContent = money(r.dep);
-        $('reciboLeyenda').textContent = t('calc.hilos').replace('{unidad}', money(hilosRecibo.UNIDAD));
-        faFlujo.pintar(r, suave === true);
+        // La ilustracion de «Usted» cambia con la actividad, y sin RFC las
+        // fichas del SAT pasan a color de aviso: lo decide el CSS.
+        escena.dataset.act = act;
+        escena.dataset.rfc = rfc ? 'si' : 'no';
+        // La barra reparte lo cobrado en sus tres partes.
+        const p = calculoRetencion.partes(r);
+        $('rbDep').style.flexGrow = (p.dep * 100).toFixed(2);
+        $('rbIsr').style.flexGrow = (p.isr * 100).toFixed(2);
+        $('rbIva').style.flexGrow = (p.iva * 100).toFixed(2);
+        // La misma cuenta en una oracion, para quien no ve el dibujo.
+        $('calcResumen').textContent = t('calc.resumen').replace('{cobra}', money(r.cobra)).replace('{isr}', money(r.isr)).replace('{iva}', money(r.ivaR)).replace('{dep}', money(r.dep));
 
         // Contexto: sin RFC, cuanto mas te depositarian con el; con RFC, que
         // cambio en 2026 para tu actividad.
@@ -82,18 +91,16 @@
         btn.addEventListener('click', function() {
             act = btn.dataset.act;
             actBtns.forEach(function(b) { b.classList.toggle('active', b === btn); });
-            paint(true);
+            paint();
         });
     });
     rfcBtns.forEach(function(btn) {
         btn.addEventListener('click', function() {
             rfc = btn.dataset.rfc === 'si';
             rfcBtns.forEach(function(b) { b.classList.toggle('active', b === btn); b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
-            paint(true);
+            paint();
         });
     });
-    // La barra y el cambio de idioma pintan sin recorrido: llegan con un
-    // evento como argumento, que no es el `true` que pide el cambio suave.
     range.addEventListener('input', paint);
     paint();
     // El recibo se arma en JS, asi que el barrido de data-i18n no lo alcanza.

@@ -1,6 +1,6 @@
 // Pruebas unitarias de la lógica que no necesita navegador: plazos, cálculo
-// de la retención, hilos del recibo y evaluación del diagnóstico. Corren con
-// el ejecutor de pruebas que trae node.
+// de la retención y evaluación del diagnóstico. Corren con el ejecutor de
+// pruebas que trae node.
 //
 // Uso, desde la raiz del repo:   node tools/unitarias.js
 // Sale con código 1 si alguna falla.
@@ -86,82 +86,19 @@ test('umbral del 113-B: más de 300,000 al año', () => {
   assert.equal(calculoRetencion.rebasaUmbral(10000), false);
 });
 
-// ---- Hilos del recibo ------------------------------------------------------
-const hilosRecibo = require('../js/hilos.js');
-
-// Un lienzo de 240 por 140 con las tres filas del recibo, medido a mano.
-const LIENZO = { xInicio: 0, xCurva: 38, xFila: 232, xFin: 240, centroTronco: 70, centros: { isr: 21, iva: 63, dep: 112 } };
-const hacesDe = (r, lienzo) => hilosRecibo.haces(
-  [{ clave: 'isr', monto: r.isr }, { clave: 'iva', monto: r.ivaR }, { clave: 'dep', monto: r.dep }], lienzo || LIENZO);
-// Cada hilo de un trazo: dónde sale, a qué altura corre en el tronco y a cuál llega.
-const hilosDe = d => [...d.matchAll(/M([-\d.]+) ([-\d.]+)H[-\d.]+C[-\d.]+ [-\d.]+ [-\d.]+ [-\d.]+ [-\d.]+ ([-\d.]+)H([-\d.]+)/g)]
-  .map(m => ({ sale: +m[1], tronco: +m[2], fila: +m[3], llega: +m[4] }));
-
-test('hilos: un monto se parte en hilos de 1,000 pesos y la fracción que sobra', () => {
-  assert.equal(hilosRecibo.UNIDAD, 1000);
-  // 23,200 son 23 hilos y 0.2; 500 es medio hilo; 60,000 no deja fracción.
-  let p = hilosRecibo.partir(23200); assert.equal(p.enteros, 23); cerca(p.fraccion, 0.2, 'fracción de 23,200');
-  p = hilosRecibo.partir(500); assert.equal(p.enteros, 0); cerca(p.fraccion, 0.5, 'fracción de 500');
-  p = hilosRecibo.partir(60000); assert.equal(p.enteros, 60); assert.equal(p.fraccion, 0);
-  // Menos de 5 pesos ya no se dibuja; un monto negativo tampoco.
-  assert.deepEqual(hilosRecibo.partir(3), { enteros: 0, fraccion: 0 });
-  assert.deepEqual(hilosRecibo.partir(-50), { enteros: 0, fraccion: 0 });
-  // El alto es proporcional a los pesos: el doble de dinero, el doble de alto.
-  cerca(hilosRecibo.alto(42000), 2 * hilosRecibo.alto(21000), 'alto proporcional');
-});
-
-test('hilos: lo que se dibuja suma lo que cobra la plataforma', () => {
-  // Cuentas a mano. Venta de 20,000 con RFC: 500 + 1,600 + 21,100 = 23,200,
-  // es decir 0 + 1 + 21 hilos completos y tres delgados (0.5, 0.6 y 0.1).
-  const casos = [
-    ['venta', 20000, true, [0, 1, 21], 23200],
-    ['venta', 20000, false, [4, 3, 16], 23200],       // 4,000 + 3,200 + 16,000
-    ['transporte', 10000, true, [0, 0, 10], 11600],   // 210 + 800 + 10,590
-    ['hospedaje', 60000, false, [12, 9, 48], 69600],  // 12,000 + 9,600 + 48,000
-  ];
-  for (const [act, base, rfc, completos, cobra] of casos) {
-    const haces = hacesDe(calculoRetencion.recibo(act, base, rfc));
-    const claves = ['isr', 'iva', 'dep'];
-    assert.deepEqual(claves.map(k => haces[k].enteros), completos, act + ' ' + base + ': hilos completos');
-    // En el trazo hay un hilo por cada hilo completo, y el delgado solo si sobra algo.
-    claves.forEach(k => {
-      assert.equal(hilosDe(haces[k].d).length, haces[k].enteros, k + ': hilos en el trazo');
-      assert.equal(hilosDe(haces[k].dResto).length, haces[k].fraccion ? 1 : 0, k + ': hilo delgado');
-    });
-    const pesos = claves.reduce((s, k) => s + (haces[k].enteros + haces[k].fraccion) * hilosRecibo.UNIDAD, 0);
-    cerca(pesos, cobra, act + ' ' + base + ': pesos dibujados');
+test('partes de lo cobrado: depósito, ISR e IVA suman el total', () => {
+  // Venta de 20,000 con RFC: de 23,200 cobrados, 21,100 se depositan (90.95%),
+  // 500 son ISR (2.16%) y 1,600 son IVA (6.90%). Cuentas hechas a mano.
+  let p = calculoRetencion.partes(calculoRetencion.recibo('venta', 20000, true));
+  cerca(p.dep, 21100 / 23200, 'depósito'); cerca(p.isr, 500 / 23200, 'ISR'); cerca(p.iva, 1600 / 23200, 'IVA');
+  // Sin RFC: 16,000, 4,000 y 3,200 de 23,200.
+  p = calculoRetencion.partes(calculoRetencion.recibo('venta', 20000, false));
+  cerca(p.dep, 16000 / 23200, 'depósito sin RFC'); cerca(p.isr, 4000 / 23200, 'ISR sin RFC'); cerca(p.iva, 3200 / 23200, 'IVA sin RFC');
+  // Las partes no dependen del monto y siempre suman 1.
+  for (const [act, base, rfc] of [['venta', 5000, true], ['transporte', 26000, true], ['hospedaje', 60000, false]]) {
+    const q = calculoRetencion.partes(calculoRetencion.recibo(act, base, rfc));
+    cerca(q.dep + q.isr + q.iva, 1, act + ' ' + base + ': suma');
   }
-});
-
-test('hilos: cada haz sale del tronco y llega a su fila, en orden y sin cruzarse', () => {
-  // El recibo más alto de la calculadora: 60,000 sin RFC, con haces de 24, 19.2
-  // y 96 pixeles. La página da a cada fila el alto de su haz más 16 de aire,
-  // con 42 de mínimo: filas de 42, 42 y 112, y de ahí salen estos centros.
-  // Con las filas del lienzo chico el depósito se encimaría con el IVA, y esta
-  // prueba lo detecta.
-  const LIENZO = { xInicio: 0, xCurva: 38, xFila: 232, xFin: 240, centroTronco: 98, centros: { isr: 21, iva: 63, dep: 140 } };
-  const haces = hacesDe(calculoRetencion.recibo('venta', 60000, false), LIENZO);
-  const todos = k => hilosDe(haces[k].d).concat(hilosDe(haces[k].dResto));
-  let finTronco = -Infinity, finFila = -Infinity;
-  for (const k of ['isr', 'iva', 'dep']) {
-    const hs = todos(k);
-    hs.forEach(h => { assert.equal(h.sale, LIENZO.xInicio); assert.equal(h.llega, LIENZO.xFin); });
-    // Dentro del haz, un hilo cada PASO pixeles, igual en el tronco que en la fila.
-    for (let i = 1; i < haces[k].enteros; i++) {
-      cerca(hs[i].tronco - hs[i - 1].tronco, hilosRecibo.PASO, k + ': paso en el tronco');
-      cerca(hs[i].fila - hs[i - 1].fila, hilosRecibo.PASO, k + ': paso en la fila');
-    }
-    // El haz que sigue empieza debajo del anterior, en el tronco y en las filas.
-    assert.ok(hs[0].tronco > finTronco, k + ': se encima con el haz anterior en el tronco');
-    assert.ok(hs[0].fila > finFila, k + ': se encima con el haz anterior en las filas');
-    finTronco = hs[hs.length - 1].tronco; finFila = hs[hs.length - 1].fila;
-    // Y queda centrado en su fila, con un pixel de margen por el ajuste a medio pixel.
-    const medio = (hs[0].fila + hs[haces[k].enteros - 1].fila) / 2;
-    assert.ok(Math.abs(medio - LIENZO.centros[k]) <= 1.5, k + ': centro ' + medio + ' contra ' + LIENZO.centros[k]);
-  }
-  // El tronco entero queda centrado donde se pidió.
-  const arriba = todos('isr')[0].tronco, abajo = finTronco;
-  assert.ok(Math.abs((arriba + abajo) / 2 - LIENZO.centroTronco) <= 1.5, 'centro del tronco');
 });
 
 // ---- Diagnóstico -----------------------------------------------------------

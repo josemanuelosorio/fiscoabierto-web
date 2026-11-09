@@ -4,7 +4,7 @@ Sitio de Fisco Abierto: herramienta fiscal gratuita de utilidad pública para qu
 
 ## Cómo se hace
 
-El contenido fiscal es mío: qué dice la ley, cada cifra con su artículo y la fecha en que la verifiqué contra la fuente oficial. El código lo escribe un asistente de IA (Claude Code) bajo las pruebas de `tools/`; por eso muchos commits llevan su firma. Las ilustraciones de las láminas se generaron con Gemini.
+El contenido fiscal es mío: qué dice la ley, cada cifra con su artículo y la fecha en que la verifiqué contra la fuente oficial. El código lo escribe un asistente de IA (Claude Code) bajo las pruebas de `tools/`; por eso muchos commits llevan su firma. Las ilustraciones de las láminas, de los videos y de la calculadora se generaron con Gemini.
 
 El historial se limpió el 1 de noviembre de 2026: los correos de los commits pasaron a la dirección privada de GitHub y se quitaron de los mensajes enlaces privados y frases que no describían el cambio. El contenido y las fechas de cada commit no cambiaron.
 
@@ -22,6 +22,7 @@ El historial se limpió el 1 de noviembre de 2026: los correos de los commits pa
 ├── fonts/                  # Inter y Source Serif 4: los archivos de Google Fonts, servidos desde el sitio
 ├── js/                     # Sus scripts, uno por sección, en el orden en que los carga el HTML
 │   └── datos/              # Diccionario ES/EN y tasas del mapa de hospedaje
+├── img/                    # Ilustraciones de la calculadora, las mismas de los videos
 ├── aprende/
 │   ├── index.html          # Aprende: seis pasos de principios fiscales, con láminas en vivo
 │   ├── laminas/            # p1 a p6.html, motor.js, lamina.css, const.js, img/ y fuentes/
@@ -44,11 +45,11 @@ Los MP4, sus portadas y `aprende/laminas/const.js` salen de un pipeline de rende
 
 | Script | Qué revisa |
 |---|---|
-| `unitarias.js` | Plazos (art. 12 CFF), recibo de la retención, hilos del recibo y evaluación del diagnóstico (pesos, umbrales y 113-B), en node, contra cifras calculadas aparte. |
+| `unitarias.js` | Plazos (art. 12 CFF), recibo de la retención con sus partes y evaluación del diagnóstico (pesos, umbrales y 113-B), en node, contra cifras calculadas aparte. |
 | `smoke.js` | Corre cada `<script>` contra un DOM simulado y detecta arranques rotos. |
 | `cifras.js` | Lista cada cifra con su fuente legal y su fecha de verificación, marca los bloques con más de 90 días y compara el HTML con `translations.es`. No valida contra la ley: esa revisión es manual. |
 | `i18n.js` | Lo que se quedaría en español al cambiar a inglés. |
-| `calc-goldens.js` | 30 casos de la calculadora (3 actividades, con y sin RFC, por 5 montos) contra una cuenta hecha aparte: las cifras del recibo y los hilos que se dibujan. Necesita Playwright. |
+| `calc-goldens.js` | 30 casos de la calculadora (3 actividades, con y sin RFC, por 5 montos) contra una cuenta hecha aparte: las cifras de la escena, los tramos de la barra y la ilustración de la actividad. Necesita Playwright. |
 | `css-muerto.js` | Selectores sin clase ni id en el HTML o el JS. |
 | `usted.js` | Tuteo en el texto en español: el sitio habla de usted. |
 | `laminas.js` | Controles de las láminas en un navegador real. Necesita Playwright. |

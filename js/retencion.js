@@ -1,7 +1,8 @@
 // ==================== CALCULO DE LA RETENCION ====================
 // Contrato: entran actividad (venta, transporte u hospedaje), monto mensual
 // sin IVA y si la plataforma tiene el RFC; sale el recibo del mes: lo que
-// cobra la plataforma, lo que retiene de ISR y de IVA y lo que deposita.
+// cobra la plataforma, lo que retiene de ISR y de IVA y lo que deposita, y que
+// parte de lo cobrado es cada cosa.
 // No toca el DOM: js/calculadora.js lo pinta y tools/unitarias.js lo prueba.
 var calculoRetencion = (function () {
     // Las tres tasas del Art. 113-A, parrafo tercero. La LIF 2026 solo sustituyo
@@ -28,8 +29,13 @@ var calculoRetencion = (function () {
     }
     // El umbral del 113-B es anual: doce veces el monto del mes.
     function rebasaUmbral(mensual) { return mensual * 12 > THRESHOLD; }
+    // Partes de lo que cobra la plataforma: deposito, ISR e IVA retenidos.
+    // Suman 1; la barra del recibo las pinta como anchos.
+    function partes(r) {
+        return { dep: r.dep / r.cobra, isr: r.isr / r.cobra, iva: r.ivaR / r.cobra };
+    }
 
-    return { ACTS: ACTS, THRESHOLD: THRESHOLD, recibo: recibo, rebasaUmbral: rebasaUmbral };
+    return { ACTS: ACTS, THRESHOLD: THRESHOLD, recibo: recibo, rebasaUmbral: rebasaUmbral, partes: partes };
 })();
 
 // En node (pruebas de tools/) el mismo archivo se puede cargar con require.
