@@ -1806,7 +1806,8 @@ a.chain-cite {
     }
 }
 .calc-contexto { margin: 10px 0 0; font-size: 0.86rem; line-height: 1.6; color: var(--color-text); }
-.calc-contexto a, .calc-paso { color: var(--color-accent); font-weight: 600; text-decoration: none; white-space: nowrap; }
+.calc-contexto a, .calc-paso { color: var(--color-accent); font-weight: 600; text-decoration: none; }
+.calc-paso { white-space: nowrap; }
 .calc-contexto a::after { content: " \2197\FE0E"; }
 @media (hover: hover) { .calc-contexto a:hover { text-decoration: underline; } }
 .calc-anual { margin: 6px 0 0; font-size: 0.8rem; color: var(--color-text-secondary); line-height: 1.6; }
