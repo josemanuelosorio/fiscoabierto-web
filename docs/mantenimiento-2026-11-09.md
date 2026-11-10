@@ -5,9 +5,20 @@ Etiquetas: VERIFICADO = comprobado en la fuente oficial enlazada; ALTA_CONFIANZA
 ## Cambios publicados
 
 - Ley de Ingresos 2027: el aviso bajo la calculadora decía que la ley seguía en comisiones del Senado al 24 de octubre. Se sustituye por un bloque con la ruta de la ley (iniciativa, Cámara de Diputados, Senado, Diario Oficial y entrada en vigor), cada paso con su fecha y su enlace a la fuente, y con la tasa de 2025, 2026 y 2027. El trazo continuo marca lo que ya ocurrió o ya es ley; el punteado, lo que falta. El estado es el del 9 de noviembre: aprobada por las dos cámaras y sin publicar. No se aplica una tasa de 2027 a la calculadora.
-- Recibo de la calculadora: se pinta como la escena del video «Cómo le retienen», con las cifras de quien usa la calculadora. Arriba el cliente, la plataforma y usted; abajo el SAT; y una ficha por cada monto junto a quien lo recibe. La ilustración de «Usted» cambia con la actividad (caja, auto o casa) y sin RFC las fichas del SAT toman color de aviso. Debajo, una barra reparte lo cobrado en depósito, ISR e IVA. Las cifras del recibo no cambian: salen de la misma función que antes. Las ilustraciones son las de los videos, generadas con Gemini.
-- El mismo día se publicó y se retiró una primera versión del recibo, con hilos de $1,000: no se entendía y a densidad normal se veía como un bloque rayado.
+- Recibo de la calculadora: se pinta como un talonario. El cobro es un boleto: la parte grande es lo que la plataforma deposita y los dos talones del extremo son lo que corta para el SAT, uno de IVA y otro de ISR. El ancho de cada parte es la proporción que le toca de lo cobrado, así que los talones se ensanchan cuando sube la retención (por ejemplo, sin RFC). Una leyenda dice en una oración las tasas de los dos talones. Las cifras del recibo no cambian: salen de la misma función que antes.
+- El mismo día se publicaron y se retiraron dos versiones previas del recibo: una con hilos de $1,000, que no se entendía, y una escena ilustrada que repetía la del video de la sección siguiente.
 - Tasas por año del bloque de la Ley de Ingresos 2027: van en numerales grandes, en una tarjeta de borde continuo si ya fueron ley y de borde punteado si falta.
+
+## Correcciones
+
+Salieron de un barrido de las dos páginas, en español e inglés, a 320, 360, 390, 768, 1024 y 1440 pixeles de ancho.
+
+- A 320 pixeles en inglés toda la página se desbordaba 23 pixeles hacia la derecha, en la principal y en Aprende. La causa era la línea de la marca en trámite del pie, que no podía partirse. Ahora se parte en teléfono.
+- Blancos de toque de menos de 24 pixeles (WCAG 2.2, criterio 2.5.8): los enlaces de la navegación en las dos páginas, los enlaces de las respuestas del FAQ, el enlace al trámite del panel, los nombres de los pasos de la ruta de la ley, el enlace de descarga de las láminas y la barra de la calculadora, cuya caja medía 6 pixeles de alto y ahora mide 28 sin moverse de lugar.
+- La barra de la calculadora no mostraba el foco del teclado. Ahora lo marca en su botón.
+- El enlace al RFC del contexto de la calculadora ya no deja un renglón justificado con huecos.
+
+Queda sin corregir: en teléfono los estados chicos del mapa miden menos de 24 pixeles (el más chico, 4 por 5). El mapa no ofrece otra forma de elegir estado.
 
 ## Fuentes de la ruta de la Ley de Ingresos 2027
 
@@ -38,15 +49,16 @@ Al publicarse la Ley de Ingresos 2027: el paso del Diario Oficial pasa a `data-e
 
 ## Medición
 
-Chromium sin ventana, misma máquina, antes del cambio y con la escena, en la misma corrida:
+Chromium sin ventana, misma máquina, antes del cambio y con el talonario, en la misma corrida:
 
-- Pintar el recibo al mover la barra: de 0.08 a 0.10 milisegundos por movimiento (mediana de 5 corridas de 400 movimientos). Un cuadro a 60 por segundo dura 16.7 milisegundos.
-- Peso de `index.html`, `css/` y `js/` sin comprimir: de 353,863 a 374,044 bytes, más 28,646 bytes de las siete ilustraciones de `img/`.
+- Pintar el recibo al mover la barra: 0.07 milisegundos por movimiento antes y después (mediana de 5 corridas de 400 movimientos).
+- Peso de `index.html`, `css/` y `js/` sin comprimir: de 353,863 a 369,058 bytes.
 - Pruebas unitarias: de 10 a 11. Con la parte del IVA calculada sobre el ISR falla la nueva.
-- Los 30 casos de la calculadora revisan ahora los tramos de la barra y la ilustración de la actividad. Con el tramo del ISR pintado con la parte del IVA fallan los 30.
+- Los 30 casos de la calculadora revisan ahora el ancho de cada parte del talonario y la tasa que dice su leyenda. Con el talón del ISR pintado con la parte del IVA fallan los 30; con la leyenda diciendo la tasa de la actividad aunque falte el RFC fallan los 15 casos sin RFC.
+- Barrido: 62 hallazgos distintos antes de las correcciones; después quedan los estados chicos del mapa y un aviso que solo aparece al abrir la página como archivo local (el marco de Substack).
 
 ## Validación
 
-VERIFICADO en esta ejecución: pruebas unitarias; arranque de scripts de las dos páginas; inventario con cero divergencias entre el HTML y el diccionario; diccionarios y marcado de idiomas; selectores CSS; tratamiento de usted; 30 casos de la calculadora sin fallas; DOM en inglés de la página principal y de Aprende; validación HTML de las dos páginas y las seis láminas, ya sin excepción para estilos en línea; controles de las láminas. Revisado en navegador a 1440, 1280, 390 y 375 pixeles de ancho, en español e inglés: sin errores de página ni desborde horizontal, y ninguna ficha se sale de la tarjeta; con movimiento reducido la escena y la ruta aparecen completas y sin animación; sin JavaScript la escena muestra el ejemplo de $20,000.
+VERIFICADO en esta ejecución: pruebas unitarias; arranque de scripts de las dos páginas; inventario con cero divergencias entre el HTML y el diccionario; diccionarios y marcado de idiomas; selectores CSS; tratamiento de usted; 30 casos de la calculadora sin fallas; DOM en inglés de la página principal y de Aprende; validación HTML de las dos páginas y las seis láminas, ya sin excepción para estilos en línea; controles de las láminas. Revisado en navegador a 1440, 390 y 320 pixeles de ancho, en español e inglés: sin errores de página ni desborde horizontal, y ningún texto se sale del talonario; con movimiento reducido el talonario no anima sus anchos y la ruta aparece completa; sin JavaScript el talonario muestra el ejemplo de $20,000.
 
-La entrada de los cables y las fichas de la escena y de los tramos de la ruta usa animaciones ligadas al desplazamiento (`animation-timeline`). Se comprobó en Chromium; donde el navegador no las conoce el dibujo aparece terminado, que es también el estado con movimiento reducido. No se probó en Safari ni en Firefox.
+La entrada de los tramos de la ruta usa animaciones ligadas al desplazamiento (`animation-timeline`). Se comprobó en Chromium; donde el navegador no las conoce el dibujo aparece terminado, que es también el estado con movimiento reducido. No se probó en Safari ni en Firefox.
