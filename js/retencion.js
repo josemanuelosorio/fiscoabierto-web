@@ -30,7 +30,7 @@ var calculoRetencion = (function () {
     // El umbral del 113-B es anual: doce veces el monto del mes.
     function rebasaUmbral(mensual) { return mensual * 12 > THRESHOLD; }
     // Partes de lo que cobra la plataforma: deposito, ISR e IVA retenidos.
-    // Suman 1; la barra del recibo las pinta como anchos.
+    // Suman 1; el talonario del recibo las pinta como anchos.
     function partes(r) {
         return { dep: r.dep / r.cobra, isr: r.isr / r.cobra, iva: r.ivaR / r.cobra };
     }

@@ -133,19 +133,13 @@
         </div>
 
         <div class="calc-recibo">
-            <p class="vid-oculto" id="calcResumen" aria-live="polite" data-i18n-js>La plataforma cobra $23,200, retiene $500 de ISR y $1,600 de IVA y le deposita $21,100.</p>
-            <div class="escena" id="calcEscena" data-act="venta" aria-hidden="true">
-                <div class="esc-nodo esc-cliente"><span class="esc-disco"><img src="img/telefono.webp" alt="" width="104" height="168" decoding="async"></span><b data-i18n="esc.cliente">Cliente</b><small data-i18n="esc.clienteS">paga en la app</small></div>
-                <div class="esc-nodo esc-plataforma"><span class="esc-disco esc-menta"><img src="img/tablero.webp" alt="" width="168" height="129" decoding="async"></span><b data-i18n="esc.plataforma">Plataforma</b><small data-i18n="esc.plataformaS">cobra y retiene</small></div>
-                <div class="esc-nodo esc-usted"><span class="esc-disco"><img class="esc-arte arte-venta" src="img/caja.webp" alt="" width="168" height="138" decoding="async"><img class="esc-arte arte-transporte" src="img/auto.webp" alt="" width="168" height="85" decoding="async"><img class="esc-arte arte-hospedaje" src="img/casa.webp" alt="" width="156" height="168" decoding="async"></span><b data-i18n="esc.usted">Usted</b><small data-i18n="esc.ustedS">recibe el pago</small></div>
-                <div class="esc-ficha esc-cobra"><span class="ficha ficha-piedra" id="calcCobra">$23,200</span><small id="calcCobraNota" data-i18n-js>el precio de su venta más $3,200 de IVA</small></div>
-                <div class="esc-baja"></div>
-                <div class="esc-ficha esc-dep"><span class="ficha ficha-dep" id="calcDeposito">$21,100</span><small data-i18n="calc.rComision">antes de su comisión</small></div>
-                <div class="esc-ficha esc-isr"><span class="ficha ficha-isr" id="calcIsr" data-i18n-js>$500</span><small id="calcIsrL" data-i18n-js>ISR, 2.5%</small></div>
-                <div class="esc-nodo esc-sat"><span class="esc-disco"><img src="img/sat.webp" alt="" width="168" height="156" decoding="async"></span><b data-i18n="esc.sat">SAT</b><small data-i18n="esc.satS">a nombre de usted</small></div>
-                <div class="esc-ficha esc-iva"><span class="ficha ficha-iva" id="calcIvaR" data-i18n-js>$1,600</span><small id="calcIvaL" data-i18n-js>IVA, la mitad</small></div>
-            </div>
-            <div class="recibo-barra" aria-hidden="true"><span class="rb-dep" id="rbDep"></span><span class="rb-isr" id="rbIsr"></span><span class="rb-iva" id="rbIva"></span></div>
+            <div class="recibo-cobra"><p><span data-i18n="calc.rCobra">La plataforma cobra</span><small id="calcCobraNota" data-i18n-js>el precio de su venta más $3,200 de IVA</small></p><b id="calcCobra">$23,200</b></div>
+            <dl class="talonario" aria-live="polite">
+                <div class="tal tal-dep" id="talDep"><dt data-i18n="calc.rDeposita">Le deposita</dt><dd class="tal-monto" id="calcDeposito">$21,100</dd><dd class="tal-nota" data-i18n="calc.rComision">antes de su comisión</dd></div>
+                <div class="tal tal-iva" id="talIva"><dt data-i18n="calc.tIva">IVA</dt><dd id="calcIvaR" data-i18n-js>$1,600</dd></div>
+                <div class="tal tal-isr" id="talIsr"><dt data-i18n="calc.tIsr">ISR</dt><dd id="calcIsr" data-i18n-js>$500</dd></div>
+            </dl>
+            <p class="recibo-leyenda" id="calcTalones" data-i18n-js>La plataforma corta dos talones para el SAT, uno de ISR (2.5%) y otro de IVA (la mitad), y le deposita el resto. El ancho de cada parte es proporcional a los pesos.</p>
             <p class="calc-contexto" id="calcContexto" data-i18n-js></p>
             <p class="calc-anual" id="calcAnual" data-i18n-js></p>
         </div>

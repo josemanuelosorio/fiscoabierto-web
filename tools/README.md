@@ -29,7 +29,7 @@ Pruebas de la lógica que no necesita navegador, con el ejecutor que trae node
 (`node:test`): las fechas límite de `js/plazos.js` (día 17 y 30 de abril,
 corridas al siguiente día hábil según el art. 12 CFF) y el recibo de
 `js/retencion.js` (con y sin RFC, el umbral del 113-B y las partes de lo
-cobrado que pinta la barra) y la evaluación de
+cobrado que pinta el talonario) y la evaluación de
 `js/evaluacion.js`: los umbrales de exposición en su borde exacto, el pago
 definitivo del 113-B, el orden de los pasos y que toda clave que devuelve exista
 en ES y en EN y se alcance con alguna respuesta. Las cifras esperadas
@@ -150,15 +150,16 @@ Uso, desde la raíz del repo:
 
     node tools/calc-goldens.js
 
-En cada caso revisa además la barra del recibo, tramo por tramo (depósito, ISR
-e IVA) contra la parte que le toca de lo cobrado, y que la escena muestre la
-ilustración de la actividad elegida.
+En cada caso revisa además el talonario del recibo: el ancho de cada parte
+(depósito, IVA e ISR) contra la proporción que le toca de lo cobrado, y que la
+leyenda diga la tasa de ISR que se aplicó.
 
 Sale con código 1 si una cifra no coincide. Probado contra una copia con
 IVA_RET cambiado a 0.40: fallaron los 15 casos que había entonces (10 sep 2026,
-antes de separar con y sin RFC). Probado contra una copia con el tramo del
-ISR pintado con la parte del IVA: fallan los 30 casos (9 nov 2026). Correrlo antes
-de cualquier push que toque la calculadora o sus constantes.
+antes de separar con y sin RFC). Probado contra una copia con el talón del
+ISR pintado con la parte del IVA: fallan los 30 casos; y con la leyenda diciendo
+la tasa de la actividad aunque falte el RFC: fallan los 15 casos sin RFC (9 nov
+2026). Correrlo antes de cualquier push que toque la calculadora o sus constantes.
 
 ## css-muerto.js
 
@@ -186,7 +187,7 @@ la raíz del repo:
 
 La configuración vive en `.htmlvalidate.json` y no declara excepciones: la
 única que hubo, `style="width:..."` en la barra de la calculadora, salió el 9
-de noviembre de 2026: el ancho inicial de cada tramo lo pone ahora el CSS. Primera corrida (10 sep 2026): 53
+de noviembre de 2026: el ancho inicial de cada parte lo pone ahora el CSS. Primera corrida (10 sep 2026): 53
 errores (38 botones sin `type`, 11 estilos en línea, iframe sin `title` y con
 atributos obsoletos); ahora 0.
 
