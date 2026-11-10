@@ -2,7 +2,7 @@
 // actividad y de "tiene RFC" en la pagina REAL (Playwright) y compara el
 // recibo que pinta contra cifras calculadas aqui, por separado, con las tasas
 // escritas a mano. Si las dos cuentas coinciden, el error tendria que estar
-// en las dos. Tambien revisa la barra: cada tramo mide la parte que le toca.
+// en las dos. Tambien revisa el talonario: cada parte mide lo que le toca.
 //
 // Uso, desde la raiz del repo:   node tools/calc-goldens.js          (pide playwright)
 // Sale con codigo 1 si alguna cifra no coincide.
@@ -40,8 +40,8 @@ for (const act of ['venta', 'transporte', 'hospedaje']) {
         act, rfc, mensual,
         cobra: money(r.cobra), isr: money(r.isr), ivaR: money(r.ivaR), dep: money(r.dep),
         anual: [money(r.isr * 12), money(r.ivaR * 12)], ctx,
-        // La barra, en porcentaje de lo cobrado: deposito, ISR e IVA.
-        barra: [r.dep, r.isr, r.ivaR].map(n => n / r.cobra * 100),
+        // Las partes del talonario, en porcentaje de lo cobrado: deposito, IVA e ISR.
+        partes: [r.dep, r.ivaR, r.isr].map(n => n / r.cobra * 100),
         umbral: mensual * 12 > 300000,
       });
     }
@@ -68,16 +68,18 @@ for (const act of ['venta', 'transporte', 'hospedaje']) {
       anual: document.getElementById('calcAnual').textContent,
       ctx: document.getElementById('calcContexto').textContent,
       umbral: document.getElementById('calcVerdict').classList.contains('is-advance'),
-      barra: ['rbDep', 'rbIsr', 'rbIva'].map(id => parseFloat(document.getElementById(id).style.flexGrow)),
-      acto: document.getElementById('calcEscena').dataset.act,
+      partes: ['talDep', 'talIva', 'talIsr'].map(id => parseFloat(document.getElementById(id).style.flexGrow)),
+      leyenda: document.getElementById('calcTalones').textContent,
     }));
     const errs = [];
     for (const k of ['cobra', 'isr', 'ivaR', 'dep']) if (got[k] !== c[k]) errs.push(k + ' esperado ' + c[k] + ' pintado ' + got[k]);
     for (const e of c.anual) if (!got.anual.includes(e)) errs.push('anual no contiene ' + e);
     for (const e of c.ctx) if (!got.ctx.includes(e)) errs.push('contexto no contiene ' + e);
     if (got.umbral !== c.umbral) errs.push('umbral esperado ' + c.umbral + ' pintado ' + got.umbral);
-    c.barra.forEach((parte, i) => { if (!(Math.abs(got.barra[i] - parte) <= 0.006)) errs.push('tramo ' + i + ' de la barra: esperado ' + parte.toFixed(2) + ' pintado ' + got.barra[i]); });
-    if (got.acto !== c.act) errs.push('la escena muestra ' + got.acto + ' y la actividad es ' + c.act);
+    c.partes.forEach((parte, i) => { if (!(Math.abs(got.partes[i] - parte) <= 0.006)) errs.push('parte ' + i + ' del talonario: esperada ' + parte.toFixed(2) + ' pintada ' + got.partes[i]); });
+    // La leyenda dice la tasa de ISR que se aplico: la de la actividad, o 20% sin RFC.
+    const tasa = (c.rfc ? ISR[c.act] : SIN_RFC) * 100;
+    if (!got.leyenda.includes('(' + (tasa % 1 === 0 ? tasa.toFixed(0) : tasa.toFixed(1)) + '%)')) errs.push('la leyenda no dice la tasa ' + tasa + '%: ' + got.leyenda);
     if (errs.length) { fallas++; console.log('  x ' + c.act + (c.rfc ? ' con RFC ' : ' sin RFC ') + money(c.mensual) + '/mes: ' + errs.join('; ')); }
   }
   errores.forEach(e => { fallas++; console.log('  x error de pagina: ' + e); });
