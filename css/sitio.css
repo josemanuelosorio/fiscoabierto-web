@@ -876,7 +876,9 @@ footer {
 .footer-mark { white-space: nowrap; }
 @media (max-width: 600px) {
     .footer-copy .sep { display: none; }
-    .footer-mark { display: block; }
+    /* En su propio renglón y con permiso de partirse: en inglés no cabe
+       entera en un teléfono de 320 px y ensanchaba toda la página. */
+    .footer-mark { display: block; white-space: normal; }
 }
 
 /* STATS */
