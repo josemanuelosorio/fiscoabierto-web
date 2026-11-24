@@ -55,6 +55,10 @@
         }
     });
 
+    // La leyenda anuncia la confirmacion parcial solo si algun estado la lleva.
+    const legParcial = document.querySelector('.map-legend .leg-partial');
+    if (legParcial) legParcial.hidden = !Object.keys(HOSPEDAJE).some(function (k) { return HOSPEDAJE[k].r === 'nv'; });
+
     group.querySelectorAll('.mx-st').forEach(function(el) {
         function activate() {
             if (active) active.classList.remove('is-active');

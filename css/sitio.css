@@ -1780,7 +1780,7 @@ a.chain-cite {
     .tal-monto { font-size: 1.6rem; }
 }
 
-/* La ruta de una ley que todavía no se publica. Trazo continuo: ya ocurrió
+/* La ruta de una ley, de la iniciativa a su entrada en vigor. Trazo continuo: ya ocurrió
    o ya es ley. Trazo punteado: falta. El estado de cada paso vive en
    data-estado (hecho, falta, sigue); el tramo que sale de un paso se pinta
    continuo cuando el paso siguiente ya ocurrió, así que al publicarse la ley
@@ -1824,7 +1824,8 @@ a.lif-nombre:focus-visible { outline: 2px solid var(--color-accent); outline-off
 .lif-ley { margin-top: 4px; font-size: 0.74rem; line-height: 1.4; color: var(--color-text-secondary); }
 .lif-a26 { border-color: var(--color-accent); background: var(--color-surface); }
 .lif-a26 .lif-tasa { color: var(--color-accent); }
-.lif-a27 { border-style: dashed; border-color: var(--color-accent); background: none; }
+/* 2027 ya es ley (DOF 13-nov-2026): borde continuo. Sin fondo hasta que entre en vigor. */
+.lif-a27 { border-color: var(--color-accent); background: none; }
 .lif-a27 .lif-tasa { color: var(--color-accent); }
 .lif .blk-foot { margin-top: 20px; }
 /* Los tramos se trazan al entrar en pantalla. */
@@ -1973,6 +1974,8 @@ a.lif-nombre:focus-visible { outline: 2px solid var(--color-accent); outline-off
 .map-legend span { display: inline-flex; align-items: center; gap: 6px; }
 .map-legend i { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
 .map-legend i.sw-partial { background: none; border: 1px dashed #57534E; }
+/* La regla de arriba fija display y le ganaría al atributo hidden. */
+.map-legend .leg-partial[hidden] { display: none; }
 .map-panel {
     margin-top: 18px;
     background: var(--color-surface);
