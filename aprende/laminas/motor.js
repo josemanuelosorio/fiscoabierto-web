@@ -10,6 +10,10 @@
 //      sin modo     corre en vivo dentro de /aprende: se escala a su marco,
 //                   avanza con el reloj, termina en el diagrama completo y
 //                   habla con la página por postMessage.
+//   3. Voz. voz.js (lo genera videos/voz/narrar.py) trae, por lámina e idioma,
+//      cuánto dura la narración y en qué segundos la lámina espera a que la
+//      voz termine un rótulo. Con voz manda el reloj del audio: la lámina no
+//      avanza sola, pinta el cuadro que corresponde al segundo de la voz.
 (function () {
   const tracks = [];
   const E = {
@@ -27,8 +31,13 @@
     // Copia por elemento: finalize() resuelve el `from` en null de cada uno por separado.
     els.forEach(el => tracks.push({ el, t0, dur: Math.max(dur, 0.0001), from: { ...from }, to: { ...to }, ease: E[ease || 'io'] }));
   };
-  // Entrada estándar: sube 14 px y aparece.
-  window.enter = (t, t0, d = 0.6, dy = 14) => at(t, t0, d, { o: 0, dy: dy }, { o: 1, dy: 0 }, 'out');
+  // Entrada estándar: sube 14 px y aparece. Los rótulos (#c1, #c2...) anotan
+  // su segundo de entrada: es lo que la narración necesita para acomodarse.
+  window.ROTULOS = [];
+  window.enter = (t, t0, d = 0.6, dy = 14) => {
+    if (typeof t === 'string' && /^#c\d+$/.test(t)) window.ROTULOS.push({ id: t.slice(1), t0 });
+    at(t, t0, d, { o: 0, dy: dy }, { o: 1, dy: 0 }, 'out');
+  };
   // Salida desde la opacidad que el elemento tenga en t0: partir siempre de 1
   // revivía elementos que ya estaban ocultos.
   window.leave = (t, t0, d = 0.4) => at(t, t0, d, { o: null }, { o: 0 }, 'in');
@@ -116,6 +125,30 @@
     });
   };
 
+  // ---- Voz -----------------------------------------------------------------
+  // esperas: pares [segundo de la lámina, duración]. Al llegar a ese segundo la
+  // lámina se queda quieta esa duración, mientras la voz termina de decir el
+  // rótulo; la animación no se estira ni se acelera.
+  const LAMINA = location.pathname.split('/').pop().replace('.html', '');
+  const VOZ = (window.VOZ && window.VOZ[LAMINA] && window.VOZ[LAMINA][window.LANG]) || null;
+  // Del segundo de la voz al segundo de la lámina.
+  function deVoz(t) {
+    let espera = 0;
+    for (const [en, dura] of VOZ.esperas) {
+      const inicio = en + espera;
+      if (t <= inicio) break;
+      if (t < inicio + dura) return en;
+      espera += dura;
+    }
+    return t - espera;
+  }
+  // Del segundo de la lámina al segundo de la voz en que ya pasaron sus esperas.
+  function aVoz(tau) {
+    let t = tau;
+    for (const [en, dura] of VOZ.esperas) if (en < tau) t += dura;
+    return t;
+  }
+
   // terminar(fin): fin es el segundo en que el diagrama queda completo.
   // En video, el diagrama sale y entra la tarjeta de cierre; en vivo, la
   // lámina se detiene en el diagrama completo, que es también su estado con
@@ -132,6 +165,14 @@
       window.POSTER = fin;
     }
     finalize();
+    // Video narrado (?voz=1): render.js sigue pidiendo cuadros por segundo de
+    // video, y ese segundo es el de la voz. El MP4 dura lo que dura su pista.
+    if (window.VIDEO && VOZ && Q.get('voz') === '1') {
+      const pintar = window.seek;
+      window.seek = t => pintar(deVoz(t));
+      window.DURATION = VOZ.duraVideo;
+      window.POSTER = aVoz(fin + 1.0);
+    }
     seek(0);
     if (!window.VIDEO) vivo();
   };
@@ -143,8 +184,9 @@
     const escala = () => { stage.style.transform = 'scale(' + (window.innerWidth / W) + ')'; };
     escala(); window.addEventListener('resize', escala);
 
-    let t = 0, corre = false, antes = 0, raf = 0;
-    const avisa = tipo => { if (window.parent !== window) window.parent.postMessage({ faLamina: 1, tipo, t, fin: window.FIN, corre }, '*'); };
+    let t = 0, corre = false, antes = 0, raf = 0, oye = false;
+    // voz: segundos que dura la narración de esta lámina en este idioma, o 0 si no tiene.
+    const avisa = tipo => { if (window.parent !== window) window.parent.postMessage({ faLamina: 1, tipo, t, fin: window.FIN, corre, voz: VOZ ? VOZ.dura : 0 }, '*'); };
     // Avanza por reloj con dt acotado: un cuadro lento no salta la animación
     // y una pestaña en segundo plano no la adelanta.
     const paso = ahora => {
@@ -157,14 +199,24 @@
       play() { if (t >= window.FIN) t = 0; corre = true; antes = performance.now(); cancelAnimationFrame(raf); raf = requestAnimationFrame(paso); avisa('estado'); },
       pausa() { corre = false; cancelAnimationFrame(raf); avisa('estado'); },
       final() { corre = false; cancelAnimationFrame(raf); t = window.FIN; seek(t); avisa('fin'); },
+      // Con voz la lámina suelta su reloj: la página le manda el segundo del
+      // audio y ella pinta el cuadro que le toca. No avisa su avance, porque
+      // la barra y el botón los lleva la página con el audio.
+      // Con movimiento reducido la página manda fija: la lámina se queda en el
+      // diagrama completo, pero sabe que hay voz, y un toque es de la voz.
+      voz(d) { if (!VOZ) return; oye = true; corre = false; cancelAnimationFrame(raf); t = d.fija ? window.FIN : Math.min(deVoz(d.t), window.FIN); seek(t); },
+      // Se quita la voz: la lámina vuelve a su reloj y, si se le pide, sigue sola desde donde iba.
+      sinvoz(d) { oye = false; if (d.sigue && t < window.FIN) ctl.play(); },
     };
     // Solo obedece a la pagina que la contiene: otra ventana no puede manejarla.
-    window.addEventListener('message', e => { if (e.source !== window.parent) return; const d = e.data; if (d && d.faControl && ctl[d.faControl]) ctl[d.faControl](); });
+    window.addEventListener('message', e => { if (e.source !== window.parent) return; const d = e.data; if (d && d.faControl && ctl[d.faControl]) ctl[d.faControl](d); });
     // Tocar la lámina pausa o reanuda; tocar un nodo con data-baja lleva al
     // peldaño que lo explica.
     stage.addEventListener('click', e => {
       const n = e.target.closest('[data-baja]');
       if (n) { if (window.parent !== window) window.parent.postMessage({ faLamina: 1, tipo: 'baja', a: n.getAttribute('data-baja') }, '*'); return; }
+      // Con voz, la pausa es del audio: se le avisa a la página.
+      if (oye) { avisa('toque'); return; }
       if (corre) ctl.pausa(); else ctl.play();
     });
     // Con movimiento reducido, o abierta sola fuera de la página, queda en el

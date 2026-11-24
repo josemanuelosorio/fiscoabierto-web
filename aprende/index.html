@@ -120,6 +120,21 @@
         .ap-play[data-estado="play"] .i-play, .ap-play[data-estado="pause"] .i-pause, .ap-play[data-estado="replay"] .i-replay { display: inline; }
         .ap-track { flex: 1; height: 3px; border-radius: 3px; background: var(--color-border); overflow: hidden; }
         .ap-fill { display: block; height: 100%; width: 0; background: var(--color-accent); }
+        /* Voz: apagada mientras no se pida. Solo aparece si la lámina trae narración en el idioma activo.
+           Mismo trazo que el enlace de descarga: texto con su icono, sin caja. Encendida, toma el color
+           de acento y el icono muestra las ondas completas. */
+        .ap-voz {
+            appearance: none; -webkit-appearance: none; cursor: pointer; flex: none;
+            display: inline-flex; align-items: center; gap: 6px; padding: 3px 0; border: 0; background: none;
+            font: inherit; font-size: 0.8rem; font-weight: 500; color: var(--color-text-secondary);
+        }
+        .ap-voz[hidden] { display: none; }
+        .ap-voz svg { width: 15px; height: 15px; fill: currentColor; }
+        .ap-voz .onda { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; opacity: 0.3; }
+        .ap-voz[aria-pressed="true"] { color: var(--color-accent); }
+        .ap-voz[aria-pressed="true"] .onda { opacity: 1; }
+        @media (hover: hover) { .ap-voz:hover { color: var(--color-accent); } }
+        .ap-voz:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
         .ap-dl { flex: none; padding: 3px 0; font-size: 0.8rem; font-weight: 500; color: var(--color-text-secondary); text-decoration: underline; text-underline-offset: 3px; }
         @media (hover: hover) { .ap-dl:hover { color: var(--color-accent); } }
         .ap-dl:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
@@ -237,6 +252,7 @@
         <figcaption class="ap-ctl">
             <button type="button" class="ap-play" aria-label="Reproducir" data-i18n-aria="ap.play" data-estado="play"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="i-play" d="M4 2.5v11l9-5.5z"/><path class="i-pause" d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/><path class="i-replay" d="M8 2.5a5.5 5.5 0 1 1-5.2 3.7l1.4.5A4 4 0 1 0 8 4v2L4.8 3.2 8 .5z"/></svg></button>
             <span class="ap-track" aria-hidden="true"><span class="ap-fill"></span></span>
+            <button type="button" class="ap-voz" aria-pressed="false" hidden><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 6h2.4L8 3v10L4.4 10H2z"/><path class="onda" d="M10.3 5.6a3.4 3.4 0 0 1 0 4.8M12.3 3.8a6 6 0 0 1 0 8.4"/></svg><span data-i18n="ap.listen">Escuchar</span></button>
             <a class="ap-dl" href="videos/deber-de-contribuir-es.mp4" download data-i18n="ap.download">Descargar video</a>
         </figcaption>
     </figure>
@@ -256,6 +272,7 @@
         <figcaption class="ap-ctl">
             <button type="button" class="ap-play" aria-label="Reproducir" data-i18n-aria="ap.play" data-estado="play"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="i-play" d="M4 2.5v11l9-5.5z"/><path class="i-pause" d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/><path class="i-replay" d="M8 2.5a5.5 5.5 0 1 1-5.2 3.7l1.4.5A4 4 0 1 0 8 4v2L4.8 3.2 8 .5z"/></svg></button>
             <span class="ap-track" aria-hidden="true"><span class="ap-fill"></span></span>
+            <button type="button" class="ap-voz" aria-pressed="false" hidden><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 6h2.4L8 3v10L4.4 10H2z"/><path class="onda" d="M10.3 5.6a3.4 3.4 0 0 1 0 4.8M12.3 3.8a6 6 0 0 1 0 8.4"/></svg><span data-i18n="ap.listen">Escuchar</span></button>
             <a class="ap-dl" href="videos/contribuciones-es.mp4" download data-i18n="ap.download">Descargar video</a>
         </figcaption>
     </figure>
@@ -276,6 +293,7 @@
         <figcaption class="ap-ctl">
             <button type="button" class="ap-play" aria-label="Reproducir" data-i18n-aria="ap.play" data-estado="play"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="i-play" d="M4 2.5v11l9-5.5z"/><path class="i-pause" d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/><path class="i-replay" d="M8 2.5a5.5 5.5 0 1 1-5.2 3.7l1.4.5A4 4 0 1 0 8 4v2L4.8 3.2 8 .5z"/></svg></button>
             <span class="ap-track" aria-hidden="true"><span class="ap-fill"></span></span>
+            <button type="button" class="ap-voz" aria-pressed="false" hidden><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 6h2.4L8 3v10L4.4 10H2z"/><path class="onda" d="M10.3 5.6a3.4 3.4 0 0 1 0 4.8M12.3 3.8a6 6 0 0 1 0 8.4"/></svg><span data-i18n="ap.listen">Escuchar</span></button>
             <a class="ap-dl" href="videos/elementos-del-impuesto-es.mp4" download data-i18n="ap.download">Descargar video</a>
         </figcaption>
     </figure>
@@ -297,6 +315,7 @@
         <figcaption class="ap-ctl">
             <button type="button" class="ap-play" aria-label="Reproducir" data-i18n-aria="ap.play" data-estado="play"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="i-play" d="M4 2.5v11l9-5.5z"/><path class="i-pause" d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/><path class="i-replay" d="M8 2.5a5.5 5.5 0 1 1-5.2 3.7l1.4.5A4 4 0 1 0 8 4v2L4.8 3.2 8 .5z"/></svg></button>
             <span class="ap-track" aria-hidden="true"><span class="ap-fill"></span></span>
+            <button type="button" class="ap-voz" aria-pressed="false" hidden><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 6h2.4L8 3v10L4.4 10H2z"/><path class="onda" d="M10.3 5.6a3.4 3.4 0 0 1 0 4.8M12.3 3.8a6 6 0 0 1 0 8.4"/></svg><span data-i18n="ap.listen">Escuchar</span></button>
             <a class="ap-dl" href="videos/nace-la-obligacion-es.mp4" download data-i18n="ap.download">Descargar video</a>
         </figcaption>
     </figure>
@@ -317,6 +336,7 @@
         <figcaption class="ap-ctl">
             <button type="button" class="ap-play" aria-label="Reproducir" data-i18n-aria="ap.play" data-estado="play"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="i-play" d="M4 2.5v11l9-5.5z"/><path class="i-pause" d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/><path class="i-replay" d="M8 2.5a5.5 5.5 0 1 1-5.2 3.7l1.4.5A4 4 0 1 0 8 4v2L4.8 3.2 8 .5z"/></svg></button>
             <span class="ap-track" aria-hidden="true"><span class="ap-fill"></span></span>
+            <button type="button" class="ap-voz" aria-pressed="false" hidden><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 6h2.4L8 3v10L4.4 10H2z"/><path class="onda" d="M10.3 5.6a3.4 3.4 0 0 1 0 4.8M12.3 3.8a6 6 0 0 1 0 8.4"/></svg><span data-i18n="ap.listen">Escuchar</span></button>
             <a class="ap-dl" href="videos/obligaciones-es.mp4" download data-i18n="ap.download">Descargar video</a>
         </figcaption>
     </figure>
@@ -343,6 +363,7 @@
         <figcaption class="ap-ctl">
             <button type="button" class="ap-play" aria-label="Reproducir" data-i18n-aria="ap.play" data-estado="play"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path class="i-play" d="M4 2.5v11l9-5.5z"/><path class="i-pause" d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/><path class="i-replay" d="M8 2.5a5.5 5.5 0 1 1-5.2 3.7l1.4.5A4 4 0 1 0 8 4v2L4.8 3.2 8 .5z"/></svg></button>
             <span class="ap-track" aria-hidden="true"><span class="ap-fill"></span></span>
+            <button type="button" class="ap-voz" aria-pressed="false" hidden><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 6h2.4L8 3v10L4.4 10H2z"/><path class="onda" d="M10.3 5.6a3.4 3.4 0 0 1 0 4.8M12.3 3.8a6 6 0 0 1 0 8.4"/></svg><span data-i18n="ap.listen">Escuchar</span></button>
             <a class="ap-dl" href="videos/derechos-es.mp4" download data-i18n="ap.download">Descargar video</a>
         </figcaption>
     </figure>
@@ -389,6 +410,7 @@ const translations = {
         'ap.lead': 'Seis pasos, de la Constitución a sus derechos como contribuyente. Cada paso toma una pieza del anterior y la abre en sus partes, así que se leen en orden.',
         'ap.steps': 'Pasos',
         'ap.download': 'Descargar video',
+        'ap.listen': 'Escuchar',
         'ap.play': 'Reproducir',
         'ap.pause': 'Pausa',
         'ap.replay': 'Repetir',
@@ -461,6 +483,7 @@ const translations = {
         'ap.lead': 'Six steps, from the Constitution to your rights as a taxpayer. Each step takes one piece of the previous one and breaks it into its parts, so they read in order.',
         'ap.steps': 'Steps',
         'ap.download': 'Download video',
+        'ap.listen': 'Listen',
         'ap.play': 'Play',
         'ap.pause': 'Pause',
         'ap.replay': 'Replay',
@@ -621,6 +644,14 @@ window.faIdioma = { t: t, actual: function () { return currentLanguage; } };
 // quiere (quiere) de lo que la lámina confirma (corre, jugada): una orden de
 // reproducir que llega antes de tiempo queda pendiente y se entrega en 'listo'.
 // Una lámina solo cuenta como vista cuando ella misma avisa que arrancó.
+//
+// Voz. Las láminas arrancan solas y en silencio; un navegador no deja que algo
+// con sonido arranque solo, así que la narración se pide con el botón Escuchar
+// de cada lámina. Al pedirla, la lámina vuelve a empezar y deja de avanzar con
+// su reloj: sigue al audio, que vive aquí porque el toque ocurre en esta
+// página. El audio se descarga hasta ese momento. Solo se oye una lámina a la
+// vez, se calla al salir de pantalla y no vuelve a sonar sola. Con movimiento
+// reducido se oye la voz sobre el diagrama completo, sin animación.
 (function () {
     var I = window.faIdioma;
     var movil = window.matchMedia('(max-width: 600px)');
@@ -630,21 +661,85 @@ window.faIdioma = { t: t, actual: function () { return currentLanguage; } };
             fig: fig, id: fig.dataset.lamina, video: fig.dataset.video,
             frame: fig.querySelector('iframe'), boton: fig.querySelector('.ap-play'),
             barra: fig.querySelector('.ap-fill'), descarga: fig.querySelector('.ap-dl'),
+            voz: fig.querySelector('.ap-voz'), oye: false,
             src: '', lista: false, vista: false, quiere: false, corre: false, fin: false, jugada: false, pausaScroll: false
         };
     });
+    // Una sola pista para toda la página. oyendo es la lámina que tiene la voz puesta.
+    var audio = document.createElement('audio');
+    audio.preload = 'none';
+    var oyendo = null, cuadro = 0;
 
-    function manda(l, orden) { if (l.lista && l.frame.contentWindow) l.frame.contentWindow.postMessage({ faControl: orden }, '*'); }
+    function manda(l, orden, datos) {
+        if (!l.lista || !l.frame.contentWindow) return;
+        var m = datos || {}; m.faControl = orden;
+        l.frame.contentWindow.postMessage(m, '*');
+    }
     // Repetir solo después de verla correr. El diagrama completo sin haberla
     // visto (movimiento reducido) muestra Reproducir, como un póster.
+    // Con voz, el estado es el del audio.
     function pinta(l) {
-        var estado = l.quiere ? 'pause' : (l.fin && l.jugada) ? 'replay' : 'play';
+        var estado = l.oye ? (audio.ended ? 'replay' : audio.paused ? 'play' : 'pause')
+            : l.quiere ? 'pause' : (l.fin && l.jugada) ? 'replay' : 'play';
         l.boton.dataset.estado = estado;
         l.boton.setAttribute('aria-label', I.t(estado === 'pause' ? 'ap.pause' : estado === 'replay' ? 'ap.replay' : 'ap.play'));
+        l.voz.setAttribute('aria-pressed', l.oye ? 'true' : 'false');
     }
     function play(l) { l.quiere = true; l.pausaScroll = false; manda(l, 'play'); pinta(l); }
     function pausa(l, porScroll) { l.quiere = false; l.pausaScroll = porScroll; manda(l, 'pausa'); pinta(l); }
+    // Mientras suena, cada cuadro le dice a la lámina por qué segundo va la voz
+    // y mueve la barra. Con movimiento reducido la lámina no se mueve.
+    function sigue() {
+        var l = oyendo; if (!l) return;
+        if (!reducido.matches) manda(l, 'voz', { t: audio.currentTime });
+        if (audio.duration) l.barra.style.width = (100 * audio.currentTime / audio.duration) + '%';
+        if (!audio.paused && !audio.ended) cuadro = requestAnimationFrame(sigue);
+    }
+    function suena() {
+        var p = audio.play();
+        // Si el navegador no deja sonar, queda en pausa con Reproducir.
+        if (p && p.catch) p.catch(function () { if (oyendo) pinta(oyendo); });
+        cancelAnimationFrame(cuadro); cuadro = requestAnimationFrame(sigue);
+        pinta(oyendo);
+    }
+    function ponVoz(l) {
+        if (oyendo) quitaVoz(oyendo, false);
+        oyendo = l; l.oye = true; l.quiere = false; l.pausaScroll = false; l.jugada = true; l.fin = false;
+        // Con movimiento reducido la lámina no sigue al audio: se queda en el
+        // diagrama completo, avisada de que hay voz para que un toque la pause.
+        if (reducido.matches) manda(l, 'voz', { fija: true });
+        audio.src = 'voz/' + l.id + '-' + I.actual() + '.m4a';
+        suena();
+    }
+    // continua: la lámina sigue sola, en silencio, desde donde iba.
+    function quitaVoz(l, continua) {
+        cancelAnimationFrame(cuadro);
+        oyendo = null; l.oye = false;
+        // Repetir solo si la narración llegó al final; a media lámina queda en Reproducir.
+        l.fin = audio.ended;
+        audio.pause(); audio.removeAttribute('src');
+        manda(l, 'sinvoz', { sigue: continua });
+        pinta(l);
+    }
+    audio.addEventListener('ended', function () {
+        var l = oyendo; if (!l) return;
+        l.barra.style.width = '100%';
+        manda(l, 'final');
+        pinta(l);
+    });
+    // La voz también puede reanudarse por fuera de la página (teclas multimedia,
+    // audífonos, pantalla de bloqueo): al sonar, la lámina vuelve a seguirla.
+    audio.addEventListener('play', function () {
+        if (!oyendo) return;
+        cancelAnimationFrame(cuadro); cuadro = requestAnimationFrame(sigue);
+        pinta(oyendo);
+    });
+    audio.addEventListener('pause', function () { if (oyendo) pinta(oyendo); });
+    // Si el audio no carga, la lámina sigue como antes, sin voz.
+    audio.addEventListener('error', function () { if (oyendo) quitaVoz(oyendo, !reducido.matches); });
+
     function cargar(l) {
+        if (l.oye) quitaVoz(l, false);
         var src = 'laminas/' + l.id + '.html?lang=' + I.actual() + (movil.matches ? '&fmt=m' : '');
         l.descarga.setAttribute('href', 'videos/' + l.video + '-' + I.actual() + (movil.matches ? '-m' : '') + '.mp4');
         if (src !== l.src) { l.src = src; l.lista = false; l.corre = false; l.frame.setAttribute('src', src); }
@@ -657,6 +752,8 @@ window.faIdioma = { t: t, actual: function () { return currentLanguage; } };
         if (!l) return;
         if (d.tipo === 'listo') {
             l.lista = true;
+            // El botón de voz solo existe si esta lámina trae narración en este idioma.
+            l.voz.hidden = !(d.voz > 0);
             // Recién cargada: si había una orden pendiente, arranca. Si no, con
             // movimiento reducido o si ya se vio (cambio de idioma o de
             // formato), queda en el diagrama completo.
@@ -669,7 +766,12 @@ window.faIdioma = { t: t, actual: function () { return currentLanguage; } };
             // Avance de un documento que se está yendo o de la lámina antes de
             // decir 'listo': la página decide en 'listo', no aquí.
             return;
+        } else if (d.tipo === 'toque') {
+            // Tocaron la lámina mientras suena: pausa o reanuda la voz.
+            if (!l.oye) return;
+            if (audio.paused) suena(); else audio.pause();
         } else if (d.tipo === 't') {
+            if (l.oye) return;
             l.barra.style.width = (100 * d.t / d.fin) + '%';
         } else if (d.tipo === 'estado' || d.tipo === 'fin') {
             l.corre = d.corre; l.quiere = d.corre; l.fin = d.tipo === 'fin';
@@ -680,7 +782,19 @@ window.faIdioma = { t: t, actual: function () { return currentLanguage; } };
     });
 
     laminas.forEach(function (l) {
-        l.boton.addEventListener('click', function () { if (l.quiere) pausa(l, false); else play(l); });
+        l.boton.addEventListener('click', function () {
+            if (l.oye) {
+                if (audio.ended) { audio.currentTime = 0; suena(); }
+                else if (audio.paused) suena();
+                else audio.pause();
+                return;
+            }
+            if (l.quiere) pausa(l, false); else play(l);
+        });
+        l.voz.addEventListener('click', function () {
+            if (l.oye) quitaVoz(l, !audio.paused && !audio.ended && !reducido.matches);
+            else ponVoz(l);
+        });
         cargar(l);
     });
 
@@ -691,6 +805,8 @@ window.faIdioma = { t: t, actual: function () { return currentLanguage; } };
             entradas.forEach(function (e) {
                 var l = laminas.filter(function (x) { return x.fig === e.target; })[0];
                 l.vista = e.isIntersecting;
+                // Con voz: se calla al salir de pantalla y no vuelve a sonar sola.
+                if (l.oye) { if (!l.vista && !audio.paused) audio.pause(); return; }
                 if (reducido.matches) return;
                 if (l.vista && !l.quiere && (!l.jugada || l.pausaScroll)) play(l);
                 else if (!l.vista && l.quiere) pausa(l, true);

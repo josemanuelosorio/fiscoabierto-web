@@ -2,7 +2,7 @@
 //
 // Grupos:
 //   node        solo necesitan node: unitarias, arranque, cifras, idioma, CSS
-//               muerto, tuteo
+//               muerto, tuteo, voz de las láminas
 //   navegador   necesitan Playwright (Chromium) o html-validate: calculadora,
 //               idioma en el DOM real y validación HTML
 //   laminas     los controles de las láminas de /aprende (tres minutos)
@@ -28,6 +28,7 @@ const GRUPOS = {
     ['node', 'tools/css-muerto.js'],
     ['node', 'tools/css-muerto.js', 'aprende/index.html'],
     ['node', 'tools/usted.js'],
+    ['node', 'tools/voz.js'],
   ],
   navegador: [
     ['npx', 'html-validate', 'index.html', 'aprende/index.html', ...LAMINAS],

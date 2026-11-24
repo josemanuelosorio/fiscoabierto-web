@@ -228,6 +228,30 @@ variable que se llame como una marca (`.tu`, `tuyo`) también dispara; se
 renombra, porque el chequeo no distingue código de texto dentro de un literal.
 El medidor de estilo de la newsletter, que vive fuera de este repo, usa la misma lista.
 
+## voz.js
+
+Comprueba que la narración de `/aprende` y las láminas vengan de la misma
+corrida. La voz de una lámina son tres piezas: los datos de
+`aprende/laminas/voz.js` (cuánto dura la narración y en qué segundos la lámina
+espera a la voz), el audio de `aprende/voz/` que suena en la página y el MP4
+descargable de `aprende/videos/`. Si se cambia un tiempo de una lámina o se
+vuelve a narrar y falta rehacer una de las tres, la voz y la animación se
+desfasan sin que nada truene.
+
+Por cada lámina e idioma revisa que las esperas vayan en orden, que la
+narración dure lo que la lámina más lo que esperó, que el audio dure lo que
+dicen los datos, y que los dos videos (16:9 y 4:5) traigan pista de sonido y
+duren lo que dicen los datos. También marca un audio que ninguna lámina usa y
+un video con sonido sin narración declarada. Lee la duración en las cajas del
+MP4, sin ffmpeg, así que corre en el CI.
+
+    node tools/voz.js
+
+Sale con código 1 si algo no coincide, y también si ninguna lámina tiene
+narración. Primera corrida (24 nov 2026), con la voz ya narrada y los videos
+todavía sin ella: 96 fallas. Cómo se narra: `videos/README.md` del proyecto,
+fuera de este repo.
+
 ## laminas.js
 
 Prueba los controles de las láminas en vivo de `/aprende` en Chromium con
@@ -243,6 +267,19 @@ esos iframes mucho antes de que entren en pantalla y lo escondía. Safari los
 pide al entrar, y en iPhone y en Safari de Mac salían todas terminadas. Por
 eso la prueba sirve cada lámina cuando su marco ya está en pantalla, 400 ms
 después, como WebKit. Sobre el código anterior al arreglo da 10 FALLAS.
+
+Prueba además la voz (botón Escuchar): que la lámina vuelva a empezar y siga al
+audio, que espere donde `voz.js` dice, que el botón principal y un toque en la
+lámina pausen y reanuden la voz, que se calle al salir de pantalla y no vuelva a
+sonar sola, que solo se oiga una lámina a la vez, que al quitar la voz o al
+fallar el audio la lámina siga sola, que el cambio de idioma la quite, que la
+barra siga a la voz cuando se reanuda por fuera de la página, y que con
+movimiento reducido suene sobre el diagrama completo y un toque la pause sin
+arrancar la animación. Estas dos últimas entraron tras la auditoría del 24 de
+noviembre de 2026: sobre el código anterior dan 3 fallas. El Chromium de
+Playwright no trae el códec AAC, así que el audio se sustituye por un doble con
+reloj propio: se prueba el trato entre la página y la lámina, no la
+decodificación. Que el archivo suene se comprueba a mano en un navegador.
 
 Uso, desde la raíz del repo (necesita Playwright):
 

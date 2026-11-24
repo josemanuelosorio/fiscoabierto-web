@@ -4,7 +4,7 @@ Sitio de Fisco Abierto: herramienta fiscal gratuita de utilidad pública para qu
 
 ## Cómo se hace
 
-El contenido fiscal es mío: qué dice la ley, cada cifra con su artículo y la fecha en que la verifiqué contra la fuente oficial. El código lo escribe un asistente de IA (Claude Code) bajo las pruebas de `tools/`; por eso muchos commits llevan su firma. Las ilustraciones de las láminas se generaron con Gemini.
+El contenido fiscal es mío: qué dice la ley, cada cifra con su artículo y la fecha en que la verifiqué contra la fuente oficial. Las herramientas con las que se construye el sitio están en [Créditos](#créditos).
 
 El historial se limpió el 1 de noviembre de 2026: los correos de los commits pasaron a la dirección privada de GitHub y se quitaron de los mensajes enlaces privados y frases que no describían el cambio. El contenido y las fechas de cada commit no cambiaron.
 
@@ -24,8 +24,9 @@ El historial se limpió el 1 de noviembre de 2026: los correos de los commits pa
 │   └── datos/              # Diccionario ES/EN y tasas del mapa de hospedaje
 ├── aprende/
 │   ├── index.html          # Aprende: seis pasos de principios fiscales, con láminas en vivo
-│   ├── laminas/            # p1 a p6.html, motor.js, lamina.css, const.js, img/ y fuentes/
-│   └── videos/             # Las mismas láminas en MP4 para descargar
+│   ├── laminas/            # p1 a p6.html, motor.js, lamina.css, const.js, voz.js, img/ y fuentes/
+│   ├── voz/                # La narración de cada lámina, en español y en inglés; se descarga al tocar Escuchar
+│   └── videos/             # Las mismas láminas en MP4 para descargar, ya narradas
 ├── videos/                 # Videos de la página principal, con sus portadas
 ├── docs/                   # Bitácoras de mantenimiento y verificación de fuentes
 ├── tools/                  # Chequeos del sitio; el CI los corre en cada push (detalle en tools/README.md)
@@ -38,7 +39,7 @@ El historial se limpió el 1 de noviembre de 2026: los correos de los commits pa
 └── LICENSE-CONTENIDO.txt   # CC BY 4.0, para textos, láminas, ilustraciones y videos
 ```
 
-Los MP4, sus portadas y `aprende/laminas/const.js` salen de un pipeline de render que no vive en este repo; aquí solo se publican. Cada video que se vuelve a subir queda en el historial (hoy la mayor parte de `.git` son MP4), así que antes de subir uno re-renderizado se compara su contenido decodificado con el anterior (`ffmpeg -i video.mp4 -f md5 -`): un render sin cambios trae otros bytes y no se sube. El historial no se reescribe para adelgazarlo, porque `main` es la rama que sirve el sitio.
+Los MP4, sus portadas, el audio de `aprende/voz/` y los archivos `const.js` y `voz.js` de `aprende/laminas/` salen de un pipeline de render que no vive en este repo; aquí solo se publican. Cada video que se vuelve a subir queda en el historial (hoy la mayor parte de `.git` son MP4), así que antes de subir uno re-renderizado se compara su contenido decodificado con el anterior (`ffmpeg -i video.mp4 -f md5 -`): un render sin cambios trae otros bytes y no se sube. El historial no se reescribe para adelgazarlo, porque `main` es la rama que sirve el sitio.
 
 ## Herramientas
 
@@ -51,7 +52,8 @@ Los MP4, sus portadas y `aprende/laminas/const.js` salen de un pipeline de rende
 | `calc-goldens.js` | 30 casos de la calculadora (3 actividades, con y sin RFC, por 5 montos) contra una cuenta hecha aparte: las cifras del recibo, el ancho de cada parte del talonario y la tasa que dice su leyenda. Necesita Playwright. |
 | `css-muerto.js` | Selectores sin clase ni id en el HTML o el JS. |
 | `usted.js` | Tuteo en el texto en español: el sitio habla de usted. |
-| `laminas.js` | Controles de las láminas en un navegador real. Necesita Playwright. |
+| `voz.js` | Que la narración de cada lámina coincida con sus tiempos, su audio y sus videos descargables. |
+| `laminas.js` | Controles de las láminas y del botón Escuchar en un navegador real. Necesita Playwright. |
 
 ## Pruebas
 
@@ -67,7 +69,15 @@ Cada push a `main` publica en GitHub Pages, y GitHub Actions corre los chequeos 
 ## Licencia
 
 - Código (HTML, CSS, JavaScript y `tools/`): MIT, en `LICENSE`.
-- Textos, explicaciones de las cifras, láminas, ilustraciones y videos: CC BY 4.0, en `LICENSE-CONTENIDO.txt`. Puede reutilizarlos citando a Fisco Abierto con un enlace a fiscoabierto.org.
+- Textos, explicaciones de las cifras, láminas, ilustraciones, narración y videos: CC BY 4.0, en `LICENSE-CONTENIDO.txt`. Puede reutilizarlos citando a Fisco Abierto con un enlace a fiscoabierto.org.
 - Las fuentes de `fonts/` (Inter y Source Serif 4, variables) y de `aprende/laminas/fuentes/` (Inter, JetBrains Mono y Source Serif 4) conservan su licencia SIL OFL 1.1, en el `OFL.txt` de cada carpeta. El sitio no pide fuentes a terceros.
 - El nombre, el logo y los favicons de Fisco Abierto no se licencian.
-- Las ilustraciones se generaron con IA; se licencian en la medida en que existan derechos sobre ellas.
+- Las ilustraciones y la narración se generaron con IA; se licencian en la medida en que existan derechos sobre ellas.
+
+## Créditos
+
+- Código: Claude Code (Anthropic), bajo las pruebas de `tools/`. Los commits que escribió llevan la firma `Co-Authored-By`.
+- Ilustraciones: Gemini (Google).
+- Narración de Aprende: Qwen3-TTS (Alibaba Cloud, Apache 2.0). Voz sintética generada en local.
+- Tipografía: Inter, Source Serif 4 y JetBrains Mono (SIL OFL 1.1).
+- Pruebas: Playwright y html-validate.

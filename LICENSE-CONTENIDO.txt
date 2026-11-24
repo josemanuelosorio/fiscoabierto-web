@@ -1,13 +1,13 @@
-Textos, explicaciones de las cifras, láminas, ilustraciones y videos de
-fiscoabierto.org: Copyright (c) 2026 José Osorio, bajo la licencia
+Textos, explicaciones de las cifras, láminas, ilustraciones, narración y
+videos de fiscoabierto.org: Copyright (c) 2026 José Osorio, bajo la licencia
 Creative Commons Atribución 4.0 Internacional (CC BY 4.0).
 Resumen: https://creativecommons.org/licenses/by/4.0/deed.es
 
 Atribución sugerida: «Fisco Abierto, fiscoabierto.org, CC BY 4.0».
 
 No se licencian el nombre, el logo ni los favicons de Fisco Abierto. Las
-ilustraciones se generaron con IA y se licencian en la medida en que existan
-derechos sobre ellas. El código se rige por LICENSE (MIT).
+ilustraciones y la narración se generaron con IA y se licencian en la medida
+en que existan derechos sobre ellas. El código se rige por LICENSE (MIT).
 
 Texto legal oficial, tal como lo publica Creative Commons:
 
