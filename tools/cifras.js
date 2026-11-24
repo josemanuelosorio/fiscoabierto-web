@@ -115,13 +115,19 @@ if (st) {
   // cada estado; con JS las pinta el dato. Son dos copias del mismo hecho y
   // deben decir lo mismo: San Luis Potosi estuvo en 3% en una y 4% en la otra.
   let pintados = 0, mapaDif = 0;
-  for (const m of html.matchAll(/<path class="mx-st b(\d)[^"]*" data-st="(\w+)"[^>]*aria-label="([^"]+)"/g)) {
+  for (const m of html.matchAll(/<path class="mx-st b(\d)([^"]*)" data-st="(\w+)"[^>]*aria-label="([^"]+)"/g)) {
     pintados++;
-    const e = ST[m[2]];
+    const e = ST[m[3]];
     const esperado = e ? `${e.n}: ${e.t % 1 === 0 ? e.t.toFixed(0) : e.t}%` : '(estado sin dato)';
-    if (!e || String(e.b) !== m[1] || m[3] !== esperado) {
+    if (!e || String(e.b) !== m[1] || m[4] !== esperado) {
       mapaDif++;
-      out.push(`- DIVERGE ${m[2]}: el HTML dice b${m[1]} y "${m[3]}"; el dato dice b${e ? e.b : '?'} y "${esperado}"`);
+      out.push(`- DIVERGE ${m[3]}: el HTML dice b${m[1]} y "${m[4]}"; el dato dice b${e ? e.b : '?'} y "${esperado}"`);
+    }
+    // El borde punteado (confirmacion parcial) tambien vive dos veces.
+    const punteadoHtml = /\bis-partial\b/.test(m[2]), punteadoDato = !!e && (e.r === 'nv' || e.c === 'p');
+    if (punteadoHtml !== punteadoDato) {
+      mapaDif++;
+      out.push(`- DIVERGE ${m[3]}: borde punteado ${punteadoHtml ? 'si' : 'no'} en el HTML y ${punteadoDato ? 'si' : 'no'} en el dato`);
     }
   }
   // Si el HTML no trae los mismos estados que el dato, la comparacion no vale.

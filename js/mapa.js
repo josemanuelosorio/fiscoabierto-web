@@ -50,14 +50,14 @@
     group.querySelectorAll('.mx-st').forEach(function(el) {
         const d = HOSPEDAJE[el.getAttribute('data-st')];
         if (d) {
-            el.setAttribute('class', 'mx-st b' + d.b + (d.r === 'nv' ? ' is-partial' : ''));
+            el.setAttribute('class', 'mx-st b' + d.b + (d.r === 'nv' || d.c === 'p' ? ' is-partial' : ''));
             el.setAttribute('aria-label', d.n + ': ' + fmtPct(d.t));
         }
     });
 
     // La leyenda anuncia la confirmacion parcial solo si algun estado la lleva.
     const legParcial = document.querySelector('.map-legend .leg-partial');
-    if (legParcial) legParcial.hidden = !Object.keys(HOSPEDAJE).some(function (k) { return HOSPEDAJE[k].r === 'nv'; });
+    if (legParcial) legParcial.hidden = !Object.keys(HOSPEDAJE).some(function (k) { return HOSPEDAJE[k].r === 'nv' || HOSPEDAJE[k].c === 'p'; });
 
     group.querySelectorAll('.mx-st').forEach(function(el) {
         function activate() {

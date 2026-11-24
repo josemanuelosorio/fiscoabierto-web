@@ -29,7 +29,10 @@ Pruebas de la lógica que no necesita navegador, con el ejecutor que trae node
 (`node:test`): las fechas límite de `js/plazos.js` (día 17 y 30 de abril,
 corridas al siguiente día hábil según el art. 12 CFF) y el recibo de
 `js/retencion.js` (con y sin RFC, el umbral del 113-B y las partes de lo
-cobrado que pinta el talonario) y la evaluación de
+cobrado que pinta el talonario), el mapa del hospedaje (cada estado declara
+en el campo `c` si su ley se confirmó en el texto vigente, y el que queda en
+parcial lo dice en su nota en los dos idiomas; sobre los datos publicados el 24
+de noviembre de 2026, sin ese campo, falla) y la evaluación de
 `js/evaluacion.js`: los umbrales de exposición en su borde exacto, el pago
 definitivo del 113-B, el orden de los pasos y que toda clave que devuelve exista
 en ES y en EN y se alcance con alguna respuesta. Las cifras esperadas
@@ -100,9 +103,11 @@ rutina de mantenimiento, no la memoria de nadie.
 En la sección del mapa compara además el respaldo sin JavaScript (la cubeta de
 color y la tasa escritas en cada `<path>` del HTML) contra `js/datos/hospedaje.js`,
 porque son dos copias del mismo hecho: con JavaScript manda el dato y sin él
-manda el HTML. Sale con código 1 si un estado diverge o si el HTML no pinta los
-mismos estados que el dato. Primera corrida (24 nov 2026): una divergencia, San
-Luis Potosí en 3% en el HTML y 4% en el dato.
+manda el HTML. Compara también el borde punteado de la confirmación parcial. Sale con código
+1 si un estado diverge o si el HTML pinta un número de estados distinto del que
+tiene el dato; no detecta un estado repetido junto con otro omitido. Primera
+corrida (24 nov 2026): una divergencia, San Luis Potosí en 3% en el HTML y 4%
+en el dato.
 
 La comparación toma el contenido de cada elemento hasta su propio cierre, contando las etiquetas anidadas del mismo nombre; antes se cortaba en el primer cierre de cualquier etiqueta, y un `<a>` dentro de un `<p>` daba divergencias falsas. Con `node tools/cifras.js aprende/index.html` hace lo mismo sobre la página Aprende.
 

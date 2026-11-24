@@ -102,6 +102,29 @@ test('partes de lo cobrado: depósito, ISR e IVA suman el total', () => {
 });
 
 // ---- Diagnóstico -----------------------------------------------------------
+// Mapa del hospedaje. El sitio no puede dar por confirmada la ley de un
+// estado sin que el dato lo declare: el 24 de noviembre de 2026 se publicó el
+// sello «verificado» sobre nueve estados cuyo texto no se había confirmado
+// como el más reciente. Desde entonces cada estado lleva el campo c, y el
+// que queda en parcial lo dice en su nota, en los dos idiomas.
+const HOSPEDAJE = require('../js/datos/hospedaje.js');
+
+test('mapa: cada estado declara si su ley se confirmó en el texto vigente, y el que no, lo dice', () => {
+  const claves = Object.keys(HOSPEDAJE);
+  assert.equal(claves.length, 32);
+  for (const k of claves) {
+    const e = HOSPEDAJE[k];
+    assert.ok(e.c === 'v' || e.c === 'p', k + ': falta c (v = confirmado en el texto vigente, p = parcial)');
+    const dice = /No pudimos confirmar/.test(e.nota), says = /We could not confirm/.test(e.nota_en);
+    if (e.c === 'p') {
+      assert.ok(dice, k + ': la nota no dice que la vigencia quedó sin confirmar');
+      assert.ok(says, k + ': la nota en inglés no lo dice');
+    } else {
+      assert.ok(!dice && !says, k + ': la nota dice sin confirmar y el dato dice confirmado');
+    }
+  }
+});
+
 const evaluarDiagnostico = require('../js/evaluacion.js');
 const translations = require('../js/datos/traducciones.js');
 const resp = (categorias, ingreso, fiscal, factura) =>
