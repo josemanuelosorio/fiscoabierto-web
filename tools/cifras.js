@@ -111,6 +111,24 @@ if (st) {
   out.push(``);
   out.push(`Confirmacion: ${Object.entries(conteo).map(([k, v]) => `${R[k] || k} ${v}`).join(' · ')}.`);
   out.push(``);
+  // Para quien navega sin JS, el HTML trae la cubeta de color y la tasa de
+  // cada estado; con JS las pinta el dato. Son dos copias del mismo hecho y
+  // deben decir lo mismo: San Luis Potosi estuvo en 3% en una y 4% en la otra.
+  let pintados = 0, mapaDif = 0;
+  for (const m of html.matchAll(/<path class="mx-st b(\d)[^"]*" data-st="(\w+)"[^>]*aria-label="([^"]+)"/g)) {
+    pintados++;
+    const e = ST[m[2]];
+    const esperado = e ? `${e.n}: ${e.t % 1 === 0 ? e.t.toFixed(0) : e.t}%` : '(estado sin dato)';
+    if (!e || String(e.b) !== m[1] || m[3] !== esperado) {
+      mapaDif++;
+      out.push(`- DIVERGE ${m[2]}: el HTML dice b${m[1]} y "${m[3]}"; el dato dice b${e ? e.b : '?'} y "${esperado}"`);
+    }
+  }
+  // Si el HTML no trae los mismos estados que el dato, la comparacion no vale.
+  if (pintados !== Object.keys(ST).length) { mapaDif++; out.push(`- DIVERGE: el HTML pinta ${pintados} estados y el dato tiene ${Object.keys(ST).length}`); }
+  out.push(`Respaldo sin JS del mapa contra los datos: ${pintados} estados comparados; divergencias: ${mapaDif}.`);
+  out.push(``);
+  if (mapaDif) process.exitCode = 1;
 }
 
 // 4. Toda linea del archivo que afirma algo con cita legal (textos ES, JS del

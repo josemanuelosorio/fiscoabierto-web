@@ -97,6 +97,13 @@ banda, calculadora y mapa; el sitio la muestra como "Verificado contra la ley
 el ...") y marca VENCIDO el que pase de 90 días: ese es el selector de la
 rutina de mantenimiento, no la memoria de nadie.
 
+En la sección del mapa compara además el respaldo sin JavaScript (la cubeta de
+color y la tasa escritas en cada `<path>` del HTML) contra `js/datos/hospedaje.js`,
+porque son dos copias del mismo hecho: con JavaScript manda el dato y sin él
+manda el HTML. Sale con código 1 si un estado diverge o si el HTML no pinta los
+mismos estados que el dato. Primera corrida (24 nov 2026): una divergencia, San
+Luis Potosí en 3% en el HTML y 4% en el dato.
+
 La comparación toma el contenido de cada elemento hasta su propio cierre, contando las etiquetas anidadas del mismo nombre; antes se cortaba en el primer cierre de cualquier etiqueta, y un `<a>` dentro de un `<p>` daba divergencias falsas. Con `node tools/cifras.js aprende/index.html` hace lo mismo sobre la página Aprende.
 
 No valida contra la ley: enumera. Es la lista de trabajo cuando cambia una
