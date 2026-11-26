@@ -27,6 +27,7 @@ El historial se limpió el 1 de noviembre de 2026: los correos de los commits pa
 │   ├── laminas/            # p1 a p6.html, motor.js, lamina.css, const.js, voz.js, img/ y fuentes/
 │   ├── voz/                # La narración de cada lámina, en español y en inglés; se descarga al tocar Escuchar
 │   └── videos/             # Las mismas láminas en MP4 para descargar, ya narradas
+├── portada/                # La serie de la portada en MP4, para el iPhone, y su sello
 ├── videos/                 # Videos de la página principal, con sus portadas
 ├── docs/                   # Bitácoras de mantenimiento y verificación de fuentes
 ├── tools/                  # Chequeos del sitio; el CI los corre en cada push (detalle en tools/README.md)

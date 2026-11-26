@@ -234,7 +234,7 @@ nav.cta-on .nav-cta {
 .serie-dia .serie-cita.on { opacity: 1; }
 /* El video del iPhone se monta encima de la serie, que hace de cartel
    mientras llega. Sin controles: Safari no debe pintar ni su botón. */
-.serie-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #131212; opacity: 0; transition: opacity 0.25s; pointer-events: none; }
+.serie-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: left center; background: #131212; opacity: 0; transition: opacity 0.25s; pointer-events: none; }
 .serie-video.listo { opacity: 1; }
 .serie-video::-webkit-media-controls,
 .serie-video::-webkit-media-controls-panel,

@@ -2,7 +2,7 @@
 // tools/render-portada.js, que la guarda al renderizar, y tools/unitarias.js,
 // que avisa cuando el video ya no corresponde a la serie en vivo.
 // Entran el script de la serie, el cálculo de retención y los textos de la
-// serie y del titular; no entra el CSS, así que un cambio de estilo de la serie
+// serie (las claves serie.*); no entran el titular ni el CSS, así que un cambio de estilo de la serie
 // pide volver a renderizar a mano.
 const fs = require('fs');
 const path = require('path');
