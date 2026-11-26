@@ -125,6 +125,37 @@ test('mapa: cada estado declara si su ley se confirmó en el texto vigente, y el
   }
 });
 
+// Portada. La serie arma sus claves de texto con el nombre de cada escena, así
+// que una clave que falte no truena: se vería su nombre en pantalla. Y el video
+// del iPhone es una copia renderizada de la serie: si la serie cambia y el
+// video no se vuelve a hacer, el teléfono y la computadora dirían cosas distintas.
+const fs = require('fs');
+const path = require('path');
+const selloPortada = require('./sello-portada');
+const textos = require('../js/datos/traducciones.js');
+
+test('portada: cada texto que pide la serie existe en español y en inglés', () => {
+  const claves = ['hero.title', 'hero.description', 'hero.cta', 'serie.cobra', 'serie.isr', 'serie.ivaMitad', 'serie.ivaTodo', 'serie.dep', 'serie.dia.t', 'serie.dia.n', 'serie.dia.c'];
+  for (const c of ['venta', 'sinRfc', 'hospedaje']) claves.push('serie.caso.' + c, 'serie.cita.' + c);
+  for (const l of ['transporte', 'venta', 'hospedaje']) claves.push('serie.ley.cita.' + l, 'serie.ley.claro.' + l);
+  for (const k of claves) {
+    assert.ok(textos.es[k], 'falta en ES: ' + k);
+    assert.ok(textos.en[k], 'falta en EN: ' + k);
+  }
+  // Y al revés: ninguna clave de la serie queda sin usar.
+  assert.deepEqual(Object.keys(textos.es).filter((k) => k.startsWith('serie.') && !claves.includes(k)), []);
+});
+
+test('portada: el video del iPhone corresponde a la serie en vivo y no pesa de más', () => {
+  const sello = JSON.parse(fs.readFileSync(path.join(__dirname, '../portada/serie.json'), 'utf8'));
+  assert.equal(sello.entradas, selloPortada(), 'la serie cambió después del último render: correr node tools/render-portada.js');
+  for (const lang of ['es', 'en']) {
+    const bytes = fs.statSync(path.join(__dirname, '../portada/serie-' + lang + '.mp4')).size;
+    assert.equal(bytes, sello.archivos[lang].bytes, 'serie-' + lang + '.mp4 no es el archivo que anota el sello');
+    assert.ok(bytes <= 1.5 * 1024 * 1024, 'serie-' + lang + '.mp4 pasa de 1.5 MiB: ' + bytes);
+  }
+});
+
 const evaluarDiagnostico = require('../js/evaluacion.js');
 const translations = require('../js/datos/traducciones.js');
 const resp = (categorias, ingreso, fiscal, factura) =>

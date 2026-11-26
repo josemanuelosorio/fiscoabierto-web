@@ -170,43 +170,94 @@ nav.cta-on .nav-cta {
     min-height: calc(100vh - 73px);
     display: flex;
     align-items: center;
-    text-align: center;
     background: radial-gradient(ellipse at 50% -20%, rgba(15, 118, 110, 0.22), transparent 60%), #131212;
     overflow: hidden;
 }
-/* La mitad de particulas en telefono. js/hero.js lo lee de aqui para que el
-   corte de pantalla viva en un solo lugar. */
-.hero { --hero-particulas: 60; }
-@media (max-width: 760px) { .hero { --hero-particulas: 30; } }
-.hero canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
+/* Dos columnas: el titular a la izquierda y la serie a la derecha. La portada
+   usa un contenedor más ancho que el resto de la página. */
+.container.hero-dos {
     width: 100%;
-    height: 100%;
-    pointer-events: none;
-    will-change: transform;
+    max-width: 1120px;
+    display: grid;
+    grid-template-columns: minmax(0, 24rem) minmax(0, 34rem);
+    gap: 72px;
+    align-items: center;
+    justify-content: center;
 }
-.hero .container {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-}
+.hero-titular { display: grid; gap: 18px; justify-items: start; }
 .hero h1 {
-    font-size: 2.4rem;
+    font-size: 2.6rem;
     font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 20px;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
     color: #FFFFFF;
+    text-wrap: balance;
 }
-.hero h1 .hero-main { color: #FFFFFF; }
-.hero h1 .hero-accent { color: #5EEAD4; }
-.hero p {
-    font-size: 1.1rem;
+.hero-titular p {
+    font-size: 1.08rem;
+    line-height: 1.5;
     color: rgba(255,255,255,0.75);
-    max-width: 560px;
-    margin: 0 auto 36px;
 }
+
+/* LA SERIE: una escena a la vez, sin caja, directo sobre el fondo. El alto es
+   fijo para que el titular no brinque al cambiar de escena. */
+.hero-serie { position: relative; }
+.serie { min-height: 400px; display: flex; flex-direction: column; justify-content: center; color: #FFFFFF; transition: opacity 0.4s; }
+.serie.sale { opacity: 0; }
+.serie-cita { font-size: 0.8rem; line-height: 1.4; color: rgba(255,255,255,0.5); }
+.serie-caso { font-family: var(--font-serif); font-size: 1.2rem; line-height: 1.4; color: rgba(255,255,255,0.82); margin-bottom: 20px; }
+/* La cuenta: la resta en columna. */
+.serie-col { display: grid; grid-template-columns: max-content 1fr; column-gap: 20px; row-gap: 4px; align-items: baseline; }
+.serie-col .n { font-size: 2.9rem; font-weight: 700; line-height: 1.12; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; text-align: right; }
+.serie-col .t { font-size: 1rem; color: rgba(255,255,255,0.66); }
+.serie-col .n, .serie-col .t { opacity: 0; transition: opacity 0.5s; }
+.serie-col .on { opacity: 1; }
+.serie-col .raya { grid-column: 1 / -1; height: 2px; background: #FFFFFF; margin: 8px 0 6px; transform: scaleX(0); transform-origin: left; transition: transform 0.6s ease-out; }
+.serie-col .raya.on { transform: scaleX(1); }
+.serie-col .total { color: #5EEAD4; }
+.serie-cuenta .serie-cita { margin-top: 18px; }
+/* La ley, traducida: la ley en serif; su traducción, en la letra del sitio. */
+.serie-ley .serie-cita { margin-bottom: 14px; }
+.serie-ley-texto { font-family: var(--font-serif); font-size: 1.42rem; line-height: 1.55; transition: opacity 0.7s; }
+.serie-ley-texto mark { color: inherit; background: linear-gradient(rgba(94,234,212,0.34), rgba(94,234,212,0.34)) no-repeat 0 86% / 0% 40%; transition: background-size 0.75s ease-out; }
+.serie-ley-texto mark.on { background-size: 100% 40%; }
+.serie-ley-claro { margin-top: 22px; font-size: 1.5rem; font-weight: 600; line-height: 1.32; color: #5EEAD4; opacity: 0; transform: translateY(8px); transition: opacity 0.6s, transform 0.6s; }
+.serie-ley.traducida .serie-ley-texto { opacity: 0.3; }
+.serie-ley.traducida .serie-ley-claro { opacity: 1; transform: none; }
+/* El día 17: los 31 días de un mes cualquiera. */
+.serie-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px 0; max-width: 420px; font-size: 1rem; font-variant-numeric: tabular-nums; text-align: center; }
+.serie-cal .n { padding: 6px 0; color: rgba(255,255,255,0.72); border-radius: 8px; transition: background 0.45s, color 0.45s; }
+.serie-cal .n.on { background: #5EEAD4; color: #042f2e; font-weight: 700; }
+.serie-dia-nota { margin-top: 20px; font-size: 1.4rem; font-weight: 600; line-height: 1.3; color: #5EEAD4; opacity: 0; transition: opacity 0.6s; }
+.serie-dia-nota.on { opacity: 1; }
+.serie-dia .serie-cita { margin-top: 10px; opacity: 0; transition: opacity 0.6s; }
+.serie-dia .serie-cita.on { opacity: 1; }
+/* El video del iPhone se monta encima de la serie, que hace de cartel
+   mientras llega. Sin controles: Safari no debe pintar ni su botón. */
+.serie-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #131212; opacity: 0; transition: opacity 0.25s; pointer-events: none; }
+.serie-video.listo { opacity: 1; }
+.serie-video::-webkit-media-controls,
+.serie-video::-webkit-media-controls-panel,
+.serie-video::-webkit-media-controls-overlay-play-button,
+.serie-video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
+/* Con movimiento reducido la serie sigue pasando de escena, sin fundidos ni
+   desplazamientos: cada paso cambia de golpe. */
+@media (prefers-reduced-motion: reduce) {
+    .serie, .serie *, .serie-video { transition: none !important; }
+}
+@media (max-width: 900px) {
+    .container.hero-dos { grid-template-columns: minmax(0, 1fr); gap: 34px; }
+    .hero h1 { font-size: 1.9rem; }
+    .hero-titular p { font-size: 1rem; }
+    .serie { min-height: 420px; }
+    .serie-col { column-gap: 14px; }
+    .serie-col .n { font-size: 2.2rem; }
+    .serie-col .t { font-size: 0.9rem; }
+    .serie-ley-texto { font-size: 1.16rem; }
+    .serie-ley-claro { font-size: 1.24rem; }
+    .serie-dia-nota { font-size: 1.18rem; }
+}
+@media (max-width: 350px) { .serie { min-height: 444px; } }
 .hero-cta {
     display: inline-block;
     background: #FFFFFF;
@@ -2006,8 +2057,7 @@ a.lif-nombre:focus-visible { outline: 2px solid var(--color-accent); outline-off
 
 /* RESPONSIVE */
 @media (max-width: 600px) {
-    .hero h1 { font-size: 1.7rem; }
-    .hero { padding: 60px 0 40px; }
+    .hero { padding: 40px 0 44px; }
     nav { padding: 7px 0; }
     nav .container { flex-wrap: wrap; row-gap: 3px; }   /* los enlaces ya traen 4 px de relleno arriba y abajo */
     .logo { gap: 7px; }

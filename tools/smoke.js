@@ -62,7 +62,7 @@ const win = {
   MutationObserver: function(){ this.observe = function(){}; this.disconnect = function(){}; }
 };
 // Lo que el navegador da y node no pone en un contexto nuevo.
-Object.assign(win, { console, URLSearchParams, URL, CustomEvent, Event, performance, setTimeout: () => 0, clearTimeout(){} });
+Object.assign(win, { console, URLSearchParams, URL, CustomEvent, Event, performance, setTimeout: () => 0, clearTimeout(){}, setInterval: () => 0, clearInterval(){} });
 win.window = win; win.self = win; win.document = doc;
 return vm.createContext(win);
 }

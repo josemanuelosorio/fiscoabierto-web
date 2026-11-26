@@ -35,6 +35,7 @@ const GRUPOS = {
     ['node', 'tools/calc-goldens.js'],
     ['node', 'tools/i18n.js', '--dom'],
     ['node', 'tools/i18n.js', 'aprende/index.html', '--dom'],
+    ['node', 'tools/portada.js'],
   ],
   laminas: [
     ['node', 'tools/laminas.js'],

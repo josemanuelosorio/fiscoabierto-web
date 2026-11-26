@@ -1,0 +1,24 @@
+{
+  "entradas": "49fae50fba03de50786e81387bfe56860b3a55a2df502c712f0fa878a39c54b3",
+  "fps": 30,
+  "archivos": {
+    "es": {
+      "escala": 2,
+      "crf": 33,
+      "bytes": 912076,
+      "ancho": 684,
+      "alto": 840,
+      "segundos": 65.8,
+      "fotogramas": 1974
+    },
+    "en": {
+      "escala": 2,
+      "crf": 33,
+      "bytes": 942046,
+      "ancho": 684,
+      "alto": 840,
+      "segundos": 65.8,
+      "fotogramas": 1974
+    }
+  }
+}

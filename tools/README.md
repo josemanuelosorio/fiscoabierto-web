@@ -29,7 +29,9 @@ Pruebas de la lógica que no necesita navegador, con el ejecutor que trae node
 (`node:test`): las fechas límite de `js/plazos.js` (día 17 y 30 de abril,
 corridas al siguiente día hábil según el art. 12 CFF) y el recibo de
 `js/retencion.js` (con y sin RFC, el umbral del 113-B y las partes de lo
-cobrado que pinta el talonario), el mapa del hospedaje (cada estado declara
+cobrado que pinta el talonario), la portada (cada texto que pide la serie
+existe en los dos idiomas, y el video del iPhone corresponde a la serie y no
+pasa de 1.5 MiB), el mapa del hospedaje (cada estado declara
 en el campo `c` si su ley se confirmó en el texto vigente, y el que queda en
 parcial lo dice en su nota en los dos idiomas; sobre los datos publicados el 24
 de noviembre de 2026, sin ese campo, falla) y la evaluación de
@@ -251,6 +253,50 @@ Sale con código 1 si algo no coincide, y también si ninguna lámina tiene
 narración. Primera corrida (24 nov 2026), con la voz ya narrada y los videos
 todavía sin ella: 96 fallas. Cómo se narra: `videos/README.md` del proyecto,
 fuera de este repo.
+
+## portada.js
+
+Prueba la serie de la portada en Chromium con Playwright: que la serie en vivo
+recorra sus escenas y vuelva a la primera (con reloj falso, sin esperar el
+minuto real); que con `?demo=video` se monte un video mudo, en bucle, sin
+controles, sin foco y sin responder al toque, y que sea el del idioma de la
+página; que mientras el video no arranca la serie en vivo corra debajo; que un
+video que falla al cargar se quite y la serie tome el relevo; que en escritorio
+y con `?demo=js` no se monte video; y que con movimiento reducido la serie
+avance sin transiciones.
+
+Existe porque el video del iPhone no se puede dar por bueno mirando la
+computadora. El Chromium de Playwright no trae H.264 y no reproduce el MP4, así
+que la prueba no dice que el video se vea: dice que, pase lo que pase con el
+video, la portada no se queda en blanco ni quieta. Que el MP4 arranca solo en un
+iPhone se revisa en el teléfono.
+
+    node tools/portada.js
+
+Sale con código 1 si algo falla. Corre en `npm run test:navegador`.
+
+## render-portada.js y sello-portada.js
+
+`render-portada.js` hace el video de la portada para el iPhone
+(`portada/serie-es.mp4` y `portada/serie-en.mp4`): corre la serie real con un
+reloj falso, fija cada transición CSS en su instante, fotografía la caja de la
+serie cuadro por cuadro y une los cuadros con ffmpeg. Graba una vuelta completa
+para que el video repita sin salto. Es el método de la portada de Anonmydoc.
+
+    node tools/render-portada.js            # los dos idiomas, unos minutos
+    node tools/render-portada.js --medir    # alto de cada escena por ancho e idioma
+
+No corre en las pruebas ni en el CI: pide ffmpeg y tarda. Hay que correrlo cuando
+cambian `js/portada.js`, `js/retencion.js`, los textos `serie.*` o los estilos
+de la serie. `sello-portada.js` calcula una huella de los tres primeros;
+el render la guarda en `portada/serie.json` y `unitarias.js` falla si la huella
+ya no coincide o si un video pasa de 1.5 MiB. El CSS no entra en la huella: un
+cambio de estilo de la serie pide renderizar a mano.
+
+`--medir` existe porque la caja de la serie tiene alto fijo: si una escena mide
+más que la caja, el titular brinca en computadora y el video queda cortado en el
+teléfono. Primera medición (25 nov 2026): la escena más alta medía 441 px a 320
+de ancho en inglés, y la caja 360; se subió a 420, y a 444 por debajo de 350 px.
 
 ## laminas.js
 
