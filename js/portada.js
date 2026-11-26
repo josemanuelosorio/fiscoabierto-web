@@ -192,6 +192,15 @@
         iniciar();
     }
     function fuenteVideo() { return 'portada/serie-' + (currentLanguage === 'en' ? 'en' : 'es') + '.mp4'; }
+    // Pide reproducir. Cada pedido lleva su número: si el navegador rechaza uno
+    // que ya fue relevado por otro (pasa al cambiarle la fuente al video cuando
+    // todavía no arrancaba), ese rechazo no cuenta y el video se conserva.
+    let pedido = 0;
+    function reproducir() {
+        const mio = ++pedido;
+        const p = video.play();
+        if (p && p.catch) p.catch(function () { if (mio === pedido) abandonarVideo(); });
+    }
 
     function montarVideo() {
         esperandoVideo = true;
@@ -218,8 +227,7 @@
         v.src = fuenteVideo();
         serie.parentNode.appendChild(v);
         video = v;
-        const p = v.play();
-        if (p && p.catch) p.catch(abandonarVideo);
+        reproducir();
     }
     if (usarVideo) montarVideo();
 
@@ -234,7 +242,7 @@
     setInterval(function () {
         if (document.hidden || !aLaVista()) { quieto = 0; return; }
         if (videoActivo) {
-            if (video.paused) video.play().catch(abandonarVideo);
+            if (video.paused) reproducir();
             quieto = Math.abs(video.currentTime - tVideo) < 0.05 ? quieto + 1 : 0;
             tVideo = video.currentTime;
             if (quieto >= 4) abandonarVideo(); // 4 s sin avanzar un fotograma: ya no es confiable
@@ -255,13 +263,14 @@
     }
     document.addEventListener('visibilitychange', function () {
         if (document.hidden) return detener();
-        if (videoActivo) video.play().catch(abandonarVideo);
+        if (videoActivo) reproducir();
         iniciar();
     });
-    // Al cambiar de idioma la escena en curso se vuelve a pintar en el idioma
-    // nuevo, y el video cambia al suyo.
+    // Al cambiar de idioma el video cambia al suyo y, si la serie en vivo está
+    // corriendo (no hay video, o todavía no arranca), la escena en curso se
+    // vuelve a pintar en el idioma nuevo.
     document.addEventListener('idioma', function () {
-        if (video) { video.src = fuenteVideo(); const p = video.play(); if (p && p.catch) p.catch(abandonarVideo); return; }
+        if (video) { video.src = fuenteVideo(); reproducir(); }
         if (corriendo) { detener(); iniciar(); }
     });
 

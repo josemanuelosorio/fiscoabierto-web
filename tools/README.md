@@ -262,14 +262,18 @@ minuto real); que con `?demo=video` se monte un video mudo, en bucle, sin
 controles, sin foco y sin responder al toque, y que sea el del idioma de la
 página; que mientras el video no arranca la serie en vivo corra debajo; que un
 video que falla al cargar se quite y la serie tome el relevo; que en escritorio
-y con `?demo=js` no se monte video; y que con movimiento reducido la serie
-avance sin transiciones.
+y con `?demo=js` no se monte video; que con movimiento reducido la serie
+avance sin transiciones; que cuando el video arranca la serie en vivo se
+detenga y el video quede a la vista; que al cambiar de idioma el video pase al
+suyo; y que cambiar de idioma con el video todavía sin arrancar repinte la
+serie en vivo en el idioma nuevo sin descartar el video.
 
 Existe porque el video del iPhone no se puede dar por bueno mirando la
-computadora. El Chromium de Playwright no trae H.264 y no reproduce el MP4, así
-que la prueba no dice que el video se vea: dice que, pase lo que pase con el
-video, la portada no se queda en blanco ni quieta. Que el MP4 arranca solo en un
-iPhone se revisa en el teléfono.
+computadora. El Chromium de Playwright no trae H.264 y no reproduce el MP4. Para
+los casos en que el video sí arranca, la prueba graba en el propio navegador un
+WebM corto y lo sirve en lugar del MP4: así se prueba el camino del código, no
+el archivo. Que el MP4 arranca solo en un iPhone se revisa en el simulador de
+iPhone o en el teléfono.
 
     node tools/portada.js
 
