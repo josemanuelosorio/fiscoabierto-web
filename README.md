@@ -6,7 +6,10 @@ Sitio de Fisco Abierto: herramienta fiscal gratuita de utilidad pública para qu
 
 El contenido fiscal es mío: qué dice la ley, cada cifra con su artículo y la fecha en que la verifiqué contra la fuente oficial. Las herramientas con las que se construye el sitio están en [Créditos](#créditos).
 
-El historial se limpió el 1 de noviembre de 2026: los correos de los commits pasaron a la dirección privada de GitHub y se quitaron de los mensajes enlaces privados y frases que no describían el cambio. El contenido y las fechas de cada commit no cambiaron.
+El historial se reescribió dos veces, y en ninguna cambiaron las fechas de los commits ni los archivos del sitio:
+
+- El 1 de noviembre de 2026 los correos de los commits pasaron a la dirección privada de GitHub y se quitaron de los mensajes enlaces privados y frases que no describían el cambio.
+- El 26 de noviembre de 2026 salió de todos los commits la carpeta `docs/`, que guardaba bitácoras internas de mantenimiento y no era parte del sitio. Los 13 commits que solo tocaban esa carpeta desaparecieron y otros 41 cambiaron de identificador; por eso algunos mensajes nombran una bitácora que ya no está.
 
 ## Stack
 
