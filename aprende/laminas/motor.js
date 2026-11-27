@@ -201,10 +201,9 @@
       final() { corre = false; cancelAnimationFrame(raf); t = window.FIN; seek(t); avisa('fin'); },
       // Con voz la lámina suelta su reloj: la página le manda el segundo del
       // audio y ella pinta el cuadro que le toca. No avisa su avance, porque
-      // la barra y el botón los lleva la página con el audio.
-      // Con movimiento reducido la página manda fija: la lámina se queda en el
-      // diagrama completo, pero sabe que hay voz, y un toque es de la voz.
-      voz(d) { if (!VOZ) return; oye = true; corre = false; cancelAnimationFrame(raf); t = d.fija ? window.FIN : Math.min(deVoz(d.t), window.FIN); seek(t); },
+      // la barra y el botón los lleva la página con el audio. Con movimiento
+      // reducido hace lo mismo: la voz se pidió con un toque.
+      voz(d) { if (!VOZ) return; oye = true; corre = false; cancelAnimationFrame(raf); t = Math.min(deVoz(d.t), window.FIN); seek(t); },
       // Se quita la voz: la lámina vuelve a su reloj y, si se le pide, sigue sola desde donde iba.
       sinvoz(d) { oye = false; if (d.sigue && t < window.FIN) ctl.play(); },
     };

@@ -14,9 +14,10 @@
 // También prueba la voz (botón Escuchar): que la lámina siga al audio y espere
 // donde voz.js dice, que el botón principal pause y reanude la voz, que se calle
 // al salir de pantalla o al cambiar de idioma, y que con movimiento reducido
-// suene sobre el diagrama completo. El Chromium de Playwright no trae el
-// códec AAC, así que el audio se sustituye por un doble con reloj propio: se
-// prueba el trato entre la página y la lámina, no la decodificación.
+// la lámina no arranque sola pero sí siga a la voz cuando se pide. El Chromium
+// de Playwright no trae el códec AAC, así que el audio se sustituye por un
+// doble con reloj propio: se prueba el trato entre la página y la lámina, no
+// la decodificación.
 //
 // Uso, desde la raiz del repo (necesita Playwright):
 //     node tools/laminas.js [--rapido]
@@ -236,19 +237,50 @@ const opacidad = (fr, id) => fr.evaluate(id => Number(getComputedStyle(document.
     await p.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
     await p.goto(base + '/aprende/', { waitUntil: 'load' });
     await ve(p, 'p3'); await p.waitForTimeout(1500);
-    await clicVoz(p, 'p3'); await p.waitForTimeout(1500);
-    const fr = marco(p, 'p3'), ultimo = await fr.evaluate(() => 'c' + window.ROTULOS.length);
-    const a = await audio(p), s = await est(p, 'p3');
+    const fr = marco(p, 'p3');
+    const datos = await fr.evaluate(() => ({ v: window.VOZ.p3.es, rotulos: window.ROTULOS }));
+    const ultimo = 'c' + datos.rotulos.length;
+    let s = await est(p, 'p3');
+    ok(s.e === 'play' && await opacidad(fr, ultimo) > 0.9, `sin pedirla, la lámina espera en el diagrama completo: ${JSON.stringify(s)}`);
+    // Escuchar es un toque de la persona: la lámina vuelve a empezar y sigue
+    // a la voz, igual que sin movimiento reducido. Antes se quedaba quieta en
+    // el diagrama completo y en un iPhone con «Reducir movimiento» parecía
+    // rota.
+    await clicVoz(p, 'p3'); await p.evaluate(d => { window.__audio.duration = d; }, datos.v.dura); await p.waitForTimeout(1500);
+    let a = await audio(p); s = await est(p, 'p3');
     ok(!a.pausado && a.t > 0.5 && s.e === 'pause' && s.w > 0, `la voz suena y la barra avanza: ${JSON.stringify({ a, s })}`);
-    ok(await opacidad(fr, ultimo) > 0.9 && await opacidad(fr, 'c1') < 0.1, 'la lámina se queda en el diagrama completo, sin animarse');
-    // Un toque en la lámina es de la voz, igual que con movimiento: la pausa
-    // y la reanuda, y la lámina no arranca su animación.
+    ok(await opacidad(fr, 'c1') > 0.9 && await opacidad(fr, ultimo) < 0.1, 'la lámina vuelve a empezar con la voz: se ve el primer rótulo y no el último');
+    // Un segundo después de que entra el segundo rótulo, contado en el reloj
+    // de la voz (se suman las esperas anteriores).
+    const tau = datos.rotulos[1].t0 + 1;
+    await p.evaluate(t => { window.__audio.currentTime = t; }, tau + datos.v.esperas.filter(e => e[0] < tau).reduce((n, e) => n + e[1], 0));
+    await p.waitForTimeout(250);
+    ok(await opacidad(fr, 'c2') > 0.5 && await opacidad(fr, 'c1') < 0.1 && await opacidad(fr, ultimo) < 0.1, 'la lámina sigue a la voz: pasa al segundo rótulo');
+    // Un toque en la lámina es de la voz: la pausa y la reanuda.
     await fr.evaluate(() => document.getElementById('stage').click()); await p.waitForTimeout(400);
-    let a2 = await audio(p), s2 = await est(p, 'p3');
-    ok(a2.pausado && s2.e === 'play' && await opacidad(fr, ultimo) > 0.9 && await opacidad(fr, 'c1') < 0.1, `un toque en la lámina pausa la voz y el diagrama sigue completo: ${JSON.stringify({ a2, s2 })}`);
-    await fr.evaluate(() => document.getElementById('stage').click()); await p.waitForTimeout(1500);
-    a2 = await audio(p); s2 = await est(p, 'p3');
-    ok(!a2.pausado && s2.e === 'pause' && await opacidad(fr, ultimo) > 0.9 && await opacidad(fr, 'c1') < 0.1, `otro toque la reanuda y la lámina sigue sin animarse: ${JSON.stringify({ a2, s2 })}`);
+    a = await audio(p); s = await est(p, 'p3');
+    ok(a.pausado && s.e === 'play', `un toque en la lámina pausa la voz: ${JSON.stringify({ a, s })}`);
+    await fr.evaluate(() => document.getElementById('stage').click()); await p.waitForTimeout(400);
+    a = await audio(p); s = await est(p, 'p3');
+    ok(!a.pausado && s.e === 'pause', `otro toque la reanuda: ${JSON.stringify({ a, s })}`);
+    // Se quita la voz a media lámina: con movimiento reducido nada sigue solo.
+    await clicVoz(p, 'p3'); await p.waitForTimeout(400);
+    a = await audio(p); s = await est(p, 'p3'); let v = await voz(p, 'p3');
+    const quieta = [await opacidad(fr, 'c2'), await opacidad(fr, ultimo)];
+    await p.waitForTimeout(1500);
+    const s2 = await est(p, 'p3');
+    ok(a.pausado && v.puesta === 'false' && s.e === 'play' && s2.e === 'play' && s2.w === s.w && Math.abs(await opacidad(fr, 'c2') - quieta[0]) < 0.01 && quieta[1] < 0.1,
+      `sin voz la lámina se detiene donde iba y no sigue sola: ${JSON.stringify({ a, s, s2, quieta })}`);
+    // Si el audio no carga, vuelve a su estado de entrada: diagrama completo con Reproducir.
+    await clicVoz(p, 'p3'); await p.waitForTimeout(500);
+    await p.evaluate(() => window.__audio.dispatchEvent(new Event('error'))); await p.waitForTimeout(600);
+    v = await voz(p, 'p3'); s = await est(p, 'p3');
+    ok(v.puesta === 'false' && s.e === 'play' && s.w === 0 && await opacidad(fr, ultimo) > 0.9, `si el audio falla, queda el diagrama completo con Reproducir: ${JSON.stringify({ v, s })}`);
+    // La voz llega al final: diagrama completo con Repetir.
+    await clicVoz(p, 'p3'); await p.evaluate(d => { window.__audio.duration = d; }, datos.v.dura); await p.waitForTimeout(400);
+    await p.evaluate(() => { window.__audio.currentTime = window.__audio.duration - 0.4; }); await p.waitForTimeout(1200);
+    s = await est(p, 'p3');
+    ok(s.e === 'replay' && s.w === 100 && await opacidad(fr, ultimo) > 0.9, `al terminar la voz queda el diagrama completo con Repetir: ${JSON.stringify(s)}`);
     ok(errores.length === 0, 'sin errores de JS ' + errores.join(' | '));
     await ctx.close();
   }

@@ -326,9 +326,12 @@ lámina pausen y reanuden la voz, que se calle al salir de pantalla y no vuelva 
 sonar sola, que solo se oiga una lámina a la vez, que al quitar la voz o al
 fallar el audio la lámina siga sola, que el cambio de idioma la quite, que la
 barra siga a la voz cuando se reanuda por fuera de la página, y que con
-movimiento reducido suene sobre el diagrama completo y un toque la pause sin
-arrancar la animación. Estas dos últimas entraron tras la auditoría del 24 de
-noviembre de 2026: sobre el código anterior dan 3 fallas. El Chromium de
+movimiento reducido la lámina espere en el diagrama completo, siga a la voz
+cuando se pide con Escuchar, se detenga donde iba al quitarla y vuelva al
+diagrama completo si el audio falla. La de la barra entró tras la auditoría del
+24 de noviembre de 2026. La de movimiento reducido cambió el 27 de noviembre:
+hasta entonces la voz sonaba sobre el diagrama quieto, y en un iPhone con
+«Reducir movimiento» parecía que la animación no corría. El Chromium de
 Playwright no trae el códec AAC, así que el audio se sustituye por un doble con
 reloj propio: se prueba el trato entre la página y la lámina, no la
 decodificación. Que el archivo suene se comprueba a mano en un navegador.

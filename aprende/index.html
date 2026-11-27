@@ -650,8 +650,15 @@ window.faIdioma = { t: t, actual: function () { return currentLanguage; } };
 // de cada lámina. Al pedirla, la lámina vuelve a empezar y deja de avanzar con
 // su reloj: sigue al audio, que vive aquí porque el toque ocurre en esta
 // página. El audio se descarga hasta ese momento. Solo se oye una lámina a la
-// vez, se calla al salir de pantalla y no vuelve a sonar sola. Con movimiento
-// reducido se oye la voz sobre el diagrama completo, sin animación.
+// vez, se calla al salir de pantalla y no vuelve a sonar sola.
+//
+// Movimiento reducido. La lámina no arranca sola: espera en el diagrama
+// completo. Lo que la persona pide con un toque sí corre, sea Reproducir o
+// Escuchar: con la voz, la lámina la sigue igual que sin ese ajuste. Antes la
+// voz sonaba sobre el diagrama quieto y, en un iPhone con «Reducir
+// movimiento», parecía que la animación estaba rota. Lo que el ajuste sigue
+// evitando es que algo se mueva sin haberlo pedido: al quitar la voz a media
+// lámina, la lámina se detiene ahí en vez de seguir sola.
 (function () {
     var I = window.faIdioma;
     var movil = window.matchMedia('(max-width: 600px)');
@@ -688,10 +695,10 @@ window.faIdioma = { t: t, actual: function () { return currentLanguage; } };
     function play(l) { l.quiere = true; l.pausaScroll = false; manda(l, 'play'); pinta(l); }
     function pausa(l, porScroll) { l.quiere = false; l.pausaScroll = porScroll; manda(l, 'pausa'); pinta(l); }
     // Mientras suena, cada cuadro le dice a la lámina por qué segundo va la voz
-    // y mueve la barra. Con movimiento reducido la lámina no se mueve.
+    // y mueve la barra.
     function sigue() {
         var l = oyendo; if (!l) return;
-        if (!reducido.matches) manda(l, 'voz', { t: audio.currentTime });
+        manda(l, 'voz', { t: audio.currentTime });
         if (audio.duration) l.barra.style.width = (100 * audio.currentTime / audio.duration) + '%';
         if (!audio.paused && !audio.ended) cuadro = requestAnimationFrame(sigue);
     }
@@ -705,9 +712,6 @@ window.faIdioma = { t: t, actual: function () { return currentLanguage; } };
     function ponVoz(l) {
         if (oyendo) quitaVoz(oyendo, false);
         oyendo = l; l.oye = true; l.quiere = false; l.pausaScroll = false; l.jugada = true; l.fin = false;
-        // Con movimiento reducido la lámina no sigue al audio: se queda en el
-        // diagrama completo, avisada de que hay voz para que un toque la pause.
-        if (reducido.matches) manda(l, 'voz', { fija: true });
         audio.src = 'voz/' + l.id + '-' + I.actual() + '.m4a';
         suena();
     }
@@ -735,8 +739,14 @@ window.faIdioma = { t: t, actual: function () { return currentLanguage; } };
         pinta(oyendo);
     });
     audio.addEventListener('pause', function () { if (oyendo) pinta(oyendo); });
-    // Si el audio no carga, la lámina sigue como antes, sin voz.
-    audio.addEventListener('error', function () { if (oyendo) quitaVoz(oyendo, !reducido.matches); });
+    // Si el audio no carga, la lámina sigue como antes, sin voz. Con movimiento
+    // reducido no sigue sola: vuelve a su estado de entrada, el diagrama
+    // completo con Reproducir.
+    audio.addEventListener('error', function () {
+        var l = oyendo; if (!l) return;
+        quitaVoz(l, !reducido.matches);
+        if (reducido.matches) { l.jugada = false; manda(l, 'final'); }
+    });
 
     function cargar(l) {
         if (l.oye) quitaVoz(l, false);
