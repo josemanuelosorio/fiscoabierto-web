@@ -264,8 +264,10 @@ página; que mientras el video no arranca la serie en vivo corra debajo; que un
 video que falla al cargar se quite y la serie tome el relevo; que en escritorio
 y con `?demo=js` no se monte video; que con movimiento reducido la serie
 avance sin transiciones; que cuando el video arranca la serie en vivo se
-detenga y el video quede a la vista; que al cambiar de idioma el video pase al
-suyo; y que cambiar de idioma con el video todavía sin arrancar repinte la
+detenga y el video quede a la vista (que se detiene se mide también con reloj
+falso: la prueba retiene el video, lo suelta y adelanta el reloj, así que esa
+parte no depende de la velocidad de la máquina; que el video avanza se mide en
+tiempo real); que al cambiar de idioma el video pase al suyo; y que cambiar de idioma con el video todavía sin arrancar repinte la
 serie en vivo en el idioma nuevo sin descartar el video.
 
 Existe porque el video del iPhone no se puede dar por bueno mirando la

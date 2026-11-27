@@ -135,25 +135,35 @@ async function grabarGemelo(b) {
   });
   const enIngles = (pg) => pg.click('.lang-switch .lang-btn[data-lang="en"]');
 
-  // 6. El camino del iPhone. El video se sirve 2.5 s después de pedirlo, cuando la serie en vivo ya lleva más
-  //    de un segundo corriendo debajo. Chromium no da la página por cargada hasta que el video tiene datos, así
-  //    que al volver de goto el video ya llegó: la primera comprobación dice que la serie alcanzó a pintar, y
-  //    las siguientes, que con el video a la vista se quedó quieta.
-  p = await abrir('about:blank', {});
-  await p.route('**/portada/serie-es.mp4', (r) => servirGemelo(r, 2500));
+  // 6. El camino del iPhone, con reloj falso para que el resultado no dependa de la velocidad de la máquina.
+  //    El video en español se retiene hasta que la prueba lo suelta. Primero se adelanta el reloj más allá de
+  //    la espera al video y se comprueba que la serie en vivo arrancó debajo. Después se suelta el video y, con
+  //    él a la vista, se adelanta el reloj tres veces: cada adelanto dispara el paso pendiente de una serie que
+  //    siguiera corriendo, y de dos pasos seguidos al menos uno cambia la página; una serie detenida no cambia
+  //    nada. Son tres adelantos y no más porque cada uno le cuenta un segundo al vigilante de js/portada.js, que
+  //    quita el video si en cuatro revisiones seguidas no lo ve avanzar: con tres no puede llegar. La pausa
+  //    real entre adelantos deja avanzar el video. «El video avanza y está a la vista» sigue en tiempo real.
+  p = await abrir('about:blank', {}, true);
+  let soltarVideo;
+  const suelto = new Promise((ok) => { soltarVideo = ok; });
+  await p.route('**/portada/serie-es.mp4', (r) => suelto.then(() => servirGemelo(r, 0)));
   await p.route('**/portada/serie-en.mp4', (r) => servirGemelo(r, 0));
-  await p.goto(base + '?demo=video&lang=es');
-  await p.waitForTimeout(2000);
-  dice(await p.evaluate(() => !document.querySelector('#serie [data-i18n-js]')), 'mientras el video no llegaba, la serie en vivo arrancó debajo');
+  await p.goto(base + '?demo=video&lang=es', { waitUntil: 'domcontentloaded' });
+  await p.waitForTimeout(500);
+  await p.clock.runFor(1500);
+  const debajo = await p.waitForFunction(() => !document.querySelector('#serie [data-i18n-js]'), null, { timeout: 5000 }).then(() => true, () => false);
+  dice(debajo, 'mientras el video no llegaba, la serie en vivo arrancó debajo');
+  soltarVideo();
   const arranco = await p.waitForSelector('.serie-video.listo', { timeout: 8000 }).then(() => true, () => false);
   dice(arranco, 'cuando el video arranca, se muestra');
-  await p.waitForTimeout(600);
-  const antesHtml = await p.evaluate(() => document.getElementById('serie').innerHTML);
+  const verSerie = () => p.evaluate(() => document.getElementById('serie').outerHTML);
+  const antesHtml = await verSerie();
   const v1 = await verVideo(p);
-  await p.waitForTimeout(2600);
+  for (let i = 0; i < 3; i++) { await p.waitForTimeout(300); await p.clock.fastForward(6000); }
   const v2 = await verVideo(p);
-  dice(await p.evaluate((h) => document.getElementById('serie').innerHTML === h, antesHtml), 'con el video a la vista, la serie en vivo se queda quieta');
+  dice(await verSerie() === antesHtml, 'con el video a la vista, la serie en vivo se queda quieta');
   dice(!!v1 && !!v2 && !v2.pausado && v2.t > v1.t && v2.opacidad === '1', 'el video avanza y está a la vista', JSON.stringify([v1, v2]));
+  await p.clock.resume();
   await enIngles(p);
   const cambio = await p.waitForFunction(() => {
     const x = document.querySelector('.serie-video');
