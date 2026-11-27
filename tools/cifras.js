@@ -36,7 +36,10 @@ function limpiar(s) {
 }
 
 const out = [];
-const hoy = new Date().toISOString().slice(0, 10);
+// La fecha de hoy, en hora local. toISOString da la de Greenwich, que en Mexico
+// ya es el dia siguiente desde las seis de la tarde.
+const ahora = new Date();
+const hoy = [ahora.getFullYear(), String(ahora.getMonth() + 1).padStart(2, '0'), String(ahora.getDate()).padStart(2, '0')].join('-');
 out.push(`# Cifras vigentes en fiscoabierto.org`);
 out.push(``);
 out.push(`Generado ${hoy} por tools/cifras.js sobre ${path.basename(file)} y lo que carga (${lines.length} lineas). No editar a mano: regenerar.`);
