@@ -73,7 +73,7 @@
                 <div>
                     <h2 data-i18n="stats.title">Cifras de 2026 sobre la economía de plataformas en México</h2>
                     <p class="section-subtitle" data-i18n="stats.subtitle">Cada cifra lleva su fuente oficial.</p>
-                    <p class="verif" data-verificado="2026-11-26" data-i18n-js></p>
+                    <p class="fuente"><a class="fuente-ir" href="#fuentes-cifras" data-i18n="fte.ir">Fuentes y verificación</a></p>
                 </div>
             </div>
             <div class="stats-items">
@@ -165,8 +165,7 @@
 
         <div class="calc-verdict" id="calcVerdict" data-i18n-js></div>
 
-        <p class="blk-foot" data-i18n="calc.foot">Art. 113-A, párrafo tercero LISR (2.1% transporte y entrega, 4% hospedaje, 1% venta hasta 2025) · Art. 25, fracción VI de la LIF 2026, DOF 07-nov-2025 (2.5% venta en 2026) · Art. 113-C, fracción IV LISR (20% sin RFC) · Art. 18-J, fracción II, inciso a) LIVA (50% del IVA; 100% sin RFC), con IVA a la tasa general de 16% · Umbral del Art. 113-B LISR, medido sobre el ejercicio anterior · Plazos: art. 106 LISR y art. 12 CFF</p>
-        <p class="verif" data-verificado="2026-11-24" data-i18n-js></p>
+        <p class="fuente"><span data-i18n="fte.calc">Arts. 113-A y 113-C LISR · Ley de Ingresos 2026, art. 25, fr. VI · Art. 18-J LIVA</span> <a class="fuente-ir" href="#fuentes-calculadora" data-i18n="fte.ir">Fuentes y verificación</a></p>
 
         <div class="lif" id="lif2027">
             <h3 class="lif-titulo" data-i18n="lif.titulo">La Ley de Ingresos 2027 conserva la retención de 2.5%</h3>
@@ -184,8 +183,7 @@
                 <li class="lif-anio lif-a26"><span class="lif-ano">2026</span><b class="lif-tasa">2.5%</b><span class="lif-ley" data-i18n="lif.a26">art. 25, fracción VI de la Ley de Ingresos 2026, vigente hasta el 31 de diciembre</span></li>
                 <li class="lif-anio lif-a27"><span class="lif-ano">2027</span><b class="lif-tasa">2.5%</b><span class="lif-ley" data-i18n="lif.a27">art. 25, fracción VI de la Ley de Ingresos 2027, que entra en vigor el 1 de enero de 2027</span></li>
             </ul>
-            <p class="blk-foot" data-i18n="lif.fuentes">Iniciativa: Gaceta Parlamentaria 7121, Anexo A, 08-sep-2026 · Dictamen: Gaceta Parlamentaria 7145-IV-2, 13-oct-2026 · Cámara de Diputados: Canal del Congreso, 15-oct-2026 · Senado: comunicado 0356, 27-oct-2026 · Ley de Ingresos 2027: DOF 13-nov-2026, edición matutina · Reforma a la Ley del ISR: DOF 13-nov-2026, sin cambios a los arts. 113-A a 113-D</p>
-            <p class="verif" data-verificado="2026-11-24" data-verif-clave="lif.corte" data-i18n-js></p>
+            <p class="fuente"><span data-i18n="fte.lif">Ley de Ingresos 2027, DOF 13-nov-2026</span> <a class="fuente-ir" href="#fuentes-lif" data-i18n="fte.ir">Fuentes y verificación</a></p>
         </div>
     </div>
 </section>
@@ -276,8 +274,7 @@
         </div>
         <div class="map-panel" id="mapPanel" aria-live="polite" data-i18n-js></div>
 
-        <p class="blk-foot"><span data-i18n="map.creditPre">Geometría:</span> <a href="https://github.com/VictorCazanave/svg-maps" target="_blank" rel="noopener noreferrer">svg-maps</a> <span data-i18n="map.creditMid">de</span> V. Cazanave, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a></p>
-        <p class="verif" data-verificado="2026-11-24" data-verif-clave="map.verif" data-i18n-js></p>
+        <p class="fuente"><span data-i18n="fte.mapa">La ley de cada estado</span> <a class="fuente-ir" href="#fuentes-mapa" data-i18n="fte.ir">Fuentes y verificación</a></p>
     </div>
 </section>
 
@@ -567,6 +564,96 @@
                 </p>
             </noscript>
         </div>
+    </div>
+</section>
+<!-- FUENTES Y VERIFICACIÓN -->
+<!-- Cada bloque deja arriba un renglón con lo principal y un enlace a su
+     entrada aquí, que guarda la cita completa y las fechas en que se volvió a
+     leer. No está en el menú: se llega con el enlace del bloque. La fecha de
+     cada entrada vive en data-verificado; de ahí la leen tools/cifras.js y el
+     generador de los videos. -->
+<section id="fuentes" class="fuentes">
+    <div class="container">
+        <h2 data-i18n="fte.titulo">Fuentes y verificación</h2>
+        <p class="fuentes-lead" data-i18n="fte.lead">Lo que cita cada parte de esta página, completo, y las fechas en que se volvió a leer contra su fuente.</p>
+
+        <details class="fuentes-bloque" id="fuentes-cifras">
+            <summary><span class="fuentes-nombre" data-i18n="fte.n.cifras">Cifras de la economía de plataformas</span><span class="fuentes-fecha" data-verificado="2026-11-26" data-verif-bloque="cifras" data-i18n-js></span></summary>
+            <div class="fuentes-cuerpo">
+                <p data-i18n="fte.cifras.p">Cada cifra trae en su ficha la fuente oficial de donde sale.</p>
+                <h3 data-i18n="fte.historial">Historial de revisiones</h3>
+                <ol class="fuentes-historial">
+                    <li><time datetime="2026-11-26" data-fecha="2026-11-26" data-i18n-js>26-nov-2026</time><span data-i18n="fte.h.cifras.1126">La informalidad laboral pasa al dato de octubre.</span></li>
+                    <li><time datetime="2026-11-24" data-fecha="2026-11-24" data-i18n-js>24-nov-2026</time><span data-i18n="fte.h.cifras.1124">Se releyeron todas las cifras.</span></li>
+                    <li><time datetime="2026-10-24" data-fecha="2026-10-24" data-i18n-js>24-oct-2026</time><span data-i18n="fte.h.cifras.1024">Se actualizaron los datos de septiembre.</span></li>
+                    <li><time datetime="2026-10-14" data-fecha="2026-10-14" data-i18n-js>14-oct-2026</time></li>
+                    <li><time datetime="2026-09-29" data-fecha="2026-09-29" data-i18n-js>29-sep-2026</time></li>
+                    <li><time datetime="2026-07-29" data-fecha="2026-07-29" data-i18n-js>29-jul-2026</time></li>
+                </ol>
+            </div>
+        </details>
+
+        <details class="fuentes-bloque" id="fuentes-calculadora">
+            <summary><span class="fuentes-nombre" data-i18n="fte.n.calc">Calculadora de retención</span><span class="fuentes-fecha" data-verificado="2026-11-24" data-verif-bloque="calculadora" data-i18n-js></span></summary>
+            <div class="fuentes-cuerpo">
+                <dl class="fuentes-citas">
+                    <dt data-i18n="fte.calc.t1">Retención de ISR</dt>
+                    <dd data-i18n="fte.calc.d1">Art. 113-A, párrafo tercero LISR: 2.1% transporte y entrega, 4% hospedaje, 1% venta hasta 2025.</dd>
+                    <dd data-i18n="fte.calc.d2">Art. 25, fracción VI de la LIF 2026, DOF 07-nov-2025: 2.5% venta en 2026.</dd>
+                    <dd data-i18n="fte.calc.d3">Art. 113-C, fracción IV LISR: 20% sin RFC.</dd>
+                    <dt data-i18n="fte.calc.t2">Retención de IVA</dt>
+                    <dd data-i18n="fte.calc.d4">Art. 18-J, fracción II, inciso a) LIVA: 50% del IVA; 100% sin RFC, con IVA a la tasa general de 16%.</dd>
+                    <dt data-i18n="fte.calc.t3">Pago definitivo</dt>
+                    <dd data-i18n="fte.calc.d5">Umbral del Art. 113-B LISR, medido sobre el ejercicio anterior.</dd>
+                    <dt data-i18n="fte.calc.t4">Plazos</dt>
+                    <dd data-i18n="fte.calc.d6">Art. 106 LISR y art. 12 CFF.</dd>
+                </dl>
+                <p class="fuentes-textos"><span data-i18n="fte.textos">Textos vigentes en la Cámara de Diputados:</span> <a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LISR.pdf" target="_blank" rel="noopener noreferrer" data-i18n="fte.ley.lisr">Ley del ISR</a>, <a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LIVA.pdf" target="_blank" rel="noopener noreferrer" data-i18n="fte.ley.liva">Ley del IVA</a>, <a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/CFF.pdf" target="_blank" rel="noopener noreferrer" data-i18n="fte.ley.cff">Código Fiscal de la Federación</a>, <a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LIF_2026.pdf" target="_blank" rel="noopener noreferrer" data-i18n="fte.ley.lif26">Ley de Ingresos 2026</a>.</p>
+                <h3 data-i18n="fte.historial">Historial de revisiones</h3>
+                <ol class="fuentes-historial">
+                    <li><time datetime="2026-11-24" data-fecha="2026-11-24" data-i18n-js>24-nov-2026</time><span data-i18n="fte.h.calc.1124">Tasas y artículos releídos; la Ley de Ingresos 2027 ya estaba publicada.</span></li>
+                    <li><time datetime="2026-10-24" data-fecha="2026-10-24" data-i18n-js>24-oct-2026</time></li>
+                    <li><time datetime="2026-10-14" data-fecha="2026-10-14" data-i18n-js>14-oct-2026</time></li>
+                    <li><time datetime="2026-09-29" data-fecha="2026-09-29" data-i18n-js>29-sep-2026</time><span data-i18n="fte.h.calc.0929">Se corrigieron cifras, citas y textos.</span></li>
+                    <li><time datetime="2026-07-29" data-fecha="2026-07-29" data-i18n-js>29-jul-2026</time></li>
+                </ol>
+            </div>
+        </details>
+
+        <details class="fuentes-bloque" id="fuentes-lif">
+            <summary><span class="fuentes-nombre" data-i18n="fte.n.lif">Ley de Ingresos 2027</span><span class="fuentes-fecha" data-verificado="2026-11-24" data-verif-bloque="lif" data-i18n-js></span></summary>
+            <div class="fuentes-cuerpo">
+                <dl class="fuentes-citas">
+                    <dt data-i18n="fte.lif.t1">Ruta legislativa</dt>
+                    <dd data-i18n="fte.lif.d1">Iniciativa: Gaceta Parlamentaria 7121, Anexo A, 08-sep-2026.</dd>
+                    <dd data-i18n="fte.lif.d2">Dictamen: Gaceta Parlamentaria 7145-IV-2, 13-oct-2026.</dd>
+                    <dd data-i18n="fte.lif.d3">Cámara de Diputados: Canal del Congreso, 15-oct-2026.</dd>
+                    <dd data-i18n="fte.lif.d4">Senado: comunicado 0356, 27-oct-2026.</dd>
+                    <dt data-i18n="fte.lif.t2">Publicación</dt>
+                    <dd data-i18n="fte.lif.d5">Ley de Ingresos 2027: DOF 13-nov-2026, edición matutina.</dd>
+                    <dd data-i18n="fte.lif.d6">Reforma a la Ley del ISR: DOF 13-nov-2026, sin cambios a los arts. 113-A a 113-D.</dd>
+                </dl>
+                <p class="fuentes-textos"><span data-i18n="fte.texto">Texto publicado, en la Cámara de Diputados:</span> <a href="https://www.diputados.gob.mx/LeyesBiblio/pdf/LIF_2027.pdf" target="_blank" rel="noopener noreferrer" data-i18n="fte.ley.lif27">Ley de Ingresos 2027</a>. <span data-i18n="fte.lif.estado">El estado de la ley se consultó en el Diario Oficial de la Federación.</span></p>
+                <h3 data-i18n="fte.historial">Historial de revisiones</h3>
+                <ol class="fuentes-historial">
+                    <li><time datetime="2026-11-24" data-fecha="2026-11-24" data-i18n-js>24-nov-2026</time><span data-i18n="fte.h.lif.1124">La ley ya estaba publicada; se leyó su artículo 25.</span></li>
+                    <li><time datetime="2026-11-09" data-fecha="2026-11-09" data-i18n-js>09-nov-2026</time><span data-i18n="fte.h.lif.1109">Ruta legislativa con su estado y sus fuentes.</span></li>
+                </ol>
+            </div>
+        </details>
+
+        <details class="fuentes-bloque" id="fuentes-mapa">
+            <summary><span class="fuentes-nombre" data-i18n="fte.n.mapa">Impuesto al hospedaje por estado</span><span class="fuentes-fecha" data-verificado="2026-11-24" data-verif-bloque="mapa" data-i18n-js></span></summary>
+            <div class="fuentes-cuerpo">
+                <p data-i18n="fte.mapa.p">La tasa y el artículo de cada estado aparecen al elegirlo en el mapa. Se leyeron en la ley de cada estado.</p>
+                <p class="fuentes-textos"><span data-i18n="map.creditPre">Geometría:</span> <a href="https://github.com/VictorCazanave/svg-maps" target="_blank" rel="noopener noreferrer">svg-maps</a> <span data-i18n="map.creditMid">de</span> V. Cazanave, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a></p>
+                <h3 data-i18n="fte.historial">Historial de revisiones</h3>
+                <ol class="fuentes-historial">
+                    <li><time datetime="2026-11-24" data-fecha="2026-11-24" data-i18n-js>24-nov-2026</time><span data-i18n="fte.h.mapa.1124">Se releyeron los 32 estados.</span></li>
+                    <li><time datetime="2026-08-27" data-fecha="2026-08-27" data-i18n-js>27-ago-2026</time></li>
+                </ol>
+            </div>
+        </details>
     </div>
 </section>
 </main>

@@ -24,13 +24,11 @@ function setLanguage(lang) {
         el.setAttribute('aria-label', t(el.dataset.i18nAria));
     });
 
-    // Fecha de verificacion por bloque. Entra la fecha ISO de data-verificado;
-    // sale la linea en el idioma activo, con el mismo formato de fecha que
-    // usan las citas del sitio (07-nov-2025). Un bloque que no verifica una
-    // cifra sino un estado (la ruta de una ley) trae su propia frase en
-    // data-verif-clave.
+    // Fecha de revision de cada entrada de Fuentes y verificacion. Entra la
+    // fecha ISO de data-verificado; sale la frase en el idioma activo, con el
+    // mismo formato de fecha que usan las citas del sitio (07-nov-2025).
     document.querySelectorAll('[data-verificado]').forEach(el => {
-        el.innerHTML = t(el.dataset.verifClave || 'verif.line').replace('{fecha}', '<span class="verif-date">' + fechaCorta(el.dataset.verificado) + '</span>');
+        el.innerHTML = t('fte.revisado').replace('{fecha}', '<span class="verif-date">' + fechaCorta(el.dataset.verificado) + '</span>');
     });
 
     // Fechas sueltas: la fecha ISO vive una sola vez, en data-fecha, y aquí

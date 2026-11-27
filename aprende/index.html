@@ -150,16 +150,12 @@
         .blk-foot { margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--color-border); font-family: var(--mono); font-size: 0.7rem; color: var(--color-text-muted); line-height: 1.7; max-width: 66ch; }
         .blk-foot a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
         @media (hover: hover) { .blk-foot a:hover { color: var(--color-accent); } }
-        .verif { margin-top: 10px; font-family: var(--mono); font-size: 0.66rem; color: var(--color-text-muted); line-height: 1.7; }
-        .verif:empty { display: none; }
-        .verif-date { white-space: nowrap; }
 
         footer { padding: 40px 0; border-top: 1px solid var(--color-border); text-align: center; }
         .footer-fine { max-width: 64ch; margin: 0 auto; font-size: 0.78rem; color: var(--color-text-secondary); line-height: 1.7; }
         .footer-copy { margin-top: 18px; font-size: 0.74rem; color: var(--color-text-muted); line-height: 1.8; }
         .footer-copy .sep { margin: 0 8px; opacity: 0.6; }
         .footer-mark { white-space: nowrap; }
-        footer .verif { margin-top: 14px; }
 
         @media (max-width: 1000px) {
             .ap-body { grid-template-columns: minmax(0, 1fr); gap: 0; }
@@ -380,10 +376,11 @@
 </div>
 </main>
 
-<footer>
+<!-- data-verificado: la fecha en que las láminas y sus citas se leyeron contra la ley. No se
+     muestra; la leen tools/cifras.js y el generador de los videos. -->
+<footer data-verificado="2026-09-30">
     <div class="container">
         <p class="footer-fine" data-i18n="footer.disclaimer">Fisco Abierto es una herramienta informativa. No constituye asesoría fiscal, legal ni contable. Consulte a un profesional antes de tomar decisiones sobre su situación fiscal.</p>
-        <p class="verif" data-verificado="2026-09-30" data-i18n-js></p>
         <p class="footer-copy">
             <span data-i18n="footer.copy">© MMXXVI Fisco Abierto™. Hecho en México.</span><span class="sep">&middot;</span><span class="footer-mark" data-i18n="footer.mark">Marca en trámite ante el IMPI, expediente 3592372</span>
         </p>
@@ -405,7 +402,6 @@ const translations = {
         'nav.faq': 'FAQ',
         'nav.newsletter': 'Newsletter',
         'nav.diagnostic': 'Diagnóstico',
-        'verif.line': 'Verificado contra la ley el {fecha}',
         'ap.title': 'Principios básicos de los impuestos en México',
         'ap.lead': 'Seis pasos, de la Constitución a sus derechos como contribuyente. Cada paso toma una pieza del anterior y la abre en sus partes, así que se leen en orden.',
         'ap.steps': 'Pasos',
@@ -478,7 +474,6 @@ const translations = {
         'nav.faq': 'FAQ',
         'nav.newsletter': 'Newsletter',
         'nav.diagnostic': 'Diagnostic',
-        'verif.line': 'Checked against the law on {fecha}',
         'ap.title': 'Basic principles of taxation in Mexico',
         'ap.lead': 'Six steps, from the Constitution to your rights as a taxpayer. Each step takes one piece of the previous one and breaks it into its parts, so they read in order.',
         'ap.steps': 'Steps',
@@ -551,13 +546,6 @@ function t(key) {
     return (d && key in d) ? d[key] : translations.es[key];
 }
 
-function fechaCorta(iso) {
-    var MESES = { es: ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'],
-                  en: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] };
-    var p = iso.split('-');
-    return p[2] + '-' + MESES[currentLanguage][+p[1] - 1] + '-' + p[0];
-}
-
 // Los enlaces al sitio llevan el idioma activo, para que el cambio de página
 // no lo pierda: la página principal lo resuelve primero por ?lang=.
 function enlacesConIdioma() {
@@ -573,9 +561,6 @@ function setLanguage(lang) {
     document.title = t('meta.title');
     document.querySelectorAll('[data-i18n-aria]').forEach(function (el) { el.setAttribute('aria-label', t(el.dataset.i18nAria)); });
     document.querySelectorAll('[data-i18n-title]').forEach(function (el) { el.setAttribute('title', t(el.dataset.i18nTitle)); });
-    document.querySelectorAll('[data-verificado]').forEach(function (el) {
-        el.innerHTML = t('verif.line').replace('{fecha}', '<span class="verif-date">' + fechaCorta(el.dataset.verificado) + '</span>');
-    });
     // El contenido es del propio sitio; innerHTML conserva enlaces, citas y marcas.
     document.querySelectorAll('[data-i18n]').forEach(function (el) { el.innerHTML = t(el.dataset.i18n); });
     enlacesConIdioma();

@@ -230,3 +230,27 @@ test('diagnóstico: toda clave que devuelve la evaluación existe, y todas se al
   const posibles = Object.keys(translations.es).filter(k => /^diag\.(ve|ob|nivel)\.|^pasos\.(oblig|revisa|sinPass|contador|mapea)$/.test(k));
   assert.deepEqual(posibles.filter(k => !vistas.has(k)), [], 'claves que ninguna respuesta produce');
 });
+
+// ---- Fuentes y verificación --------------------------------------------------
+// Cada bloque deja un renglón con el enlace a su entrada en la sección de
+// fuentes. Si un enlace apunta a una entrada que no existe, el clic no lleva a
+// nada; y si una entrada pierde su fecha, tools/cifras.js deja de medir su
+// edad y el generador de los videos se queda sin la fecha de la calculadora.
+test('fuentes: cada enlace de bloque tiene su entrada, y cada entrada su fecha y su bloque', () => {
+  const html = require('node:fs').readFileSync(require('node:path').join(__dirname, '..', 'index.html'), 'utf8');
+  const enlaces = [...html.matchAll(/class="fuente-ir" href="#([^"]+)"/g)].map(m => m[1]);
+  const entradas = [...html.matchAll(/<details class="fuentes-bloque" id="([^"]+)">\s*<summary>.*?data-verificado="(\d{4}-\d{2}-\d{2})" data-verif-bloque="([^"]+)"/g)]
+    .map(m => ({ id: m[1], fecha: m[2], bloque: m[3] }));
+  assert.equal(enlaces.length, 4, 'se esperaban cuatro bloques con enlace a sus fuentes');
+  assert.deepEqual([...enlaces].sort(), entradas.map(e => e.id).sort(), 'los enlaces y las entradas no coinciden');
+  assert.equal((html.match(/<details class="fuentes-bloque"/g) || []).length, entradas.length, 'una entrada no trae su fecha o su bloque');
+  for (const e of entradas) {
+    assert.equal(e.id, 'fuentes-' + e.bloque, e.id + ': el bloque de la fecha no es el de la entrada');
+    assert.ok(!Number.isNaN(Date.parse(e.fecha)), e.id + ': fecha inválida');
+    // La última fecha del historial es la de la entrada: no se anuncia una revisión que el historial no trae.
+    const cuerpo = html.slice(html.indexOf('id="' + e.id + '"'));
+    const primera = cuerpo.slice(0, cuerpo.indexOf('</details>')).match(/<ol class="fuentes-historial">\s*<li><time datetime="(\d{4}-\d{2}-\d{2})"/);
+    assert.ok(primera && primera[1] === e.fecha, e.id + ': la fecha de la entrada no es la más reciente de su historial');
+  }
+  assert.equal((html.match(/data-verificado=/g) || []).length, entradas.length, 'hay una fecha de verificación fuera de la sección de fuentes');
+});

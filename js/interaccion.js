@@ -13,6 +13,13 @@ document.querySelectorAll('.faq-question').forEach(btn => {
     });
 });
 
+// ==================== FUENTES Y VERIFICACION ====================
+// Quien llega con el ancla de una entrada en la direccion la encuentra abierta.
+(function () {
+    const entrada = /^#fuentes-[a-z]+$/.test(location.hash) && document.getElementById(location.hash.slice(1));
+    if (entrada && entrada.tagName === 'DETAILS') entrada.open = true;
+})();
+
 // ==================== DESPLAZAMIENTO SUAVE ====================
 document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
@@ -20,6 +27,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
         const target = href === '#' ? document.body : document.querySelector(href);
         if (!target) return;
         e.preventDefault();
+        // Una entrada de Fuentes y verificacion se abre antes de bajar a ella.
+        if (target.tagName === 'DETAILS') target.open = true;
         const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' });
         if (href !== '#') {

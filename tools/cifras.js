@@ -46,7 +46,7 @@ out.push(`Generado ${hoy} por tools/cifras.js sobre ${path.basename(file)} y lo 
 out.push(``);
 
 // 0. Fecha de verificacion de cada bloque, leida de data-verificado. El sitio
-// la muestra; aqui se mide su edad. Pasados 90 dias sin re-verificar, el bloque
+// la muestra en Fuentes y verificacion; aqui se mide su edad. Pasados 90 dias sin re-verificar, el bloque
 // se lista como vencido: es el selector de la rutina de mantenimiento.
 out.push(`## Fecha de verificacion por bloque`);
 out.push(``);
@@ -59,10 +59,11 @@ for (let i = 0; i < lines.length; i++) {
   const dias = Math.floor((Date.parse(hoy) - Date.parse(m[1])) / 86400000);
   const vencido = dias > 90;
   if (vencido) vencidos++;
-  // Un bloque con frase propia (data-verif-clave) se nombra con ella: dos
-  // bloques de la misma seccion no deben verse iguales en la tabla.
-  const clave = lines[i].match(/data-verif-clave="([^"]+)"/);
-  out.push(`| ${seccionDe(i)}${clave ? ' · ' + clave[1] : ''} | ${m[1]} | ${dias} | ${vencido ? 'VENCIDO (mas de 90 dias)' : 'vigente'} |`);
+  // Las fechas viven juntas en la seccion de fuentes, una por entrada: cada
+  // una se nombra con su bloque (data-verif-bloque) para que no se vean
+  // iguales en la tabla.
+  const bloque = lines[i].match(/data-verif-bloque="([^"]+)"/);
+  out.push(`| ${seccionDe(i)}${bloque ? ' · ' + bloque[1] : ''} | ${m[1]} | ${dias} | ${vencido ? 'VENCIDO (mas de 90 dias)' : 'vigente'} |`);
 }
 out.push(``);
 out.push(vencidos ? `${vencidos} bloque(s) con verificacion vencida: re-verificar antes del siguiente push de contenido.` : `Ningun bloque pasa de 90 dias.`);

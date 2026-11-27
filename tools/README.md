@@ -42,6 +42,14 @@ se calcularon aparte, desde el texto de la ley, no con el código que se prueba.
 Quitar un día inhábil de la lista hace fallar la prueba de plazos. Con la parte
 del IVA calculada sobre el ISR falla la prueba de partes (9 nov 2026).
 
+Desde el 27 de noviembre de 2026 vigila además la sección de fuentes de la
+página principal: que el enlace de cada bloque tenga su entrada, que cada
+entrada traiga su fecha (`data-verificado`) y su bloque (`data-verif-bloque`),
+que esa fecha sea la más reciente de su historial y que no quede ninguna fecha
+de verificación fuera de la sección. De esas fechas dependen `cifras.js`, que
+mide su edad, y `videos/render.js`, que toma la de la calculadora para la
+tarjeta final de los videos.
+
     node tools/unitarias.js
 
 ## pagina.js
@@ -97,10 +105,12 @@ JS) contra `translations.es` y reporta divergencias: el mismo texto vive dos
 veces en el archivo y ya divergió una vez (el pie de la calculadora perdió la
 cita del 113-C en la copia HTML).
 
-Arranca con la fecha de verificación de cada bloque (`data-verificado` en
-banda, calculadora y mapa; el sitio la muestra como "Verificado contra la ley
-el ...") y marca VENCIDO el que pase de 90 días: ese es el selector de la
-rutina de mantenimiento, no la memoria de nadie.
+Arranca con la fecha de verificación de cada bloque y marca VENCIDO el que
+pase de 90 días: ese es el selector de la rutina de mantenimiento, no la
+memoria de nadie. En la página principal las fechas viven en la sección
+«Fuentes y verificación», una por entrada (`data-verificado` con su
+`data-verif-bloque`: cifras, calculadora, lif y mapa), y el sitio las muestra
+como «Revisado el ...». En Aprende la fecha es un dato del pie y no se muestra.
 
 En la sección del mapa compara además el respaldo sin JavaScript (la cubeta de
 color y la tasa escritas en cada `<path>` del HTML) contra `js/datos/hospedaje.js`,
@@ -123,8 +133,10 @@ Uso, desde la raíz del repo:
 
 Correrlo después de cualquier cambio de contenido y antes de cada pasada de
 verificación. Divergencias distintas de 0 se corrigen antes del push. Al
-terminar una pasada de verificación, actualizar el `data-verificado` del
-bloque revisado: la fecha vive solo ahí.
+terminar una pasada de verificación, actualizar el `data-verificado` de la
+entrada del bloque revisado y agregar esa fecha arriba de su historial, con una
+nota en los dos idiomas si hubo algo que decir: `unitarias.js` falla si la fecha
+de la entrada no es la más reciente de su historial.
 
 ## i18n.js
 

@@ -1632,31 +1632,64 @@ a.chain-cite {
     line-height: 1.7;
     max-width: 62ch;
 }
-.blk-foot {
-    margin-top: 24px;
-    padding-top: 14px;
-    border-top: 1px solid var(--color-border);
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.66rem;
+/* Pie de cada bloque: un renglon con lo principal de su fundamento y el
+   enlace a su entrada en Fuentes y verificacion, donde va la cita completa.
+   Va en la letra del sitio y sin raya, para que no pese mas que el bloque. */
+.fuente {
+    margin-top: 22px;
+    font-size: 0.78rem;
+    line-height: 1.6;
     color: #78716C; /* 4.6:1 sobre el fondo; #A8A29E daba 2.4 */
-    line-height: 1.7;
 }
-.blk-foot .sep { margin: 0 7px; opacity: 0.55; }
-.blk-foot a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
-@media (hover: hover) { .blk-foot a:hover { color: var(--color-accent); } }
-/* Fecha de verificacion por bloque. La fecha vive en data-verificado y
-   el texto lo pinta el JS en el idioma activo; tools/cifras.js la lee
-   y avisa cuando envejece. */
-.verif {
-    margin-top: 10px;
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.66rem;
-    color: #78716C;
-    line-height: 1.7;
+.fuente-ir {
+    margin-left: 10px;
+    color: var(--color-text-secondary);
+    text-decoration: underline;
+    text-decoration-color: var(--color-border);
+    text-underline-offset: 3px;
+    white-space: nowrap;
 }
-.verif:empty { display: none; }
+.fuente > .fuente-ir:first-child { margin-left: 0; }
+@media (hover: hover) { .fuente-ir:hover { color: var(--color-accent); text-decoration-color: currentColor; } }
+.stats-aside .fuente { margin-top: 16px; }
+.stats-aside .fuente-ir { color: #A8A29E; text-decoration-color: rgba(168, 162, 158, 0.5); }
 .verif-date { white-space: nowrap; }
-.stats-aside .verif { color: #A8A29E; margin-top: 16px; }
+
+/* --- Fuentes y verificacion --- */
+/* Al final de la pagina y fuera del menu. Una entrada por bloque, cerrada:
+   quien quiere revisar la abre, o llega a ella abierta desde su bloque. */
+.fuentes { padding: 56px 0 64px; }
+.fuentes h2 { font-size: 1.05rem; letter-spacing: -0.01em; margin-bottom: 6px; }
+.fuentes-lead { font-size: 0.86rem; color: var(--color-text-secondary); margin: 0 0 22px; max-width: 60ch; }
+.fuentes-bloque { border-top: 1px solid var(--color-border); scroll-margin-top: 88px; }
+.fuentes-bloque:last-of-type { border-bottom: 1px solid var(--color-border); }
+.fuentes-bloque summary {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+    padding: 14px 0; cursor: pointer; list-style: none;
+}
+.fuentes-bloque summary::-webkit-details-marker { display: none; }
+.fuentes-bloque summary:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.fuentes-nombre { font-size: 0.92rem; font-weight: 600; }
+.fuentes-nombre::before { content: '+'; display: inline-block; width: 1.1em; color: var(--color-accent); font-weight: 500; }
+.fuentes-bloque[open] .fuentes-nombre::before { content: '\2212'; }
+.fuentes-fecha { font-size: 0.76rem; color: #78716C; white-space: nowrap; }
+.fuentes-cuerpo { padding: 2px 0 22px 1.1em; font-size: 0.84rem; line-height: 1.65; color: var(--color-text-secondary); max-width: 64ch; }
+.fuentes-cuerpo p { margin: 0 0 12px; }
+.fuentes-cuerpo h3 { font-size: 0.84rem; font-weight: 600; color: var(--color-text); margin: 18px 0 6px; }
+.fuentes-citas { margin: 0 0 12px; }
+.fuentes-citas dt { font-weight: 600; color: var(--color-text); margin-top: 10px; }
+.fuentes-citas dt:first-child { margin-top: 0; }
+.fuentes-citas dd { margin: 2px 0 0; }
+.fuentes-cuerpo a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+@media (hover: hover) { .fuentes-cuerpo a:hover { color: var(--color-accent); } }
+.fuentes-historial { list-style: none; margin: 0; padding: 0; }
+.fuentes-historial li { display: grid; grid-template-columns: 7.2em 1fr; gap: 10px; padding: 3px 0; }
+.fuentes-historial time { font-variant-numeric: tabular-nums; color: var(--color-text); }
+@media (max-width: 600px) {
+    .fuentes-bloque summary { flex-direction: column; gap: 2px; }
+    .fuentes-fecha { padding-left: 1.45em; }
+    .fuente-ir { margin-left: 0; display: block; margin-top: 4px; }
+}
 
 /* --- Calculadora de la retencion --- */
 .calc-section { background: var(--color-surface); }
@@ -1878,7 +1911,7 @@ a.lif-nombre:focus-visible { outline: 2px solid var(--color-accent); outline-off
 /* 2027 ya es ley (DOF 13-nov-2026): borde continuo. Sin fondo hasta que entre en vigor. */
 .lif-a27 { border-color: var(--color-accent); background: none; }
 .lif-a27 .lif-tasa { color: var(--color-accent); }
-.lif .blk-foot { margin-top: 20px; }
+.lif .fuente { margin-top: 20px; }
 /* Los tramos se trazan al entrar en pantalla. */
 @keyframes tramo-entra { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes tramo-baja { from { transform: scaleY(0); } to { transform: scaleY(1); } }
