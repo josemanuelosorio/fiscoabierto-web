@@ -104,7 +104,7 @@ nav.shrunk { padding: 8px 0; }
     font-size: 0.88rem;
     font-weight: 600;
     padding: 9px 18px;
-    border-radius: 999px;
+    border-radius: 8px;
     white-space: nowrap;
     /* Dos botones de Diagnostico a la vista es uno de mas: este
        aparece cuando el del hero ya salio de pantalla. */
@@ -511,7 +511,7 @@ html { scroll-padding-top: 90px; }
 .platform-btn {
     background: rgba(255,255,255,0.06);
     border: 1.5px solid rgba(255,255,255,0.12);
-    border-radius: 999px;
+    border-radius: 8px;
     padding: 13px 16px;
     cursor: pointer;
     font-family: inherit;
@@ -621,13 +621,11 @@ html { scroll-padding-top: 90px; }
 .step-indicator {
     font-size: 0.72rem;
     font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
     color: rgba(255, 255, 255, 0.45);
 }
 .btn-next, .btn-prev, .btn-results {
     padding: 12px 28px;
-    border-radius: 999px;
+    border-radius: 8px;
     border: none;
     font-family: inherit;
     font-size: 0.95rem;
@@ -760,10 +758,8 @@ html { scroll-padding-top: 90px; }
 
 /* Paso 3: revelado progresivo de la segunda pregunta */
 .q-label {
-    font-size: 0.78rem;
+    font-size: 0.86rem;
     font-weight: 600;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
     margin-bottom: 10px;
     color: #5EEAD4;
 }
@@ -783,14 +779,10 @@ html { scroll-padding-top: 90px; }
 
 /* Contador de seleccion (paso 1) */
 .sel-count {
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     font-weight: 600;
+    font-variant-numeric: tabular-nums;
     color: #5EEAD4;
-    background: rgba(94,234,212,0.1);
-    border: 1px solid rgba(94,234,212,0.25);
-    border-radius: 999px;
-    padding: 4px 12px;
 }
 
 /* Direccion de la transicion entre pasos */
@@ -831,10 +823,8 @@ html { scroll-padding-top: 90px; }
     padding: 24px 0;
 }
 .result-section h3 {
-    font-size: 0.78rem;
+    font-size: 0.95rem;
     font-weight: 600;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
     margin-bottom: 12px;
     color: #5EEAD4;
 }
@@ -1143,11 +1133,9 @@ footer {
 }
 .trust-kicker {
     text-align: center;
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #5EEAD4;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #A8A29E;
     margin: 0 auto clamp(24px, 4vh, 40px);
     max-width: 900px;
     width: 100%;
@@ -1202,23 +1190,19 @@ footer {
     display: inline-flex;
     align-items: baseline;
     gap: 9px;
-    border: 1px solid rgba(255, 255, 255, 0.13);
-    background: rgba(255, 255, 255, 0.045);
-    border-radius: 999px;
-    padding: 10px 18px;
+    padding: 6px 4px;
     white-space: nowrap;
     opacity: 0;
     will-change: opacity, transform;
 }
-.chain-src b { font-size: 0.95rem; font-weight: 600; color: #F5F5F4; }
+.chain-src b { font-size: 0.95rem; font-weight: 600; color: #F5F5F4; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, 0.28); text-underline-offset: 4px; transition: text-decoration-color 0.2s ease; }
 .chain-src i { font-size: 0.82rem; font-style: normal; color: #A8A29E; }
 
-/* La pill ES el link a su fuente. La flecha va pegada al texto gris y no al
-   nombre, para no partirlo cuando la pill se apila. */
+/* Cada fuente es un enlace de texto: el nombre va subrayado. La flecha va
+   pegada al texto gris y no al nombre, para no partirlo cuando se apila. */
 a.chain-src {
     text-decoration: none;
     cursor: pointer;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
 }
 a.chain-src i::after {
     content: '\2197\FE0E';
@@ -1227,10 +1211,7 @@ a.chain-src i::after {
     color: rgba(94, 234, 212, 0.45);
     transition: color 0.2s ease;
 }
-a.chain-src:hover, a.chain-src:focus-visible, a.chain-src:active {
-    border-color: rgba(94, 234, 212, 0.5);
-    background: rgba(94, 234, 212, 0.09);
-}
+a.chain-src:hover b, a.chain-src:focus-visible b, a.chain-src:active b { text-decoration-color: #5EEAD4; }
 a.chain-src:hover i::after,
 a.chain-src:focus-visible i::after,
 a.chain-src:active i::after { color: #5EEAD4; }
@@ -1308,11 +1289,11 @@ a.chain-cite {
 .tr-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 14px; }
 .tr-tab {
     appearance: none; -webkit-appearance: none; cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.14); background: transparent; border-radius: 999px;
-    padding: 7px 12px; font-family: inherit; font-size: 0.76rem; font-weight: 600; color: #A8A29E;
-    transition: color 0.15s, border-color 0.15s, background-color 0.15s;
+    border: 0; border-bottom: 2px solid transparent; background: transparent;
+    padding: 7px 10px; font-family: inherit; font-size: 0.8rem; font-weight: 600; color: #A8A29E;
+    transition: color 0.15s, border-color 0.15s;
 }
-.tr-tab[aria-pressed="true"] { border-color: rgba(94, 234, 212, 0.6); background: rgba(94, 234, 212, 0.1); color: #CCFBF1; }
+.tr-tab[aria-pressed="true"] { border-bottom-color: #5EEAD4; color: #F5F5F4; }
 @media (hover: hover) { .tr-tab:hover { color: #E7E5E4; } }
 .tr-tab:focus-visible { outline: 2px solid #5EEAD4; outline-offset: 2px; }
 .tr-lit {
@@ -1335,7 +1316,7 @@ a.chain-cite {
 .tr-go::after { content: " \2197\FE0E"; }
 @media (hover: hover) { .tr-go:hover { text-decoration: underline; text-underline-offset: 4px; } }
 .tr-go:focus-visible { outline: 2px solid #5EEAD4; outline-offset: 3px; border-radius: 4px; }
-.chain-src.is-sel { border-color: rgba(94, 234, 212, 0.6); background: rgba(94, 234, 212, 0.1); }
+.chain-src.is-sel b { color: #CCFBF1; text-decoration-color: #5EEAD4; }
 
 /* LA RAMA DE TRÁMITES. Sale del panel hacia abajo sobre el mismo negro
    (la sección ya se apagó a #1C1917 al llegar aquí). Tiene fondo propio
@@ -1350,11 +1331,7 @@ a.chain-cite {
     content: ''; position: absolute; left: 50%; top: 0; width: 1.25px; height: 40px;
     background: rgba(94, 234, 212, 0.42); transform: translateX(-50%);
 }
-.tram-kicker {
-    width: fit-content; margin: 0 auto 22px; padding: 6px 14px; border-radius: 999px;
-    border: 1px solid rgba(94, 234, 212, 0.42); background: rgba(94, 234, 212, 0.07);
-    font-size: 0.74rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #5EEAD4;
-}
+.tram-kicker { width: fit-content; margin: 0 auto 22px; font-size: 0.9rem; font-weight: 500; color: #A8A29E; }
 .tram-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .tram-card {
     display: flex; flex-direction: column; gap: 6px; height: 100%;
@@ -1365,7 +1342,7 @@ a.chain-cite {
 @media (hover: hover) { .tram-card:hover { border-color: rgba(94, 234, 212, 0.5); background: rgba(94, 234, 212, 0.07); } }
 .tram-card:focus-visible { outline: 2px solid #5EEAD4; outline-offset: 3px; }
 .tram-item.is-sel .tram-card, .tram-item.is-flash .tram-card { border-color: rgba(94, 234, 212, 0.6); background: rgba(94, 234, 212, 0.1); }
-.tram-n { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.74rem; color: #5EEAD4; }
+.tram-n { font-size: 0.78rem; font-weight: 600; font-variant-numeric: tabular-nums; color: #5EEAD4; }
 .tram-t { font-size: 0.98rem; font-weight: 600; line-height: 1.3; color: #F5F5F4; }
 .tram-t::after { content: " \2197\FE0E"; font-weight: 400; color: rgba(94, 234, 212, 0.5); }
 .tram-d { font-size: 0.84rem; line-height: 1.5; color: #A8A29E; }
@@ -1390,7 +1367,7 @@ a.chain-cite {
 .trust-chain:not(.chain-on) .chain-node,
 .trust-chain:not(.chain-on) .chain-out { opacity: 1; transform: none; }
 
-/* Antes de que las pills en linea dejen de caber, el texto gris baja debajo
+/* Antes de que las fuentes en linea dejen de caber, el texto gris baja debajo
    del nombre en vez de encogerse. */
 @media (max-width: 1100px) {
     .chain-src { flex-direction: column; gap: 1px; white-space: normal; }
@@ -1446,12 +1423,18 @@ a.chain-cite {
         gap: 6px;
         min-height: 118px;
         padding: 18px 18px 20px;
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        background: rgba(255, 255, 255, 0.045);
         border-radius: 20px;
         white-space: normal;
         text-align: left;
     }
     .chain-col-l .chain-src, .chain-col-r .chain-src { align-items: flex-start; text-align: left; }
+    .chain-src.is-sel { border-color: rgba(94, 234, 212, 0.6); background: rgba(94, 234, 212, 0.1); }
+    a.chain-src { transition: border-color 0.2s ease, background-color 0.2s ease; }
+    a.chain-src:hover, a.chain-src:focus-visible, a.chain-src:active { border-color: rgba(94, 234, 212, 0.5); background: rgba(94, 234, 212, 0.09); }
     .chain-src b {
+        text-decoration: none;
         font-size: 1.25rem;
         display: flex;
         width: 100%;
@@ -1564,8 +1547,8 @@ a.chain-cite {
     line-height: 1.7;
 }
 .faq-item.open .faq-answer { max-height: 560px; }
-.faq-do { margin: -8px 0 20px; font-size: 0.84rem; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
-.faq-do-l { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-text-secondary); }
+.faq-do { margin: -8px 0 20px; font-size: 0.84rem; display: flex; gap: 2px 10px; align-items: baseline; flex-wrap: wrap; }
+.faq-do-l { flex-basis: 100%; font-size: 0.82rem; font-weight: 600; color: var(--color-text-secondary); }
 .faq-do a { display: inline-block; padding: 2px 0; color: var(--color-accent); font-weight: 600; text-decoration: none; }
 .faq-do a::after { content: " \2193"; }
 @media (hover: hover) { .faq-do a:hover { text-decoration: underline; } }
@@ -1705,7 +1688,7 @@ a.chain-cite {
     -webkit-appearance: none;
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: 999px;
+    border-radius: 8px;
     padding: 9px 16px;
     font-family: inherit;
     font-size: 0.82rem;
@@ -1724,10 +1707,8 @@ a.chain-cite {
 .calc-slider { margin: 24px 0 6px; }
 .calc-slider label {
     display: block;
-    font-size: 0.78rem;
+    font-size: 0.82rem;
     font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
     color: var(--color-text-secondary);
     margin-bottom: 10px;
 }
@@ -1804,7 +1785,7 @@ a.chain-cite {
 .calc-rfc-l { font-size: 0.8rem; color: var(--color-text-secondary); margin-right: 4px; }
 .rfc-btn {
     appearance: none; -webkit-appearance: none; cursor: pointer;
-    background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 999px;
+    background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px;
     padding: 7px 14px; font-family: inherit; font-size: 0.8rem; font-weight: 600; color: var(--color-text-secondary);
     transition: background-color 0.15s, color 0.15s, border-color 0.15s;
 }
@@ -1892,7 +1873,7 @@ a.lif-nombre { padding: 4px 0; margin: -4px 0; }   /* blanco de toque de 24 px s
 a.lif-nombre::after { content: " \2197\FE0E"; font-weight: 400; color: var(--color-text-secondary); }
 a.lif-nombre:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 2px; }
 @media (hover: hover) { a.lif-nombre:hover { color: var(--color-accent); } }
-.lif-fecha { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.7rem; color: #78716C; }
+.lif-fecha { font-size: 0.74rem; font-variant-numeric: tabular-nums; color: #78716C; }
 .lif-paso[data-estado="falta"] .lif-fecha { color: var(--color-text); font-weight: 700; }
 .lif-nota { font-size: 0.76rem; line-height: 1.4; color: var(--color-text-secondary); }
 /* La tasa de cada año en grande, con la misma regla de la ruta: tarjeta de
@@ -1903,7 +1884,7 @@ a.lif-nombre:focus-visible { outline: 2px solid var(--color-accent); outline-off
     display: flex; flex-direction: column; gap: 3px; padding: 14px 16px 15px;
     border: 1.5px solid var(--color-border); border-radius: var(--radius); background: var(--color-bg);
 }
-.lif-ano { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.72rem; color: #78716C; }
+.lif-ano { font-size: 0.76rem; font-variant-numeric: tabular-nums; color: #78716C; }
 .lif-tasa { font-size: 2.3rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; color: var(--color-text); }
 .lif-ley { margin-top: 4px; font-size: 0.74rem; line-height: 1.4; color: var(--color-text-secondary); }
 .lif-a26 { border-color: var(--color-accent); background: var(--color-surface); }
@@ -1968,7 +1949,7 @@ a.lif-nombre:focus-visible { outline: 2px solid var(--color-accent); outline-off
 /* Cambio de capítulo: el título sale hacia arriba y el nuevo entra desde abajo. */
 .vid-now.is-out { opacity: 0; transform: translateY(-6px); transition-duration: 0.18s; }
 .vid-now.is-in { opacity: 0; transform: translateY(8px); transition: none; }
-.vid-now-n { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.5em; font-weight: 600; letter-spacing: 0; color: var(--color-accent); flex: none; }
+.vid-now-n { font-variant-numeric: tabular-nums; font-size: 0.5em; font-weight: 600; letter-spacing: 0; color: var(--color-accent); flex: none; }
 .vid-play {
     appearance: none; -webkit-appearance: none; cursor: pointer; flex: none;
     width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
@@ -2081,8 +2062,8 @@ a.lif-nombre:focus-visible { outline: 2px solid var(--color-accent); outline-off
 /* El mapa remata en pesos: un monto mensual y, con el estado elegido,
    cuánto es de impuesto estatal. */
 .map-monto { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 18px; }
-.map-monto label { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-text-secondary); }
-.map-monto-in { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--color-border); border-radius: 10px; padding: 6px 10px; background: var(--color-surface); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; }
+.map-monto label { font-size: 0.82rem; font-weight: 600; color: var(--color-text-secondary); }
+.map-monto-in { display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--color-border); border-radius: 10px; padding: 6px 10px; background: var(--color-surface); font-variant-numeric: tabular-nums; font-weight: 700; }
 .map-monto-in:focus-within { border-color: var(--color-accent); }
 .map-monto-in input { border: 0; outline: 0; width: 8.5ch; font: inherit; color: var(--color-text); background: transparent; -moz-appearance: textfield; }
 .map-monto-in input::-webkit-outer-spin-button, .map-monto-in input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
